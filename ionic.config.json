@@ -1,0 +1,7 @@
+{
+  "name": "dreamjordan",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

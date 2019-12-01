@@ -1,0 +1,54 @@
+.header{
+    padding: 1rem 2.4rem;
+    text-align: center;
+    h3{
+        color: var(--naranja);
+        font-weight: bold;
+        margin-top: 10px;
+    }
+}
+
+.header-text{
+    font-family: var(--font-alt);
+    color: var(--negro);
+    font-size: 0.8rem;
+    line-height: 1.2;
+} 
+
+ion-grid{
+    --ion-grid-padding: 15px ;
+}
+
+ion-col{
+    --ion-grid-column-padding: 8px;
+}
+
+.title-slider{
+    font-weight: bolder;
+}
+
+.coupon {
+    background-color: var(--aqua2);
+    font-weight: bold;
+    color: #fff;
+    width: 100%;
+    padding: 1rem ;
+    text-align: center;
+}
+
+ion-button{
+    height: 30px;
+    margin-top: 12px;
+    --background:transparent;
+    --border-color:#fff;
+    --border-width:1px;
+    --border-style:solid;
+    --border-radius: 0px;
+    --padding-start:30px;
+    --padding-end: 30px;
+}
+
+.bottom-slider-text{
+    text-align: center;
+    width: 70%;
+}
