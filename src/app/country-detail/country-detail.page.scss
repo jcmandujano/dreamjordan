@@ -1,0 +1,81 @@
+ion-col{
+    --ion-grid-column-padding: 8px;
+}
+
+ion-content{
+    --background: #fff;
+}
+
+.header-text{
+    padding: 1rem 1.4rem;
+}
+
+h4{
+    margin-top: 0;
+    font-weight: bold ;
+}
+
+ion-button{
+    --background: var(--aqua2);
+    width: 80%;
+    height: 33px;
+    margin-top: 12px;
+    font-weight: bolder;
+    --border-color: #fff;
+    --border-width: 1px;
+    --border-style: solid;
+    --border-radius: 0px;
+    --padding-start: 30px;
+    --padding-end: 30px;  
+}
+
+.price{
+    color:var(--naranja);
+    font-weight: 600;
+}
+
+.description{
+    background-color: var(--naranja-light);
+    padding: 1rem 1.5rem;
+    font-family: var(--font-alt);
+    color: var(--negro);
+    font-size: 0.8rem;
+    line-height: 1.2;
+}
+
+.title-slider{
+    font-weight: bolder;
+}
+
+.content-list{
+    ion-row{
+        border-bottom: solid;
+        border-width: 2px;
+        border-color: var(--gris);
+        margin: 20px 0px;
+    }
+}
+
+.header-row{
+    ion-col{
+        padding: 0;
+    }
+    img{
+        position: absolute;
+    }
+}
+
+ion-grid{
+    --ion-grid-padding: 15px ;
+}
+
+.column {
+    float: left;
+    width: 50%;
+}
+  
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}

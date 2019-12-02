@@ -1,0 +1,110 @@
+.warp-solid{
+  width: 100%;
+  position: absolute;
+  background-color: rgba(60, 40, 21, .5);
+  height: 300px;
+  z-index: 1;
+  mix-blend-mode: multiply;
+}
+ion-grid{
+  padding: 0%;
+}
+
+.swiper-zoom-container>img{
+  max-height: none;
+  object-fit: contain;
+}
+
+.home-slide {
+  height: 230px;
+}
+
+.slider-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  border:2px solid #fff;
+  padding: .3rem 1.3rem;
+  z-index: 1;
+}
+
+.title-slider{
+  font-weight: bolder;
+}
+
+.welcome {
+  background-image: url('../../assets/img/bg-home-colors.svg');
+  background-size: cover;
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.welcome-text{
+  background-color: #fff;
+  padding: 1rem 1.3rem;
+  text-align: center;
+}
+
+.welcome-title{
+  color: var(--naranja);
+  font-weight: bolder;
+  font-size: 1.3rem;
+  
+}
+
+.body-welcome{
+  font-family: var(--font-alt);
+  color: var(--negro);
+  font-size: 0.8rem;
+  line-height: 1.2;
+}
+
+.coupon {
+  background-color: var(--aqua2);
+  font-weight: bold;
+  color: #fff;
+  width: 100%;
+  padding: 1rem ;
+  text-align: center;
+}
+
+ion-button{
+  height: 30px;
+  margin-top: 12px;
+  --background:transparent;
+  --border-color:#fff;
+  --border-width:1px;
+  --border-style:solid;
+  --border-radius: 0px;
+  --padding-start:30px;
+  --padding-end: 30px;
+}
+
+.title-carousel{
+  font-weight: bold;
+  color: var(--naranja);
+  font-size: 1.2rem;
+  padding-left: 15px;
+}
+
+.bottom-slider {
+  margin-left: 20px;
+  margin-right: 20px; 
+}
+
+.bottom-slider-text{
+  font-size: 1rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  width: 90%;
+  z-index: 1;
+}
+
+ion-grid{
+  margin-bottom: 20px;
+}
