@@ -41,6 +41,10 @@ ion-content{
         border-color: var(--gris);
         margin: 20px 0px;
     }
+    .play-div{
+        padding: 1rem 1rem;
+        text-align: center;
+    }
 }
 
 .header-row{
@@ -86,7 +90,7 @@ h4{
     font-family: var(--font-alt);
 }
 
-.play-div{
-
-        padding: 1rem 0rem;
+ion-progress-bar{
+    height: 13px;
+    margin-bottom: 17px;
 }
