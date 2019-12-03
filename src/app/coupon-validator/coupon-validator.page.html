@@ -1,9 +1,41 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>coupon-validator</ion-title>
+    <ion-buttons slot="start">
+        <img class="logo" src="./assets/img/logo.svg"/>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-icon class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
+        <ion-badge class="notifications-badge">05</ion-badge>
+      <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
-<ion-content>
+<ion-content> 
+  <!--is not valid-->
+  <ion-row class="container" *ngIf="isValid == false">
+    <ion-col size="12">
+        <h3>¿Tienes un código?</h3>
+    </ion-col>
+    <ion-col size="12">
+        <ion-input placeholder="Escríbelo aquí"></ion-input>
+    </ion-col>
+    <ion-col size="12"> 
+        <ion-button (click)="validate()">Validar</ion-button>
+    </ion-col>
+  </ion-row>
+  <!--ya validado-->
+  <ion-row class="container" *ngIf="isValid">
+      <ion-col size="12">
+          <h3>Tú código</h3>
+      </ion-col>
+      <ion-col size="12">
+          <p class="coupon-code">01000000</p>
+      </ion-col>
+      <ion-col size="12"> 
+        <p class="warn-text">Es valido, si lo activas ahora solo podrás usarlo durante los siguientes <span class="valid-days">X</span> días</p>
+        <ion-button class="primary" >Activar ahora</ion-button>
+        <ion-button class="cancel-btn">Despues</ion-button>
+      </ion-col>
+    </ion-row>
 
 </ion-content>

@@ -1,0 +1,139 @@
+.header-row{
+    ion-col{
+        padding: 0;
+    }
+}
+
+.header-text{
+    padding: 1rem 1.4rem;
+}
+
+.price{
+    color:var(--naranja);
+    font-weight: 600;
+}
+
+h4{
+    margin-top: 0;
+    font-weight: bold ;
+}
+
+.description{
+    background-color: var(--naranja-light);
+    padding: 1rem 1.5rem;
+    font-family: var(--font-alt);
+    color: var(--negro);
+    font-size: 0.8rem;
+    line-height: 1.2;
+    margin-top: -5px;
+}
+
+ion-content{
+    --background: #fff;
+}
+
+.primary{
+    --background: var(--aqua2);
+    width: 50%;
+    height: 33px;
+    margin-top: 12px;
+    font-weight: bolder;
+    --border-color: #fff;
+    --border-width: 1px;
+    --border-style: solid;
+    --border-radius: 0px;
+    --padding-start: 30px;
+    --padding-end: 30px;  
+}
+
+.cancel-btn{
+    --background: var(--naranja);
+    width: 50%;
+    height: 33px;
+    margin-top: 12px;
+    font-weight: bolder;
+    --border-color: #fff;
+    --border-width: 1px;
+    --border-style: solid;
+    --border-radius: 0px;
+    --padding-start: 30px;
+    --padding-end: 30px;  
+}
+
+ion-input{
+    background-color: var(--gris-light);
+    color: var(--negro);
+    border-radius: 100px;
+}
+
+.container{
+    padding: 1rem 3rem;
+    text-align: center;
+}
+
+h3{
+    color: var(--naranja);
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.coupon-code{
+    color: var(--aqua1);
+    font-weight: bold;
+    margin: 0;
+    letter-spacing: 2px;
+    font-size: 2rem;
+}
+
+
+.file-tour-name{
+    font-weight: bold;
+    font-size: .9rem;
+}
+
+.file-tour-desc{
+    font-family: var(--font-alt);
+    font-size: .8rem;
+    line-height: 1.2;
+}
+
+.index{
+    color:var(--naranja);
+    font-size: 2rem;
+    font-weight: bold;
+}
+.index-col{
+    padding: 2rem 1rem;
+}
+
+.counter{
+    font-size: .9rem;
+    font-family: var(--font-alt);
+}
+
+ion-progress-bar{
+    height: 13px;
+    margin-bottom: 17px;
+}
+
+.content-list{
+    ion-row{
+        border-bottom: solid;
+        border-width: 2px;
+        border-color: var(--gris);
+        margin: 20px 0px;
+    }
+    .play-div{
+        padding: 2rem 1rem;
+        text-align: center;
+    }
+}
+
+.warn-text{
+    font-family: var(--font-alt);
+    font-size: .9rem;
+}
+
+.valid-days{
+    color: var(--aqua2);
+}

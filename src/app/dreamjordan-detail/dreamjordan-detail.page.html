@@ -1,0 +1,126 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <img class="logo" src="./assets/img/logo.svg"/>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-icon class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
+        <ion-badge class="notifications-badge">05</ion-badge>
+      <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-row class="header-row">
+      <ion-col size="5">
+        <img class="portait-img" src="./assets/img/2.jpeg"/>
+      </ion-col>
+      <ion-col size="7">
+        <div class="header-text">
+          <h4>Los imperdibles de Jordania</h4>
+          <span class="price" *ngIf="isActivated">8 de 10 días</span>
+          <br>
+        </div>
+      </ion-col>
+    </ion-row>
+    <div class="description">
+      <p>Dolorum inventore nam convallis eveniet hac class adipiscing blanditiis. Praesentium turpis cursus mollis ipsam torquent mollitia viverra sollicitudin, congue nulla voluptates ducimus iusto facere turpis, aliquip minima, ullamco, maecenas sit wisi, vulputate eu mus? Dignissimos etiam lacus sagittis? Fugiat orci nam excepteur. Deleniti, faucibus iste! Paria</p>
+    </div>
+    <!-- cupon a validar -->
+    <ion-row class="container" *ngIf="isValid == false">
+      <ion-col size="12">
+          <h3>¿Tienes un código?</h3>
+      </ion-col>
+      <ion-col size="12">
+          <ion-input placeholder="Escríbelo aquí"></ion-input>
+      </ion-col>
+      <ion-col size="12"> 
+          <ion-button class="primary" (click)="validate(true)">Validar</ion-button>
+      </ion-col>
+      <ion-col size="12"> 
+        <p class="warn-text">Si no tienes un código y quieres este paquete</p>
+          <ion-button class="primary">Contactar con Ana</ion-button>
+      </ion-col>
+    </ion-row>
+    <!-- cupon Validado -->
+    <ion-row class="container" *ngIf="isValid && isActivated == false">
+      <ion-col size="12">
+          <h3>Tú código</h3>
+      </ion-col>
+      <ion-col size="12">
+          <p class="coupon-code">01000000</p>
+      </ion-col>
+      <ion-col size="12"> 
+        <p class="warn-text">Es valido, si lo activas ahora solo podrás usarlo durante los siguientes <span class="valid-days">X</span> días</p>
+        <ion-button class="primary" (click)="activate()">Activar ahora</ion-button>
+        <ion-button class="cancel-btn">Despues</ion-button>
+      </ion-col>
+    </ion-row>
+    <!--When is activated-->
+    <ion-grid class="content-list" *ngIf="isActivated == true">  
+        <ion-row>
+          <ion-col size="2" class="index-col">
+            <span class="index">1</span>
+          </ion-col>
+          <ion-col size="7">
+            <span class="file-tour-name">Nombre</span>
+            <br>
+            <p class="file-tour-desc"> Dolorum inventore nam convallis eveniet hac class adipiscing blanditiis. Praesentium turpis cursus epteur.</p>
+            <ion-progress-bar value="0.5"></ion-progress-bar>
+          </ion-col >
+          <ion-col size="3" class="play-div">
+            <img src="../../assets/img/play.svg"/>
+            <br>
+            <span class="counter"> 1 de 3</span>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="2" class="index-col">
+            <span class="index">2</span>
+          </ion-col>
+          <ion-col size="7">
+            <span class="file-tour-name">Nombre</span>
+            <br>
+            <p class="file-tour-desc"> Dolorum inventore nam convallis eveniet hac class adipiscing blanditiis. Praesentium turpis cursus epteur.</p>
+            <ion-progress-bar></ion-progress-bar>
+          </ion-col >
+          <ion-col size="3" class="play-div">
+            <img src="../../assets/img/play.svg"/>
+            <br>
+            <span class="counter"> 1 de 3</span>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="2" class="index-col">
+            <span class="index">3</span>
+          </ion-col>
+          <ion-col size="7">
+            <span class="file-tour-name">Nombre</span>
+            <br>
+            <p class="file-tour-desc"> Dolorum inventore nam convallis eveniet hac class adipiscing blanditiis. Praesentium turpis cursus epteur.</p>
+            <ion-progress-bar></ion-progress-bar>
+          </ion-col >
+          <ion-col size="3" class="play-div">
+            <img src="../../assets/img/play.svg"/>
+            <br>
+            <span class="counter"> 1 de 3</span>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="2" class="index-col">
+            <span class="index">4</span>
+          </ion-col>
+          <ion-col size="7">
+            <span class="file-tour-name">Nombre</span>
+            <br>
+            <p class="file-tour-desc"> Dolorum inventore nam convallis eveniet hac class adipiscing blanditiis. Praesentium turpis cursus epteur.</p>
+            <ion-progress-bar></ion-progress-bar>
+          </ion-col >
+          <ion-col size="3" class="play-div">
+            <img src="../../assets/img/play.svg"/>
+            <br>
+            <span class="counter"> 1 de 3</span>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+</ion-content>

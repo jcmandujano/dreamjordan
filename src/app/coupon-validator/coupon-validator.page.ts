@@ -7,9 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CouponValidatorPage implements OnInit {
 
+  isValid : boolean = false;
   constructor() { }
 
   ngOnInit() {
+  }
+
+  validate(){
+    this.isValid = true
   }
 
 }

@@ -1,9 +1,87 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>my-cart</ion-title>
+    <ion-buttons slot="start">
+      <img class="logo" src="./assets/img/logo.svg"/>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-icon class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
+        <ion-badge class="notifications-badge">05</ion-badge>
+      <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+<!--GRID OCUPADO PARA CUANDO AUN NO SE COMPRA CONTENIDO-->
+<ion-grid class="content-list" >  
+  <ion-row>
+    <ion-col size="3" class="index-col">
+      <img class="tmb-img" src="../../assets/img/3.jpg"/>
+    </ion-col>
+    <ion-col size="6">
+      <p class="file-tour-name">Nombre  <span class="file-tour-desc">País completo</span></p>
+      <ion-select class="cart-select">
+        <ion-select-option value="f">1</ion-select-option>
+        <ion-select-option value="m">2</ion-select-option>
+      </ion-select>
+    </ion-col >
+    <ion-col size="2" class="centered">
+      <span class="price">$10000</span>
+    </ion-col>
+    <ion-col size="1" class="centered">
+        <ion-icon class="trashy" src="./assets/img/trash.svg" ></ion-icon>
+      </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="3" class="index-col">
+      <img class="tmb-img" src="../../assets/img/3.jpg"/>
+    </ion-col>
+    <ion-col size="6">
+      <p class="file-tour-name">Nombre  <span class="file-tour-desc">País completo</span></p>
+      <ion-select class="cart-select">
+        <ion-select-option value="f">1</ion-select-option>
+        <ion-select-option value="m">2</ion-select-option>
+      </ion-select>
+    </ion-col >
+    <ion-col size="2" class="centered">
+      <span class="price">$10000</span>
+    </ion-col>
+    <ion-col size="1" class="centered">
+        <ion-icon class="trashy" src="./assets/img/trash.svg" ></ion-icon>
+      </ion-col>
+  </ion-row>
+  <ion-row>
+      <ion-col size="3" class="index-col">
+        <img class="tmb-img" src="../../assets/img/3.jpg"/>
+      </ion-col>
+      <ion-col size="6">
+        <p class="file-tour-name">Nombre  <span class="file-tour-desc">País completo</span></p>
+        <ion-select class="cart-select">
+          <ion-select-option value="f">1</ion-select-option>
+          <ion-select-option value="m">2</ion-select-option>
+        </ion-select>
+      </ion-col >
+      <ion-col size="2" class="centered">
+        <span class="price">$10000</span>
+      </ion-col>
+      <ion-col size="1" class="centered">
+          <ion-icon class="trashy" src="./assets/img/trash.svg" ></ion-icon>
+        </ion-col>
+    </ion-row>
+    <div class="resume">
+      <p class="resume-total">Total  <span class="price">$30000</span></p>
+    </div>
+    <div class="row">
+      <div class="column">
+        <ion-button class="cancel-btn">Seguir Comprando</ion-button>
+      </div>
+      <div class="column">
+        <ion-button class="primary">Pagar</ion-button>
+      </div>
+    </div>
+    <div class="trash-all">
+      <p>Vaciar carrito  </p>
+      <ion-icon class="trashy" src="./assets/img/trash.svg" ></ion-icon>
+    </div>
+</ion-grid>
 </ion-content>

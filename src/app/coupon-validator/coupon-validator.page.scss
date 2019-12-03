@@ -1,0 +1,62 @@
+.container{
+    padding: 2rem 4rem;
+    text-align: center;
+}
+
+h3{
+    color: var(--naranja);
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+ion-button{
+    --background: var(--aqua2);
+    width: 50%;
+    height: 33px;
+    margin-top: 12px;
+    font-weight: bolder;
+    --border-color: #fff;
+    --border-width: 1px;
+    --border-style: solid;
+    --border-radius: 0px;
+    --padding-start: 30px;
+    --padding-end: 30px;  
+}
+
+ion-input{
+    background-color: var(--gris-light);
+    color: var(--negro);
+    border-radius: 100px;
+}
+
+
+.coupon-code{
+    color: var(--aqua1);
+    font-weight: bold;
+    margin: 0;
+    letter-spacing: 2px;
+    font-size: 2rem;
+}
+
+.warn-text{
+    font-family: var(--font-alt);
+    font-size: .9rem;
+}
+
+.valid-days{
+    color: var(--aqua2);
+}
+
+.cancel-btn{
+    --background: var(--naranja);
+    width: 50%;
+    height: 33px;
+    margin-top: 12px;
+    font-weight: bolder;
+    --border-color: #fff;
+    --border-width: 1px;
+    --border-style: solid;
+    --border-radius: 0px;
+    --padding-start: 30px;
+    --padding-end: 30px;  
+}
