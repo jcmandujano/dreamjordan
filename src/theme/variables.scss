@@ -3,6 +3,9 @@
 
 /** Ionic CSS Variables **/
 :root {
+
+  --ion-font-family: 'Open Sans Condensed';
+  --font-alt:'Karla';
   /** primary **/
   --ion-color-primary: #F07530;
   --ion-color-primary-rgb: 56, 128, 255;
@@ -75,8 +78,7 @@
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
 
-  --ion-font-family: 'Open Sans Condensed';
-  --font-alt:'Karla';
+
   --negro:#1A1A1A;
   --blanco:#ffffff;
   --naranja: #E47625;
@@ -86,6 +88,15 @@
   --naranja-light: #FEFAF7;
   --naranja-dark: #df5f16;
   --gris-light: #E6E6E6; 
+
+  html.ios {
+    --ion-default-font:var(--ion-font-family);
+  }
+
+  html.md {
+    --ion-default-font:var(--ion-font-family);
+  }
+
 
   ion-tab-button.tab-selected {
     background-color: var(--naranja-dark);

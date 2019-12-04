@@ -67,6 +67,36 @@ const routes: Routes =[
             import('../tour-detail/tour-detail.module').then( m => m.TourDetailPageModule)
           }
         ]
+      },
+      {
+        path: 'coupon-validator',
+        children: [
+          {
+            path: '',
+            loadChildren: () => 
+            import('../coupon-validator/coupon-validator.module').then( m => m.CouponValidatorPageModule)
+          },
+        ]
+      },
+      {
+        path: 'dreamjordan-detail',
+        children: [
+          {
+            path: '',
+            loadChildren: () => 
+            import('../dreamjordan-detail/dreamjordan-detail.module').then( m => m.DreamjordanDetailPageModule)
+          }
+        ]
+      },
+      {
+        path: 'my-cart',
+        children: [
+          {
+            path: '',
+            loadChildren: () => 
+            import('../my-cart/my-cart.module').then( m => m.MyCartPageModule)
+          }
+        ]
       }
      ]
    },

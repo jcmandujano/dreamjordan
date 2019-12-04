@@ -1,15 +1,15 @@
 <ion-header>
-    <ion-toolbar>
-      <ion-buttons slot="start">
-          <img class="logo" src="./assets/img/logo.svg"/>
-      </ion-buttons>
-      <ion-buttons slot="primary">
-        <ion-icon class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
-          <ion-badge class="notifications-badge">05</ion-badge>
-        <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+        <img class="logo" src="./assets/img/logo.svg"/>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-icon class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
+        <ion-badge class="notifications-badge">05</ion-badge>
+      <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 <ion-content>
   <div class="header">
     <h3>Mis Compras</h3>
@@ -18,7 +18,7 @@
   <div class="coupon">
     <span>¿Tienes un código?</span>
     <br>
-    <ion-button>Canjealo aqui</ion-button>
+    <ion-button (click)="validateCoupon()">Canjealo aqui</ion-button>
   </div>
   <ion-grid>
     <ion-row>

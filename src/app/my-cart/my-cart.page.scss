@@ -1,0 +1,123 @@
+.content-list{
+    ion-row{
+        border-bottom: solid;
+        border-width: 2px;
+        border-color: var(--gris);
+        margin: 20px 0px;
+    }
+    .play-div{
+        padding: 2rem 1rem;
+        text-align: center;
+    }
+}
+
+.file-tour-name{
+    font-weight: bold;
+    font-size: .9rem;
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+.file-tour-desc{
+    font-family: var(--font-alt);
+    font-size: .8rem;
+    font-weight: normal;
+    line-height: 1.2;
+    color: var(--gris);
+}
+
+.price{
+    color:var(--naranja);
+    font-weight: 600;
+}
+
+.tmb-img{
+    object-fit: cover;
+    width: 100%;
+    height: 72px;
+}
+
+ion-select{
+    background-color: var(--blanco);
+    border-radius: 10px;
+    border: 2px;
+    border-style: solid;
+    border-color: var(--gris-light);
+    width: 60px;
+    font-size: 0.8rem;
+    .select-icon {
+        .select-icon-inner {
+           color : red !important;
+        }
+      }
+}
+
+.centered{
+    padding: 2rem 0rem;
+}
+
+.trashy{
+    font-size: 1.5rem;
+}
+
+.resume{
+    text-align: right;
+    margin-right: 20px;
+    p{
+        font-weight: bold;
+    }
+}
+
+.cancel-btn{
+    --background: var(--naranja);
+    width:90%;
+    height: 33px;
+    margin-top: 12px;
+    font-weight: bolder;
+    --border-color: #fff;
+    --border-width: 1px;
+    --border-style: solid;
+    --border-radius: 0px;
+    --padding-start: 30px;
+    --padding-end: 30px;  
+}
+
+.primary{
+    --background: var(--aqua2);
+    width: 90%;
+    height: 33px;
+    margin-top: 12px;
+    font-weight: bolder;
+    --border-color: #fff;
+    --border-width: 1px;
+    --border-style: solid;
+    --border-radius: 0px;
+    --padding-start: 30px;
+    --padding-end: 30px;   
+}
+
+.column {
+    float: left;
+    width: 50%;
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .row{
+    padding: 0rem 2rem;
+  }
+
+  .trash-all{
+    text-align: center;
+    padding: 2rem 0;
+    font-weight: bold;
+    color:var(--gris);
+    p{
+        display:inline;
+    }
+}
