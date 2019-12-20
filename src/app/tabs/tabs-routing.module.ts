@@ -102,7 +102,7 @@ const routes: Routes =[
    },
     {
      path:'',
-     redirectTo: '/tabs/home',
+     redirectTo: '/logreg-select',
      pathMatch:'full'
     }
 ]

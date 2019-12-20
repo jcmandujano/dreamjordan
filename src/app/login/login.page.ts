@@ -13,7 +13,7 @@ export class LoginPage implements OnInit {
   }
 
   goTohome(){
-    this.router.navigate(['/']);
+    this.router.navigate(['/tabs/home']);
   }
 
 }
