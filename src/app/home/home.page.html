@@ -68,10 +68,10 @@
         <ion-button (click)="validateCoupon()">Canjealo aqui</ion-button>
       </div>
     </ion-row>
-    <ion-row>
+    <ion-row *ngIf="visibles">
       <p class="title-carousel">Mis Compras</p>
     </ion-row>
-    <ion-row>
+    <ion-row *ngIf="visibles">
       <ion-slides class="bottom-slider" [options]="slideOpts">
           <ion-slide >
             <div class="warp-solid"></div>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../api/user.service';
 
 @Component({
   selector: 'app-coupon-validator',
@@ -8,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 export class CouponValidatorPage implements OnInit {
 
   isValid : boolean = false;
-  constructor() { }
+  constructor(public user : UserService) { }
 
   ngOnInit() {
+  }
+
+  ionViewWillEnter(){
+    if(this.user.account === undefined){
+      console.log("no hay nadie logeado");
+    }else{
+      console.log("Ya tenemos a alguieen")
+    }
   }
 
   validate(){

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import {Router} from '@angular/router';
+import {Router, NavigationExtras} from '@angular/router';
+import { UserService } from '../api/user.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -8,9 +10,11 @@ import {Router} from '@angular/router';
 })
 export class HomePage {
 
-  constructor(private router:Router) { }
+  
 
+  constructor(private router:Router, public user : UserService) { }
 
+  visibles : boolean = false;
   slideOpts = {
     freeMode: true,
     slidesPerView: 2,
@@ -18,8 +22,33 @@ export class HomePage {
     autoHeight:true
   };
 
+  ionViewWillEnter(){
+    if(this.user.account === undefined){
+      this.user.getLoginStatus().subscribe(res => { 
+        this.user.account = res;
+        console.log("Ya tenemos a alguieen")
+      },
+      (err: HttpErrorResponse) => { 
+        console.log("povema2",err);
+      });
+      
+    }else{
+      console.log("Ya tenemos a alguieen")
+    }
+  }
+
   validateCoupon(){
-    this.router.navigate(['/tabs/coupon-validator']);
+    if(this.user.account === undefined){
+      let navigationExtras: NavigationExtras = {
+        state: {
+          origin: "validaCupon"
+        }
+      };
+      this.router.navigate(['/logreg-select'],navigationExtras);
+    }else{
+      this.router.navigate(['/tabs/coupon-validator']);
+    }
+    
   }
   openCart(){
     this.router.navigate(['/tabs/my-cart']);
