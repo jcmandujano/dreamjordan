@@ -49,7 +49,7 @@ const routes: Routes =[
         ]
       },
       {
-        path: 'country-detail',
+        path: 'country-detail/:id',
         children: [
           {
             path: '',
@@ -59,7 +59,7 @@ const routes: Routes =[
         ]
       },
       {
-        path: 'tour-detail',
+        path: 'tour-detail/:idpais/:nid',
         children: [
           {
             path: '',
@@ -79,7 +79,7 @@ const routes: Routes =[
         ]
       },
       {
-        path: 'dreamjordan-detail',
+        path: 'dreamjordan-detail/:id',
         children: [
           {
             path: '',
@@ -102,7 +102,7 @@ const routes: Routes =[
    },
     {
      path:'',
-     redirectTo: '/tabs/home',
+     redirectTo: 'tabs/home',
      pathMatch:'full'
     }
 ]

@@ -68,10 +68,10 @@
         <ion-button (click)="validateCoupon()">Canjealo aqui</ion-button>
       </div>
     </ion-row>
-    <ion-row>
+    <ion-row *ngIf="visibles">
       <p class="title-carousel">Mis Compras</p>
     </ion-row>
-    <ion-row>
+    <ion-row *ngIf="visibles">
       <ion-slides class="bottom-slider" [options]="slideOpts">
           <ion-slide >
             <div class="warp-solid"></div>
@@ -134,46 +134,12 @@
     </ion-row>
     <ion-row>
       <ion-slides class="bottom-slider" [options]="slideOpts">
-          <ion-slide >
+          <ion-slide *ngFor="let pais of paises">
             <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
+            <img *ngIf="pais.field_imagen == ''" src="./assets/img/exampleImage.png"/>
+            <img *ngIf="pais.field_imagen"[src]="co.API+pais.field_imagen"/>
             <div class="bottom-slider-text">
-              <span class="title-slider">México</span>
-            </div>
-          </ion-slide>
-          <ion-slide >
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider">México</span>
-            </div>
-          </ion-slide>
-          <ion-slide >
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider">México</span>
-            </div>
-          </ion-slide>
-          <ion-slide >
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider">México</span>
-            </div>
-          </ion-slide>
-          <ion-slide >
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider">México</span>
-            </div>
-          </ion-slide>
-          <ion-slide >
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider">México</span>
+              <span class="title-slider">{{pais.nombrePais}}</span>
             </div>
           </ion-slide>
       </ion-slides>
