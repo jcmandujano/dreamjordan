@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { CommonService } from '../api/common.service';
 
 export interface Account{
   csrf_token: string;
@@ -26,7 +25,6 @@ export interface CurrentUser{
 
 export class UserService {
 
-  API: string = 'https://dream-jordan.com/';
   private _account:Account;
 
   get account(): Account{
@@ -38,12 +36,11 @@ export class UserService {
 
   constructor(
     public http: HttpClient,
-    public alertController: AlertController,
-    public router: Router
+    public co: CommonService,
   ) { }
 
   getLoginStatus(){
-    return this.http.get<Account>(this.API+'user/me/null?_format=json',{ withCredentials: true }).pipe(
+    return this.http.get<Account>(this.co.API+'user/me/null?_format=json',{ withCredentials: true }).pipe(
       map(
         res => { 
           return res;
@@ -64,7 +61,7 @@ export class UserService {
       "pass":password
     };
     return this.http.post<Account>(
-      this.API+'user/clogin?_format=json',
+      this.co.API+'user/clogin?_format=json',
       JSON.stringify(datos),
       { headers: headers, withCredentials: true }).pipe(
         map(
@@ -80,7 +77,7 @@ export class UserService {
 
   logout(){
     return this.http.get<Account>(
-      this.API+'user/clogout?_format=json',
+      this.co.API+'user/clogout?_format=json',
       { withCredentials: true }).pipe(
         map(
           res => { 
@@ -91,6 +88,32 @@ export class UserService {
           }
         )
       );
+  }
+
+  getPaises(){
+    return this.http.get<Array<any>>(this.co.API+'paises-app/?_format=json',{ withCredentials: true }).pipe(
+      map(
+        res => { 
+          return res;
+        },
+        (err: HttpErrorResponse) => { 
+          console.log(err);
+        }
+      )
+    );
+  }
+
+  getPaisById(idPais){
+    return this.http.get<Array<any>>(this.co.API+'paises-app/'+idPais+'?_format=json',{ withCredentials: true }).pipe(
+      map(
+        res => { 
+          return res;
+        },
+        (err: HttpErrorResponse) => { 
+          console.log(err);
+        }
+      )
+    );
   }
 
 }

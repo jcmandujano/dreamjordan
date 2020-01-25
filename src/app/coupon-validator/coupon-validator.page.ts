@@ -15,10 +15,10 @@ export class CouponValidatorPage implements OnInit {
   }
 
   ionViewWillEnter(){
-    if(this.user.account === undefined){
-      console.log("no hay nadie logeado");
+     if(this.user.account.current_user){
+      console.log("Ya tenemos a alguieen");
     }else{
-      console.log("Ya tenemos a alguieen")
+      console.log("no hay nadie logeado");
     }
   }
 

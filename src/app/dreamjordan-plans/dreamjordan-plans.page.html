@@ -18,66 +18,11 @@
   </div>
   <ion-grid>
     <ion-row>
-      <ion-col size="6">
+      <ion-col size="6" *ngFor="let tour of DreamJordanTours">
         <div class="warp-solid"></div>
-        <img class="portait-img" src="./assets/img/exampleImage.png"/>
-        <div class="bottom-slider-text" (click)="tourDetail()">
-          <span class="title-slider">Los imperdibles de Jordania</span>
-        </div>
-      </ion-col>
-      <ion-col size="6">
-        <div class="warp-solid"></div>
-        <img class="portait-img" src="./assets/img/2.jpeg"/>
-        <div class="bottom-slider-text">
-          <span class="title-slider">Viaje Rápido Israel / Jordania (8 días)</span>
-        </div>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="6">
-        <div class="warp-solid"></div>
-        <img class="portait-img" src="./assets/img/3.jpg"/>
-        <div class="bottom-slider-text">
-            <span class="title-slider">Los imperdibles de Jordania</span>
-        </div>
-      </ion-col>
-      <ion-col size="6">
-        <div class="warp-solid"></div>
-        <img class="portait-img" src="./assets/img/4.png"/>
-        <div class="bottom-slider-text">
-            <span class="title-slider">Viaje Rápido Israel / Jordania (8 días)</span>
-        </div>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="6">
-        <div class="warp-solid"></div>
-        <img class="portait-img" src="./assets/img/4.png"/>
-        <div class="bottom-slider-text">
-            <span class="title-slider">Los imperdibles de Jordania</span>
-        </div>
-      </ion-col>
-      <ion-col size="6">
-        <div class="warp-solid"></div>
-        <img class="portait-img" src="./assets/img/1.jpeg"/>
-        <div class="bottom-slider-text">
-            <span class="title-slider">Viaje Rápido Israel / Jordania (8 días)</span>
-        </div>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="6">
-        <div class="warp-solid"></div>
-        <img class="portait-img" src="./assets/img/3.jpg"/>
-        <div class="bottom-slider-text">
-          <span class="title-slider">Los imperdibles de Jordania</span>
-        </div>
-      </ion-col>
-      <ion-col size="6">
-        <div class="warp-solid"></div>
-        <img class="portait-img" src="./assets/img/2.jpeg"/>
-        <div class="bottom-slider-text">
-            <span class="title-slider">Viaje Rápido Israel / Jordania (8 días)</span>
+        <img class="portait-img" [src]="co.API+tour.field_imagen_dream_jordan_tour">
+        <div class="bottom-slider-text" (click)="tourDetail(tour.nid)">
+          <span class="title-slider">{{tour.title}}</span>
         </div>
       </ion-col>
     </ion-row>

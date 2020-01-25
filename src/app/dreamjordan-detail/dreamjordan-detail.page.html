@@ -13,18 +13,18 @@
 <ion-content>
     <ion-row class="header-row">
       <ion-col size="5">
-        <img class="portait-img" src="./assets/img/2.jpeg"/>
+        <img class="portait-img" [src]="co.API+current_tour?.field_imagen_dream_jordan_tour"/>
       </ion-col>
       <ion-col size="7">
         <div class="header-text">
-          <h4>Los imperdibles de Jordania</h4>
+          <h4>{{current_tour?.title}}</h4>
           <span class="price" *ngIf="isActivated">8 de 10 días</span>
           <br>
         </div>
       </ion-col>
     </ion-row>
     <div class="description">
-      <p>Dolorum inventore nam convallis eveniet hac class adipiscing blanditiis. Praesentium turpis cursus mollis ipsam torquent mollitia viverra sollicitudin, congue nulla voluptates ducimus iusto facere turpis, aliquip minima, ullamco, maecenas sit wisi, vulputate eu mus? Dignissimos etiam lacus sagittis? Fugiat orci nam excepteur. Deleniti, faucibus iste! Paria</p>
+      <p>{{current_tour?.body}}</p>
     </div>
     <!-- cupon a validar -->
     <ion-row class="container" *ngIf="isValid == false">
@@ -58,63 +58,15 @@
     </ion-row>
     <!--When is activated-->
     <ion-grid class="content-list" *ngIf="isActivated == true">  
-        <ion-row>
+        <ion-row *ngFor="let audio of audiosList; let i = index">
           <ion-col size="2" class="index-col">
-            <span class="index">1</span>
+            <span class="index">{{i+1}}</span>
           </ion-col>
           <ion-col size="7">
-            <span class="file-tour-name">Nombre</span>
+            <span class="file-tour-name">{{audio.name}}</span>
             <br>
             <p class="file-tour-desc"> Dolorum inventore nam convallis eveniet hac class adipiscing blanditiis. Praesentium turpis cursus epteur.</p>
             <ion-progress-bar value="0.5"></ion-progress-bar>
-          </ion-col >
-          <ion-col size="3" class="play-div">
-            <img src="../../assets/img/play.svg"/>
-            <br>
-            <span class="counter"> 1 de 3</span>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="2" class="index-col">
-            <span class="index">2</span>
-          </ion-col>
-          <ion-col size="7">
-            <span class="file-tour-name">Nombre</span>
-            <br>
-            <p class="file-tour-desc"> Dolorum inventore nam convallis eveniet hac class adipiscing blanditiis. Praesentium turpis cursus epteur.</p>
-            <ion-progress-bar></ion-progress-bar>
-          </ion-col >
-          <ion-col size="3" class="play-div">
-            <img src="../../assets/img/play.svg"/>
-            <br>
-            <span class="counter"> 1 de 3</span>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="2" class="index-col">
-            <span class="index">3</span>
-          </ion-col>
-          <ion-col size="7">
-            <span class="file-tour-name">Nombre</span>
-            <br>
-            <p class="file-tour-desc"> Dolorum inventore nam convallis eveniet hac class adipiscing blanditiis. Praesentium turpis cursus epteur.</p>
-            <ion-progress-bar></ion-progress-bar>
-          </ion-col >
-          <ion-col size="3" class="play-div">
-            <img src="../../assets/img/play.svg"/>
-            <br>
-            <span class="counter"> 1 de 3</span>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="2" class="index-col">
-            <span class="index">4</span>
-          </ion-col>
-          <ion-col size="7">
-            <span class="file-tour-name">Nombre</span>
-            <br>
-            <p class="file-tour-desc"> Dolorum inventore nam convallis eveniet hac class adipiscing blanditiis. Praesentium turpis cursus epteur.</p>
-            <ion-progress-bar></ion-progress-bar>
           </ion-col >
           <ion-col size="3" class="play-div">
             <img src="../../assets/img/play.svg"/>

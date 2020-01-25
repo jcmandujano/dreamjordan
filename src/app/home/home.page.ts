@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {Router, NavigationExtras} from '@angular/router';
 import { UserService } from '../api/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CommonService } from '../api/common.service';
 
 @Component({
   selector: 'app-home',
@@ -10,9 +11,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class HomePage {
 
-  
+  paises : any;
 
-  constructor(private router:Router, public user : UserService) { }
+  constructor(private router:Router, 
+    public user : UserService, 
+    public co: CommonService) { }
 
   visibles : boolean = false;
   slideOpts = {
@@ -22,31 +25,46 @@ export class HomePage {
     autoHeight:true
   };
 
+  //valida si existe un usuario logeado JCMV 20012020
   ionViewWillEnter(){
     if(this.user.account === undefined){
+      this.co.showLoader();
       this.user.getLoginStatus().subscribe(res => { 
         this.user.account = res;
-        console.log("Ya tenemos a alguieen")
+        this.co.hideLoader();
+        if(this.user.account.current_user){
+          console.log("Ya tenemos a alguieen1 ",res);
+        }
       },
       (err: HttpErrorResponse) => { 
-        console.log("povema2",err);
-      });
-      
-    }else{
-      console.log("Ya tenemos a alguieen")
+        this.co.hideLoader();
+        console.log("error",err);
+      }); 
     }
+    this.recuperaPaises();
   }
 
+  recuperaPaises(){
+    //recuperamos paises
+    this.user.getPaises().subscribe(res => { 
+      this.paises = res;
+    },
+    (err: HttpErrorResponse) => { 
+      console.log("error",err);
+    });
+  }
+
+  // funcion llamada desde el boton "valida cupon"
   validateCoupon(){
-    if(this.user.account === undefined){
+    if(this.user.account.current_user){
+      this.router.navigate(['/tabs/coupon-validator']);
+    }else{
       let navigationExtras: NavigationExtras = {
-        state: {
+        state: {  
           origin: "validaCupon"
         }
       };
       this.router.navigate(['/logreg-select'],navigationExtras);
-    }else{
-      this.router.navigate(['/tabs/coupon-validator']);
     }
     
   }
