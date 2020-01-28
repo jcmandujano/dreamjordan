@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-buttons slot="primary">
       <ion-icon class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
-        <ion-badge class="notifications-badge">05</ion-badge>
+      <ion-badge *ngIf="cart.length > 0" class="notifications-badge">{{cartItemCount | async}}</ion-badge>
       <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
@@ -14,62 +14,29 @@
 <ion-content>
 <!--GRID OCUPADO PARA CUANDO AUN NO SE COMPRA CONTENIDO-->
 <ion-grid class="content-list" >  
-  <ion-row>
+  <ion-row *ngFor="let item of cart">
     <ion-col size="3" class="index-col">
       <img class="tmb-img" src="../../assets/img/3.jpg"/>
     </ion-col>
     <ion-col size="6">
-      <p class="file-tour-name">Nombre  <span class="file-tour-desc">País completo</span></p>
-      <ion-select class="cart-select">
-        <ion-select-option value="f">1</ion-select-option>
-        <ion-select-option value="m">2</ion-select-option>
-      </ion-select>
+      <p class="file-tour-name">{{item.name}}  <span class="file-tour-desc">País completo</span></p>
+      <ion-select class="cart-select" [(ngModel)]="item.amount" [selectedText]="item.amount">
+        <ion-select-option value="1" >1</ion-select-option>
+        <ion-select-option value="2" >2</ion-select-option>
+        <ion-select-option value="3" >3</ion-select-option>
+        <ion-select-option value="4" >4</ion-select-option>
+        <ion-select-option value="5" >5</ion-select-option>
+      </ion-select> 
     </ion-col >
     <ion-col size="2" class="centered">
-      <span class="price">$10000</span>
+      <span class="price">{{item.field_costo | currency:'USD'}}</span>
     </ion-col>
     <ion-col size="1" class="centered">
-        <ion-icon class="trashy" src="./assets/img/trash.svg" ></ion-icon>
+        <ion-icon (click)="removeCartItem(item)" class="trashy" src="./assets/img/trash.svg" ></ion-icon>
       </ion-col>
   </ion-row>
-  <ion-row>
-    <ion-col size="3" class="index-col">
-      <img class="tmb-img" src="../../assets/img/3.jpg"/>
-    </ion-col>
-    <ion-col size="6">
-      <p class="file-tour-name">Nombre  <span class="file-tour-desc">País completo</span></p>
-      <ion-select class="cart-select">
-        <ion-select-option value="f">1</ion-select-option>
-        <ion-select-option value="m">2</ion-select-option>
-      </ion-select>
-    </ion-col >
-    <ion-col size="2" class="centered">
-      <span class="price">$10000</span>
-    </ion-col>
-    <ion-col size="1" class="centered">
-        <ion-icon class="trashy" src="./assets/img/trash.svg" ></ion-icon>
-      </ion-col>
-  </ion-row>
-  <ion-row>
-      <ion-col size="3" class="index-col">
-        <img class="tmb-img" src="../../assets/img/3.jpg"/>
-      </ion-col>
-      <ion-col size="6">
-        <p class="file-tour-name">Nombre  <span class="file-tour-desc">País completo</span></p>
-        <ion-select class="cart-select">
-          <ion-select-option value="f">1</ion-select-option>
-          <ion-select-option value="m">2</ion-select-option>
-        </ion-select>
-      </ion-col >
-      <ion-col size="2" class="centered">
-        <span class="price">$10000</span>
-      </ion-col>
-      <ion-col size="1" class="centered">
-          <ion-icon class="trashy" src="./assets/img/trash.svg" ></ion-icon>
-        </ion-col>
-    </ion-row>
     <div class="resume">
-      <p class="resume-total">Total  <span class="price">$30000</span></p>
+      <p class="resume-total">Total  <span class="price">{{getTotal() | currency:'USD'}}</span></p>
     </div>
     <div class="row">
       <div class="column">
@@ -79,7 +46,7 @@
         <ion-button class="primary">Pagar</ion-button>
       </div>
     </div>
-    <div class="trash-all">
+    <div class="trash-all" (click)="emptyCurrentCart()">
       <p>Vaciar carrito  </p>
       <ion-icon class="trashy" src="./assets/img/trash.svg" ></ion-icon>
     </div>

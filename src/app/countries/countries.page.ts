@@ -3,7 +3,9 @@ import {Router, NavigationExtras} from '@angular/router';
 import { CommonService } from '../api/common.service';
 import { UserService } from '../api/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
-
+import { CartService } from '../api/cart.service';
+import { BehaviorSubject } from 'rxjs';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
 @Component({
   selector: 'app-countries',
   templateUrl: './countries.page.html',
@@ -12,11 +14,23 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class CountriesPage implements OnInit {
   paises : any;
   skeletons:any;
+  cartItemCount: BehaviorSubject<number>;
+  cart=[];
   constructor(private router:Router,
     public user : UserService, 
-    public co: CommonService) { }
+    public co: CommonService,
+    private cartserv:CartService,
+    private nativeStorage: NativeStorage) { }
+    
 
   ngOnInit() {
+    this.nativeStorage.getItem('myitem')
+    .then(
+      data => console.log(data),
+      error => console.error(error)
+    );
+    this.cartItemCount = this.cartserv.getCartItemCount();
+    this.cart = this.cartserv.getCart();
     //recuperamos paises
     this.co.showLoader();
     this.user.getPaises().subscribe(res => { 
@@ -34,5 +48,8 @@ export class CountriesPage implements OnInit {
     this.router.navigateByUrl('/tabs/country-detail/'+idPais);
   }
   
+  openCart(){
+    this.router.navigate(['/tabs/my-cart']);
+  }
 
 }

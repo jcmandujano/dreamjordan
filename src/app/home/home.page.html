@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-buttons slot="primary">
       <ion-icon (click)="openCart()" class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
-        <ion-badge class="notifications-badge">05</ion-badge>
+      <ion-badge *ngIf="cart.length > 0" class="notifications-badge">{{cartItemCount | async}}</ion-badge>
       <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
@@ -137,7 +137,7 @@
           <ion-slide *ngFor="let pais of paises">
             <div class="warp-solid"></div>
             <img *ngIf="pais.field_imagen == ''" src="./assets/img/exampleImage.png"/>
-            <img *ngIf="pais.field_imagen"[src]="co.API+pais.field_imagen"/>
+            <img *ngIf="pais.field_imagen" [src]="co.API+pais.field_imagen"/>
             <div class="bottom-slider-text">
               <span class="title-slider">{{pais.nombrePais}}</span>
             </div>
@@ -149,48 +149,13 @@
     </ion-row>
     <ion-row>
       <ion-slides class="bottom-slider" [options]="slideOpts">
-          <ion-slide >
+          <ion-slide *ngFor="let djTours of DreamJordanTours">
             <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
+            <img [src]="co.API+djTours.field_imagen_dream_jordan_tour"/>
             <div class="bottom-slider-text">
-              <span class="title-slider">Los imperdibles de Jordania</span>
+              <span class="title-slider">{{djTours.title}}</span>
             </div>
           </ion-slide>
-          <ion-slide >
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider">Viaje Rápido Israel / Jordania (8 días)</span>
-            </div>
-          </ion-slide>
-          <ion-slide >
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider">Viaje Relámpago a Jordania e Israel 3 Días</span>
-            </div>
-          </ion-slide>
-        <ion-slide >
-          <div class="warp-solid"></div>
-          <img src="./assets/img/exampleImage.png"/>
-          <div class="bottom-slider-text">
-            <span class="title-slider">Los imperdibles de Jordania</span>
-          </div>
-        </ion-slide>
-        <ion-slide >
-          <div class="warp-solid"></div>
-          <img src="./assets/img/exampleImage.png"/>
-          <div class="bottom-slider-text">
-            <span class="title-slider">Viaje Rápido Israel / Jordania (8 días)</span>
-          </div>
-        </ion-slide>
-        <ion-slide >
-          <div class="warp-solid"></div>
-          <img src="./assets/img/exampleImage.png"/>
-          <div class="bottom-slider-text">
-            <span class="title-slider">Viaje Relámpago a Jordania e Israel 3 Días</span>
-          </div>
-        </ion-slide>
       </ion-slides>
     </ion-row>
   </ion-grid>

@@ -17,7 +17,7 @@ export class TourDetailPage implements OnInit{
   cart=[];
   products = [];
   cartItemCount: BehaviorSubject<number>;
-
+  ammount : number = 1;
   nid:any;
   audiosArray:any;
   idPais:any;
@@ -36,12 +36,10 @@ export class TourDetailPage implements OnInit{
     this.products = this.cartserv.getProducts();
     this.cart = this.cartserv.getCart();
     this.cartItemCount = this.cartserv.getCartItemCount();
-    console.log("carriyo",this.products);
   }
 
   addToCart(product){
-    product.amount = 1;
-    console.log("producto",product);
+   // product.amount = 1;
     this.cartserv.addProduct(product);
   }
 
@@ -49,9 +47,12 @@ export class TourDetailPage implements OnInit{
     this.co.showLoader();
     this.tourService.getAudiosxTour(this.nid).subscribe(
       (res:any) => { 
-        this.co.hideLoader();
         this.audiosArray = res;
-        //console.log("audios",res);
+        for(let obj of this.audiosArray){
+        obj.amount=1;
+        // console.log("audios",obj);
+        }
+        this.co.hideLoader();
       },
       (err: HttpErrorResponse) => { 
         //console.log(err);

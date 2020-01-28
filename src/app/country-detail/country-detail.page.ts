@@ -4,6 +4,8 @@ import {TourService} from '../api/tour.service';
 import { CommonService } from '../api/common.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../api/user.service';
+import { CartService } from '../api/cart.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-country-detail',
@@ -14,14 +16,22 @@ export class CountryDetailPage {
   idPais: any;
   paisSelecc : any;
   tours:any;
+  cart=[];
+  cartItemCount: BehaviorSubject<number>;
   constructor(public router:Router,
     public tourService:TourService,
     public user : UserService,
     public co: CommonService,
-    public active : ActivatedRoute) { 
+    public active : ActivatedRoute,
+    private cartserv:CartService) { 
       this.idPais = this.active.snapshot.paramMap.get("id");
-
   }
+
+  ngOnInit(){
+    this.cart = this.cartserv.getCart();
+    this.cartItemCount = this.cartserv.getCartItemCount();
+  }
+
 
   ionViewDidEnter() {
     this.co.showLoader();
@@ -44,7 +54,7 @@ export class CountryDetailPage {
     this.user.getPaisById(this.idPais).subscribe(res => { 
       this.co.hideLoader();
       this.paisSelecc = res[0];
-      console.log("elemento",this.paisSelecc);
+      //console.log("elemento",this.paisSelecc);
     },
     (err: HttpErrorResponse) => { 
       this.co.hideLoader();
@@ -56,5 +66,7 @@ export class CountryDetailPage {
     this.router.navigate(['/tabs/tour-detail/'+this.idPais+'/'+nid]);
   }
 
-
+  openCart(){
+    this.router.navigate(['/tabs/my-cart']);
+  }
 }

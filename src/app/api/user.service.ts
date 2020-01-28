@@ -75,6 +75,31 @@ export class UserService {
       );
   }
 
+  register(username:string,password:string){
+    let headers = new HttpHeaders({
+      'Content-Type':  'application/json',
+    });
+    let datos =  {
+      "name":[{"value":username}],
+      "mail":[{"value":username}],
+      "pass":[{"value":password}]
+    };
+    console.log("data",datos);
+    return this.http.post<Account>(
+      this.co.API+'user/register?_format=json',
+      JSON.stringify(datos),
+      { headers: headers, withCredentials: true }).pipe(
+        map(
+          res => { 
+            return res;
+          },
+          (err: HttpErrorResponse) => { 
+            console.log(err);
+          }
+        )
+      );
+  }
+
   logout(){
     return this.http.get<Account>(
       this.co.API+'user/clogout?_format=json',
