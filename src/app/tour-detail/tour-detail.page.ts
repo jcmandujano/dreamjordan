@@ -92,4 +92,8 @@ export class TourDetailPage implements OnInit{
     this.router.navigate(['/tabs/my-cart']);
   }
 
+  ngOnDestroy(){
+    this.cartserv.setLocalStorage();
+  }
+
 }

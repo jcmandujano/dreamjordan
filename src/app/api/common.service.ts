@@ -47,11 +47,14 @@ export class CommonService {
       await this.loader.present();
     }
   }
+
   hideLoader(){
     if(this.loader != null){
       this.loader.dismiss();
       this.loader = null;
     }
   }
+
+  
 
 }

@@ -36,7 +36,7 @@ export class UserService {
 
   constructor(
     public http: HttpClient,
-    public co: CommonService,
+    public co: CommonService
   ) { }
 
   getLoginStatus(){

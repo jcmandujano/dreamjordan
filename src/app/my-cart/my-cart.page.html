@@ -43,7 +43,7 @@
         <ion-button class="cancel-btn">Seguir Comprando</ion-button>
       </div>
       <div class="column">
-        <ion-button class="primary">Pagar</ion-button>
+        <ion-button (click)="pay()" class="primary">Pagar</ion-button>
       </div>
     </div>
     <div class="trash-all" (click)="emptyCurrentCart()">

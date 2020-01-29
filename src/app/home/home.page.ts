@@ -7,7 +7,7 @@ import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
 import {TourService} from '../api/tour.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +24,8 @@ export class HomePage {
     public co: CommonService,
     public tourService:TourService,
     private cartserv : CartService,
-    private nativeStorage: NativeStorage) {
+    private nativeStorage: NativeStorage,
+    public platform: Platform) {
       this.cartItemCount = this.cartserv.getCartItemCount();
       this.cart = this.cartserv.getCart();
      }
@@ -37,13 +38,26 @@ export class HomePage {
     autoHeight:true
   };
 
+  getCartData(){
+    this.platform.ready().then(() => {
+      // 'hybrid' detects both Cordova and Capacitor
+      if (this.platform.is('android') || this.platform.is('ios')) {
+        console.log("cordova aviable :)");
+        this.nativeStorage.getItem('carrito')
+        .then(
+          data => console.log(data),
+          error => console.error(error)
+        );
+      }else{
+        console.log("otra")
+      }
+    });
+  }
+
   //valida si existe un usuario logeado JCMV 20012020
   ionViewWillEnter(){
-    this.nativeStorage.setItem('myitem', {property: 'value', anotherProperty: 'anotherValue'})
-    .then(
-      () => console.log('Stored item!'),
-      error => console.error('Error storing item', error)
-    );
+    this.getCartData();
+
     if(this.user.account === undefined){
       this.co.showLoader();
       this.user.getLoginStatus().subscribe(res => { 

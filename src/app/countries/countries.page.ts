@@ -24,7 +24,7 @@ export class CountriesPage implements OnInit {
     
 
   ngOnInit() {
-    this.nativeStorage.getItem('myitem')
+    this.nativeStorage.getItem('carrito')
     .then(
       data => console.log(data),
       error => console.error(error)
@@ -50,6 +50,10 @@ export class CountriesPage implements OnInit {
   
   openCart(){
     this.router.navigate(['/tabs/my-cart']);
+  }
+
+  ngOnDestroy(){
+    console.log("saliendo");
   }
 
 }
