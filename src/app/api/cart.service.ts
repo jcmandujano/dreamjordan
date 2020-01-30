@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { UserService } from '../api/user.service';
 import { map } from 'rxjs/operators';
 import { CommonService } from '../api/common.service';
+import {StorageService, Item} from '../api/storage.service';
 
 export interface Product{
   nid:number;
@@ -21,40 +22,14 @@ export interface Product{
 export class CartService {
   data : Product[]; 
   itemsCarrito :any;
-  /*= [
-    {nid:0, mid : 0, name:"producto 1", price:10, audio:"naa", amount:1}
-  ]*/
   private cart = [];
   private cartItemCount = new BehaviorSubject(0);
-   
-
+  
   constructor(private nativeStorage: NativeStorage,
     public US : UserService,
     public http: HttpClient,
-    public co: CommonService) { }
-
-  //setLocalStorage(cartObject:any){
-    setLocalStorage(){
-      let currentCart : any;
-      this.nativeStorage.getItem('carrito').then(
-          data => 
-            console.log("carrito en el native",data),
-            //currentCart = data,
-          error => 
-            console.error(error)
-      );
-      if(currentCart != this.cart ){
-        console.log("cambio el carrito");
-      }else{
-        console.log("no ha cambiado");
-      }
-      console.log("guardame este fierrito");
-      /*this.nativeStorage.setItem('carrito', {cart: this.cart})
-      .then(
-        () => console.log('Se guardo correctamente'),
-        error => console.error('Error al guardar el carrito', error)
-      );*/
-    }
+    public co: CommonService,
+    private storage : StorageService) { }
 
   getProducts(){
     return this.data;
@@ -63,9 +38,14 @@ export class CartService {
   getCart(){
     return this.cart;
   }
-
+  
   getCartItemCount(){
     return this.cartItemCount;
+  }
+
+  setCartItemCount(value){
+    console.log("valllll",value);
+    this.cartItemCount.next(value);
   }
 
   addProduct(product){
@@ -79,9 +59,11 @@ export class CartService {
     }
     if(!added){
       this.cart.push(product);
+      let item = {id: product.nid, element: this.cart}
     }
     this.cartItemCount.next(this.cartItemCount.value + 1 );
-    console.log("test",this.cart);
+    //console.log("test",this.cart);
+    
   }
 
   decreaseProduct(product){

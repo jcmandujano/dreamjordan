@@ -53,17 +53,20 @@
         <span class="index">{{i+1}}</span>
       </ion-col>
       <ion-col size="7">
+        <!--<audio id="{{audio.mid}}" [src]="co.API+audio.field_media_audio_file" controls>
+        </audio>-->
         <span class="file-tour-name">{{audio.name}}</span>
         <br>
         <p class="file-tour-desc"> Dolorum inventore nam convallis eveniet hac class adipiscing blanditiis. Praesentium turpis cursus epteur.</p>
-        <ion-progress-bar value="0.5"></ion-progress-bar>
+        <!-- <ion-progress-bar value="0.5"></ion-progress-bar> -->
+        <ion-range color="danger" pin="true"></ion-range>
       </ion-col >
       <ion-col size="3" class="play-div">
-        <img src="../../assets/img/play.svg"/>
+        <img src="../../assets/img/play.svg" (click)="start(audio)" *ngIf="!isPlaying"/>
+        <img src="../../assets/img/pause.png" (click)="togglePlayer(true)" *ngIf="isPlaying"/>
         <br>
         <span class="counter"> 1 de 3</span>
       </ion-col>
     </ion-row>
   </ion-grid>
-
 </ion-content>

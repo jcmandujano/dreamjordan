@@ -6,6 +6,16 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ConstantPool } from '@angular/compiler';
 import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
+import {Howl, howler} from 'howler'
+
+export interface Track{
+  nid:string;
+  mid:string;
+  name:string;
+  field_costo:string;
+  field_media_audio_file:string;
+  ammount:number;
+}
 
 @Component({
   selector: 'app-tour-detail',
@@ -17,12 +27,22 @@ export class TourDetailPage implements OnInit{
   cart=[];
   products = [];
   cartItemCount: BehaviorSubject<number>;
+  /*Variables para el carrito*/
+
   ammount : number = 1;
   nid:any;
   audiosArray:any;
   idPais:any;
   comprado:boolean = false;  
   currentTour:any;
+  
+  /*variables para audio player*/
+  progress:number;
+  activetrack : Track = null;
+  player:Howl = null;
+  isPlaying:boolean = false;
+  /*variables para audio player*/
+
   constructor(private router:Router,
     public tourService:TourService,
     public co: CommonService,
@@ -50,7 +70,7 @@ export class TourDetailPage implements OnInit{
         this.audiosArray = res;
         for(let obj of this.audiosArray){
         obj.amount=1;
-        // console.log("audios",obj);
+         console.log("audios",obj);
         }
         this.co.hideLoader();
       },
@@ -92,8 +112,44 @@ export class TourDetailPage implements OnInit{
     this.router.navigate(['/tabs/my-cart']);
   }
 
-  ngOnDestroy(){
-    this.cartserv.setLocalStorage();
+  
+  /*METODOS PARA AUDIO PLAYER*/
+  start(track:Track){
+    if(this.player){
+      this.player.stop();
+    }
+    this.player = new Howl({
+      src:[this.co.PRIMARY_DOMAIN+track.field_media_audio_file],
+      html5:true,
+      onplay:() =>{
+        this.activetrack = track;
+        this.isPlaying = true;
+      },
+      onend:()=>{
+        console.log("onend");
+      }
+    });
+    console.log("kha",this.player);
+    this.player.play();
   }
+
+  togglePlayer(pause){
+    this.isPlaying = !pause;
+    if(pause){
+      this.player.pause();
+    }else{
+      this.player.play();
+    }
+  }
+
+  seek(){
+
+  }
+
+  updateProgress(){
+    
+  }
+
+
 
 }

@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import {CartService} from '../app/api/cart.service';
+import {StorageService, Item} from '../app/api/storage.service';
+
 
 @Component({
   selector: 'app-root',
@@ -22,22 +23,16 @@ export class AppComponent {
       icon: 'list'
     }
   ];
-
+  localItems : Item[]  = [];
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private cartserv : CartService
+    private storage : StorageService
   ) {
     this.initializeApp();
   }
 
-  closeApp(){
-    if(this.platform.pause){
-      console.log("se acabo");
-    // or something function
-    }
-  }
 
   initializeApp() {
     this.platform.ready().then(() => {
@@ -45,9 +40,7 @@ export class AppComponent {
       this.splashScreen.hide();
       this.platform.pause.subscribe(() => {        
         console.log('PAUSADO');
-        this.cartserv.setLocalStorage();
         //Same logic
-        //this.platform.resume.unsubscribe();
       });  
     });
   }

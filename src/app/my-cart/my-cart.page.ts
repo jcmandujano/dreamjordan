@@ -17,7 +17,6 @@ export class MyCartPage implements OnInit {
     public user : UserService) { }
 
   ngOnInit() {
-   
   }
 
   ionViewDidEnter(){
@@ -79,5 +78,9 @@ export class MyCartPage implements OnInit {
       }
     );
     console.log("pagameee");
+  }
+
+  ngOnDestroy(){
+    console.log("Adios");
   }
 }

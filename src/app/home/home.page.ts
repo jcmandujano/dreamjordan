@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 import {TourService} from '../api/tour.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { Platform } from '@ionic/angular';
+import {StorageService, Item} from '../api/storage.service';
 
 @Component({
   selector: 'app-home',
@@ -15,6 +16,7 @@ import { Platform } from '@ionic/angular';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+  localItems : Item[]  = [];
   cart=[];
   paises : any;
   cartItemCount: BehaviorSubject<number>;
@@ -25,7 +27,8 @@ export class HomePage {
     public tourService:TourService,
     private cartserv : CartService,
     private nativeStorage: NativeStorage,
-    public platform: Platform) {
+    public platform: Platform,
+    private storage : StorageService) {
       this.cartItemCount = this.cartserv.getCartItemCount();
       this.cart = this.cartserv.getCart();
      }
@@ -38,26 +41,8 @@ export class HomePage {
     autoHeight:true
   };
 
-  getCartData(){
-    this.platform.ready().then(() => {
-      // 'hybrid' detects both Cordova and Capacitor
-      if (this.platform.is('android') || this.platform.is('ios')) {
-        console.log("cordova aviable :)");
-        this.nativeStorage.getItem('carrito')
-        .then(
-          data => console.log(data),
-          error => console.error(error)
-        );
-      }else{
-        console.log("otra")
-      }
-    });
-  }
-
   //valida si existe un usuario logeado JCMV 20012020
   ionViewWillEnter(){
-    this.getCartData();
-
     if(this.user.account === undefined){
       this.co.showLoader();
       this.user.getLoginStatus().subscribe(res => { 
@@ -76,6 +61,13 @@ export class HomePage {
     this.recuperaDreamJordan();
   }
 
+ /* loadStorageItems(){ SEGUIMIS DESOUES∫
+    this.storage.getItems().then(items =>{
+     this.localItems = items;
+     console.log("items",this.localItems);
+    });
+  }*/
+
   recuperaPaises(){
     //recuperamos paises
     this.user.getPaises().subscribe(res => { 
@@ -90,7 +82,7 @@ export class HomePage {
     this.tourService.getDreamJordanTours().subscribe(res => { 
       this.co.hideLoader();
       this.DreamJordanTours = res;
-      console.log("toursDreamJordan",res);
+      //console.log("toursDreamJordan",res);
     },
     (err: HttpErrorResponse) => { 
       this.co.hideLoader();
