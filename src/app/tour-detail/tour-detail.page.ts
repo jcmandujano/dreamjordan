@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import {Router, ActivatedRoute, } from '@angular/router';
 import {TourService} from '../api/tour.service';
 import { CommonService } from '../api/common.service';
@@ -7,6 +7,7 @@ import { ConstantPool } from '@angular/compiler';
 import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
 import {Howl, howler} from 'howler'
+import { IonRange } from '@ionic/angular';
 
 export interface Track{
   nid:string;
@@ -15,6 +16,7 @@ export interface Track{
   field_costo:string;
   field_media_audio_file:string;
   ammount:number;
+  isPlaying:boolean;
 }
 
 @Component({
@@ -37,10 +39,11 @@ export class TourDetailPage implements OnInit{
   currentTour:any;
   
   /*variables para audio player*/
-  progress:number;
   activetrack : Track = null;
   player:Howl = null;
   isPlaying:boolean = false;
+  playlist = new Array();
+  @ViewChildren(IonRange) ranges : QueryList<IonRange>;
   /*variables para audio player*/
 
   constructor(private router:Router,
@@ -70,7 +73,7 @@ export class TourDetailPage implements OnInit{
         this.audiosArray = res;
         for(let obj of this.audiosArray){
         obj.amount=1;
-         console.log("audios",obj);
+         //console.log("audios",obj);
         }
         this.co.hideLoader();
       },
@@ -104,33 +107,53 @@ export class TourDetailPage implements OnInit{
   }
 
   buy(flag:boolean){
-    console.log("Compramee!! " + flag);
     this.comprado = flag;
+    this.audiosArray.forEach(element => {
+      element.audioelement=this.start(element);
+      element.progress=0;
+    });
   }
 
   openCart(){
     this.router.navigate(['/tabs/my-cart']);
   }
 
-  
+
   /*METODOS PARA AUDIO PLAYER*/
   start(track:Track){
-    if(this.player){
-      this.player.stop();
-    }
-    this.player = new Howl({
-      src:[this.co.PRIMARY_DOMAIN+track.field_media_audio_file],
-      html5:true,
-      onplay:() =>{
-        this.activetrack = track;
-        this.isPlaying = true;
-      },
-      onend:()=>{
-        console.log("onend");
-      }
-    });
-    console.log("kha",this.player);
-    this.player.play();
+      this.player = new Howl({
+        src:[this.co.PRIMARY_DOMAIN+track.field_media_audio_file],
+        html5:true,
+        onplay:() =>{
+          console.log("playing");
+          track.isPlaying=true;
+        },
+        onend:()=>{
+          console.log("onend");
+          track.isPlaying=false;
+          this.updateFinished(track);
+        },
+        onpause:()=>{
+          console.log("paused");
+          track.isPlaying=false;
+        }
+      });
+      return this.player;
+  }
+
+  play(track:Howl){
+    track.play();
+    this.updateProgress(track);
+  }
+
+  pause(track:Howl){
+    track.pause();
+  }
+
+  //guardamos un play mas, al contador de plays
+  updateFinished(track){
+    console.log("NID",track);
+    
   }
 
   togglePlayer(pause){
@@ -142,14 +165,18 @@ export class TourDetailPage implements OnInit{
     }
   }
 
-  seek(){
-
+  seek(audio:Howl, i:number){
+    let currentRange = this.ranges.filter((element,index)=> index == i);
+    let newValue =+ currentRange[0].value;
+    let duration = audio.duration();
+    audio.seek(duration * (newValue/100));
   }
 
-  updateProgress(){
-    
+  updateProgress(track:Howl){
+    let seek =  track.seek();
+    track.progress = (seek/track.duration()) * 100;
+    setTimeout(()=>{
+      this.updateProgress(track);
+    }, 1000)
   }
-
-
-
 }

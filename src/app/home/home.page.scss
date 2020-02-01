@@ -10,13 +10,16 @@ ion-grid{
   padding: 0%;
 }
 
-.swiper-zoom-container>img{
-  max-height: none;
-  object-fit: contain;
+.home-slide{
+  height: 230px;
+  .swiper-zoom-container>img{
+    max-height: none;
+    object-fit: contain;
+  }
 }
 
-.home-slide {
-  height: 230px;
+.fitme{
+  object-fit: cover;
 }
 
 .slider-text {

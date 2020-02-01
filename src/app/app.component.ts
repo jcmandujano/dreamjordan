@@ -13,14 +13,29 @@ import {StorageService, Item} from '../app/api/storage.service';
 export class AppComponent {
   public appPages = [
     {
-      title: 'Home',
-      url: '/home',
-      icon: 'home'
+      title: 'Sobre Dream Jordan',
+      url: '#',
+      icon:'information-circle'
     },
     {
-      title: 'List',
-      url: '/list',
-      icon: 'list'
+      title: 'F.A.Q.',
+      url: '#',
+      icon:'help-circle'
+    },
+    {
+      title: 'Contacto',
+      url: '#',
+      icon:'mail'
+    },
+    {
+      title: 'Mi cuenta',
+      url: '#',
+      icon:'person'
+    },
+    {
+      title: 'Cerrar sesion',
+      url: '#',
+      icon:'close-circle'
     }
   ];
   localItems : Item[]  = [];

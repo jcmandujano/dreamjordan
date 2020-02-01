@@ -9,6 +9,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { PayPal } from '@ionic-native/paypal/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,6 +22,7 @@ import { AppRoutingModule } from './app-routing.module';
     HttpClient,
     NativeStorage,
     SplashScreen,
+    PayPal,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

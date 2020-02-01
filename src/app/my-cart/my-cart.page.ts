@@ -4,6 +4,10 @@ import { BehaviorSubject } from 'rxjs';
 import { CommonService } from '../api/common.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../api/user.service';
+import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';
+
+
+
 @Component({
   selector: 'app-my-cart',
   templateUrl: './my-cart.page.html',
@@ -14,7 +18,8 @@ export class MyCartPage implements OnInit {
   cartItemCount: BehaviorSubject<number>;
   constructor( private cartserv : CartService,
     public co: CommonService,
-    public user : UserService) { }
+    public user : UserService,
+    private payPal: PayPal) { }
 
   ngOnInit() {
   }
@@ -83,4 +88,33 @@ export class MyCartPage implements OnInit {
   ngOnDestroy(){
     console.log("Adios");
   }
+
+  paypal(){
+    this.payPal.init({
+      PayPalEnvironmentProduction: 'ATNskmqDdI_ouR_lIK8vgq2VZWOj3pHdAUz8RNy3CtEVYOiZbrVWohvnZeBqqaFXtsRDc1E36J1E26fx',
+      PayPalEnvironmentSandbox: 'ATNskmqDdI_ouR_lIK8vgq2VZWOj3pHdAUz8RNy3CtEVYOiZbrVWohvnZeBqqaFXtsRDc1E36J1E26fx'
+    }).then(() => {
+      // Environments: PayPalEnvironmentNoNetwork, PayPalEnvironmentSandbox, PayPalEnvironmentProduction
+      this.payPal.prepareToRender('PayPalEnvironmentSandbox', new PayPalConfiguration({
+        // Only needed if you get an "Internal Service Error" after PayPal login!
+        //payPalShippingAddressOption: 2 // PayPalShippingAddressOptionPayPal
+      })).then(() => {
+        let payment = new PayPalPayment('3.33', 'MXN', 'Description', 'sale');
+        this.payPal.renderSinglePaymentUI(payment).then((data) => {
+          console.log("se logro",data);
+          // Successfully paid
+        }, () => {
+          console.log("cancelado");
+          // Error or render dialog closed without being successful
+        });
+      }, () => {
+        console.log("error en configuracion");
+        // Error in configuration
+      });
+    }, () => {
+      console.log("Error in initialization, maybe PayPal isn't supported or something else");
+      // Error in initialization, maybe PayPal isn't supported or something else
+    });
+  }
+
 }
