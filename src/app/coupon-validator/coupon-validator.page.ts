@@ -10,7 +10,6 @@ import { FormControl, Validators, FormGroup, ReactiveFormsModule } from '@angula
   styleUrls: ['./coupon-validator.page.scss'],
 })
 export class CouponValidatorPage implements OnInit {
-  showLogin:boolean;
   showRegister:boolean = false;
   showValidator:boolean = false;
   muestraLogin: boolean = true;
@@ -50,7 +49,10 @@ export class CouponValidatorPage implements OnInit {
   }
 
   validate(){
+    this.showValidator = false;
     this.isValid = true
+    this.muestraLogin = false;
+    this.showRegister = false;
   }
 
   muestraRegistro(){

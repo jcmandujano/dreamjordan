@@ -5,6 +5,7 @@ import { CommonService } from '../api/common.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../api/user.service';
 import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 
 
@@ -13,15 +14,31 @@ import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal
   templateUrl: './my-cart.page.html',
   styleUrls: ['./my-cart.page.scss'],
 })
-export class MyCartPage implements OnInit {
+export class MyCartPage {
+  showRegister:boolean = false;
+  showLogin: boolean = false;
+  showCart:boolean = true;
   cart : Product[] = [];
   cartItemCount: BehaviorSubject<number>;
+
+  login_data = new FormGroup({
+    email: new FormControl(null,Validators.required),
+    password: new FormControl(null,Validators.required)
+  });
+
+  register_data = new FormGroup({
+    email: new FormControl(null,Validators.required),
+    password: new FormControl(null,Validators.required)
+  });
+  
   constructor( private cartserv : CartService,
     public co: CommonService,
     public user : UserService,
     private payPal: PayPal) { }
 
-  ngOnInit() {
+  muestraRegistro(){
+    this.showLogin = false;
+    this.showRegister  = true;
   }
 
   ionViewDidEnter(){
@@ -43,19 +60,12 @@ export class MyCartPage implements OnInit {
     this.cart = this.cartserv.getCart();
   }
 
-  decreaseCartItem(product){
-    this.cartserv.decreaseProduct(product);
-  }
-
-  increaseCartItem(product){
-    this.cartserv.addProduct(product);
-  }
-
+  //Delete selected item from the cart list JCMV
   removeCartItem(product){
-    //console.log("eliminamesta",product);
     this.cartserv.removeProduct(product);
   }
 
+  //Get the total price JCMV
   getTotal(){
     return this.cart.reduce((i,j) =>  i + j.field_costo * j.amount,0);
   }
@@ -66,27 +76,29 @@ export class MyCartPage implements OnInit {
   }
 
   pay(){
-    this.co.showLoader();
-    this.cartserv.insertPurchase().subscribe(
-      (res:any) => { 
-        console.log("resoyesta",res);
-        this.co.hideLoader();
-      },
-      (err: HttpErrorResponse) => { 
-        //console.log(err);
-        this.co.hideLoader();
-        var message = err.error.message;
-        if(err.status == 400){
-          message = 'Correo electrónico o contraseña no reconocidos.';
+    if(this.user.account.current_user){
+      this.co.showLoader();
+      this.cartserv.insertSinglePurchase().subscribe(
+        (res:any) => { 
+          this.co.hideLoader();
+        },
+        (err: HttpErrorResponse) => { 
+          //console.log(err);
+          this.co.hideLoader();
+          var message = err.error.message;
+          if(err.status == 400){
+            message = 'Correo electrónico o contraseña no reconocidos.';
+          }
+          this.co.presentAlert('Error','¡UPS!, hubo un problema al iniciar sesión.',message);
         }
-        this.co.presentAlert('Error','¡UPS!, hubo un problema al iniciar sesión.',message);
-      }
-    );
+      );
+    }else{
+      this.co.presentAlert('Error','Para poder comprar es necesario hacer registrarse o acceder.',"");
+      this.showLogin=true;
+      this.showCart = false;
+    }
+    
     console.log("pagameee");
-  }
-
-  ngOnDestroy(){
-    console.log("Adios");
   }
 
   paypal(){
@@ -115,6 +127,50 @@ export class MyCartPage implements OnInit {
       console.log("Error in initialization, maybe PayPal isn't supported or something else");
       // Error in initialization, maybe PayPal isn't supported or something else
     });
+  }
+
+  doLogin(data){
+    this.co.showLoader();
+    this.user.login(data.email,data.password).subscribe(
+      (res:any) => { 
+        this.co.hideLoader();
+        this.user.account = res;
+        this.showCart = true;
+      },
+      (err: HttpErrorResponse) => { 
+        //console.log(err);
+        this.co.hideLoader();
+        var message = err.error.message;
+        if(err.status == 400){
+          message = 'Correo electrónico o contraseña no reconocidos.';
+        }
+        this.co.presentAlert('Error','¡UPS!, hubo un problema al iniciar sesión.',message);
+      }
+    );
+    //console.log("datos",data);
+  }
+
+  register(data){
+    this.co.showLoader();
+    this.user.register(data.email,data.password).subscribe(
+      (res:any) => { 
+        this.co.hideLoader();
+        this.user.account = res;
+        this.showCart = true;
+        this.showRegister = false;
+        this.doLogin(data);
+      },
+      (err: HttpErrorResponse) => { 
+        //console.log(err);
+        this.co.hideLoader();
+        var message = err.error.message;
+        if(err.status == 400){
+          message = 'Correo electrónico o contraseña no reconocidos.';
+        }
+        this.co.presentAlert('Error','¡UPS!, hubo un problema al registrar el usuario.',message);
+      }
+    );
+    console.log("datos",data);
   }
 
 }

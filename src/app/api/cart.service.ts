@@ -96,7 +96,7 @@ export class CartService {
     console.log("obtenemos las compras del usuario");
   }
 
-  insertPurchase(){
+  insertSinglePurchase(){
     this.itemsCarrito = this.buildBodyJson();
     let headers = new HttpHeaders({
       'Content-Type':  'application/json',
@@ -142,6 +142,32 @@ export class CartService {
     });
     return itemsCarrito;
    // console.log("objeto completo",this.itemsCarrito);
+  }
+
+  insertMultiPurchase(infoPurchase:any){
+    let headers = new HttpHeaders({
+      'Content-Type':  'application/json',
+      'X-CSRF-Token': this.US.account.csrf_token
+    });
+    let datos =  {
+      "type":"checkout",
+      "title":"hola mundo Checkout",
+      "field_transactionid":[{"value":"prueba"}],
+      "field_elementos":infoPurchase
+    };
+    return this.http.post(
+      this.co.API+'user/checkout?_format=json',
+      JSON.stringify(datos),
+      { headers: headers, withCredentials: true }).pipe(
+        map(
+          res => { 
+            return res;
+          },
+          (err: HttpErrorResponse) => { 
+            console.log(err);
+          }
+        )
+      );
   }
 
 }

@@ -11,7 +11,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-row class="header-row">
+    <ion-row class="header-row" *ngIf="showTours">
       <ion-col size="5">
         <img class="portait-img" [src]="co.API+current_tour?.field_imagen_dream_jordan_tour"/>
       </ion-col>
@@ -23,11 +23,54 @@
         </div>
       </ion-col>
     </ion-row>
-    <div class="description">
+    <div class="description" *ngIf="showTours"> 
       <p>{{current_tour?.body}}</p>
     </div>
+    <!--LOGIN-->
+    <ion-row class="container" *ngIf="showTours == false && showLogin == true">
+      <form [formGroup]="login_data" >
+        <ion-col size="12">
+          <h3>Login</h3>
+        </ion-col>
+        <ion-col size="12">
+          <ion-input formControlName="email" placeholder="Correo"></ion-input>
+        </ion-col>
+        <ion-col size="12">
+          <ion-input formControlName="password" placeholder="Password"></ion-input>
+        </ion-col>
+        <ion-col size="12"> 
+          <ion-button (click)="doLogin(login_data.value)" [disabled]="!login_data.valid">Acceder</ion-button>
+        </ion-col>
+        <ion-col size="12"> 
+          <ion-button (click)="muestraRegistro()">Registro</ion-button>
+        </ion-col>
+        <ion-col size="12"> 
+          <p>Para poder obtener el contenido es necesario acceder, si no estas registrado, puedes hacerlo rapidamente.</p>
+        </ion-col>
+      </form>
+    </ion-row>
+    <!--REGISTRO-->
+    <ion-row class="container" *ngIf="showRegister && showLogin == false">
+      <form [formGroup]="register_data" >
+        <ion-col size="12">
+          <h3>Registro</h3>
+        </ion-col>
+        <ion-col size="12">
+          <ion-input formControlName="email" placeholder="Correo"></ion-input>
+        </ion-col>
+        <ion-col size="12">
+          <ion-input formControlName="password" placeholder="Password"></ion-input>
+        </ion-col>
+        <ion-col size="12"> 
+          <ion-button (click)="register(register_data.value)" [disabled]="!register_data.valid">Registrarse</ion-button>
+        </ion-col>
+        <ion-col size="12"> 
+          <p>Para poder obtener el contenido es necesario acceder, si no estas registrado, puedes hacerlo rapidamente.</p>
+        </ion-col>
+      </form>
+    </ion-row>
     <!-- cupon a validar -->
-    <ion-row class="container" *ngIf="isValid == false">
+    <ion-row class="container" *ngIf="showTours">
       <ion-col size="12">
           <h3>¿Tienes un código?</h3>
       </ion-col>

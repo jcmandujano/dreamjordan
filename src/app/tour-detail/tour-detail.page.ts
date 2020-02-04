@@ -63,6 +63,7 @@ export class TourDetailPage implements OnInit{
 
   addToCart(product){
    // product.amount = 1;
+   console.log("producto",product);
     this.cartserv.addProduct(product);
   }
 

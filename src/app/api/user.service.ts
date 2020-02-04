@@ -141,4 +141,17 @@ export class UserService {
     );
   }
 
+  getPurchases(){
+    return this.http.get<Array<any>>(this.co.API+'user/checkout_app?_format=json',{ withCredentials: true }).pipe(
+      map(
+        res => { 
+          return res;
+        },
+        (err: HttpErrorResponse) => { 
+          console.log(err);
+        }
+      )
+    );
+  }
+
 }

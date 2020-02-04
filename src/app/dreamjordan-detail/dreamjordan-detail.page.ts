@@ -5,6 +5,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
 import {Router, ActivatedRoute, } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UserService} from '../api/user.service'; 
 @Component({
   selector: 'app-dreamjordan-detail',
   templateUrl: './dreamjordan-detail.page.html',
@@ -18,10 +20,24 @@ export class DreamjordanDetailPage implements OnInit {
   audiosList:any;
   cart=[];
   cartItemCount: BehaviorSubject<number>;
+  showRegister:boolean = false;
+  showLogin: boolean = true;
+  showTours:boolean = false;
+  login_data = new FormGroup({
+    email: new FormControl(null,Validators.required),
+    password: new FormControl(null,Validators.required)
+  });
+
+  register_data = new FormGroup({
+    email: new FormControl(null,Validators.required),
+    password: new FormControl(null,Validators.required)
+  });
+  
   constructor(public active :ActivatedRoute,
     public tourService:TourService,
     public co: CommonService,
     private router:Router,
+    public user : UserService,
     private cartserv:CartService) { 
     this.id_tour = this.active.snapshot.paramMap.get("id");
     //console.log("quepaso",this.id_tour);
@@ -46,6 +62,24 @@ export class DreamjordanDetailPage implements OnInit {
         this.co.presentAlert('Error','Hubo un problema al recuperar la información.',message);
       }
     );
+
+    if(this.user.account === undefined){  
+      this.user.getLoginStatus().subscribe(res => { 
+        this.user.account = res;
+        this.co.hideLoader();
+        if(this.user.account.current_user){
+          console.log("Ya tenemos a alguieen1 ",res);
+          this.showTours=true;
+        }
+      },
+      (err: HttpErrorResponse) => { 
+        this.co.hideLoader();
+        console.log("error",err);
+      }); 
+    }
+  }
+
+  getAudiosByTour(){
     this.tourService.getDreamJordanAudios(this.id_tour).subscribe(
       (res:any) => { 
         this.co.hideLoader();
