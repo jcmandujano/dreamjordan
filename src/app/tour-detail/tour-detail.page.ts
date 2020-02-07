@@ -3,11 +3,11 @@ import {Router, ActivatedRoute, } from '@angular/router';
 import {TourService} from '../api/tour.service';
 import { CommonService } from '../api/common.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ConstantPool } from '@angular/compiler';
 import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
-import {Howl, howler} from 'howler'
+import {Howl, howler} from 'howler';
 import { IonRange } from '@ionic/angular';
+import { UserService} from '../api/user.service'; 
 
 export interface Track{
   nid:string;
@@ -37,7 +37,9 @@ export class TourDetailPage implements OnInit{
   idPais:any;
   comprado:boolean = false;  
   currentTour:any;
-  
+  tipo_tour:string = "1";
+  toursComprados:any;
+  isPurchased:boolean =false;
   /*variables para audio player*/
   activetrack : Track = null;
   player:Howl = null;
@@ -50,6 +52,7 @@ export class TourDetailPage implements OnInit{
     public tourService:TourService,
     public co: CommonService,
     public active : ActivatedRoute,
+    public user : UserService,
     private cartserv:CartService) { 
       this.nid = this.active.snapshot.paramMap.get("nid");
       this.idPais = this.active.snapshot.paramMap.get("idpais");
@@ -62,21 +65,21 @@ export class TourDetailPage implements OnInit{
   }
 
   addToCart(product){
-   // product.amount = 1;
-   console.log("producto",product);
     this.cartserv.addProduct(product);
   }
 
   ionViewDidEnter() {
     this.co.showLoader();
+    this.getTourInfo()
+    this.getPurchasedItems();
     this.tourService.getAudiosxTour(this.nid).subscribe(
       (res:any) => { 
         this.audiosArray = res;
-        for(let obj of this.audiosArray){
-        obj.amount=1;
-         //console.log("audios",obj);
-        }
+       /*  for(let obj of this.audiosArray){
+          obj.amount=1;
+        } */
         this.co.hideLoader();
+        this.prepareItems();
       },
       (err: HttpErrorResponse) => { 
         //console.log(err);
@@ -87,38 +90,62 @@ export class TourDetailPage implements OnInit{
         }
         this.co.presentAlert('Error','Hubo un problema al recuperar la información.',message);
       }
-    );
-    this.tourService.getSingleTour(this.idPais,this.nid).subscribe(
-      (res:any) => { 
-        this.co.hideLoader();
-        this.currentTour = res[0];
-        //console.log("voala",res[0]);
-      },
-      (err: HttpErrorResponse) => { 
-        //console.log(err);
-        this.co.hideLoader();
-        let message = err.error.message;
-        if(err.status == 400){
-          message = '.';
-        }
-        this.co.presentAlert('Error','Hubo un problema al recuperar la información.',message);
-      }
-    );
-
+    ); 
   }
 
-  buy(flag:boolean){
+  prepareItems(){
+    this.audiosArray.forEach(originales => {
+      originales.amount=1;
+      originales.audioelement=this.start(originales);
+      originales.progress=0;
+      this.toursComprados.forEach(comprados => {
+        if(comprados.audio == originales.mid){
+          originales.comprado=true;
+        }
+      });
+    });
+    //console.log(this.audiosArray);
+  }
+
+  getTourInfo(){
+    this.tourService.getSingleTour(this.idPais,this.nid).subscribe(
+      (res:any) => { 
+        this.currentTour = res[0];
+      },
+      (err: HttpErrorResponse) => { 
+        //console.log(err);
+        let message = err.error.message;
+        if(err.status == 400){
+          message = '.';
+        }
+        this.co.presentAlert('Error','Hubo un problema al recuperar la información.',message);
+      }
+    );
+  }
+
+  /* buy(flag:boolean){ SE COMENTA POR QUE YA SE INTEGRO en "prepareItems"
     this.comprado = flag;
     this.audiosArray.forEach(element => {
       element.audioelement=this.start(element);
       element.progress=0;
     });
-  }
+  } */
 
   openCart(){
     this.router.navigate(['/tabs/my-cart']);
   }
 
+  getPurchasedItems(){
+    this.user.getProcessedItems(this.nid, this.tipo_tour).subscribe(res =>{
+      this.toursComprados=res;
+      if(res.length>0){
+        this.isPurchased = true;
+      }
+    },
+      (err: HttpErrorResponse) => { 
+        console.log("error",err);
+      }); 
+  } 
 
   /*METODOS PARA AUDIO PLAYER*/
   start(track:Track){
@@ -157,15 +184,6 @@ export class TourDetailPage implements OnInit{
     
   }
 
-  togglePlayer(pause){
-    this.isPlaying = !pause;
-    if(pause){
-      this.player.pause();
-    }else{
-      this.player.play();
-    }
-  }
-
   seek(audio:Howl, i:number){
     let currentRange = this.ranges.filter((element,index)=> index == i);
     let newValue =+ currentRange[0].value;
@@ -180,4 +198,5 @@ export class TourDetailPage implements OnInit{
       this.updateProgress(track);
     }, 1000)
   }
+
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController, ModalController, NavController, LoadingController } from '@ionic/angular';
+import { AlertController, ModalController, NavController, LoadingController, ToastController } from '@ionic/angular';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class CommonService {
               public alertController: AlertController, 
               public modalController: ModalController, 
               public navCtrl: NavController,
-              public loadingCtrl: LoadingController,) { }
+              public loadingCtrl: LoadingController,
+              public toastController: ToastController) { }
 
   API: string = 'https://dream-jordan.com/';
   PRIMARY_DOMAIN: string = 'https://dream-jordan.com';
@@ -55,6 +57,12 @@ export class CommonService {
     }
   }
 
-  
+  async presentToast(message:string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000
+    });
+    await toast.present();
+  }
 
 }

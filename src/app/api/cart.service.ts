@@ -96,16 +96,19 @@ export class CartService {
     console.log("obtenemos las compras del usuario");
   }
 
-  insertSinglePurchase(){
+  insertSinglePurchase(type:string, title:string, trans_id:string, status:boolean){
+    let today = this.getCurrentDate();
     this.itemsCarrito = this.buildBodyJson();
     let headers = new HttpHeaders({
       'Content-Type':  'application/json',
       'X-CSRF-Token': this.US.account.csrf_token
     });
     let datos =  {
-      "type":"checkout",
-      "title":"hola mundo Checkout",
-      "field_transactionid":[{"value":"prueba"}],
+      "type":type,
+      "title":title,
+      "field_transactionid":[{"value":trans_id}],
+      "field_status":[{"value":status}],
+      "field_fecha_comprado":[{"value":today}],
       "field_elementos":this.itemsCarrito
     };
     return this.http.post(
@@ -157,6 +160,46 @@ export class CartService {
     };
     return this.http.post(
       this.co.API+'user/checkout?_format=json',
+      JSON.stringify(datos),
+      { headers: headers, withCredentials: true }).pipe(
+        map(
+          res => { 
+            return res;
+          },
+          (err: HttpErrorResponse) => { 
+            console.log(err);
+          }
+        )
+      );
+  }
+
+  getCurrentDate(){
+    var d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
+  activateDreamJordanTour(nid){
+    let headers = new HttpHeaders({
+      'Content-Type':  'application/json',
+      'X-CSRF-Token': this.US.account.csrf_token
+    });
+    let datos = {
+      "type": [{
+        "target_id": "checkout"}],
+        "field_status":[{"value":1}]  
+    };
+
+    return this.http.patch(
+      this.co.API+'node/'+nid+'?_format=json',
       JSON.stringify(datos),
       { headers: headers, withCredentials: true }).pipe(
         map(

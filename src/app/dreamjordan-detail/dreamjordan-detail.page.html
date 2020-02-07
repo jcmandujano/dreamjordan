@@ -11,19 +11,19 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-row class="header-row" *ngIf="showTours">
+    <ion-row class="header-row" *ngIf="showTours || isActivated || isValid">
       <ion-col size="5">
         <img class="portait-img" [src]="co.API+current_tour?.field_imagen_dream_jordan_tour"/>
       </ion-col>
       <ion-col size="7">
         <div class="header-text">
           <h4>{{current_tour?.title}}</h4>
-          <span class="price" *ngIf="isActivated">8 de 10 días</span>
+          <span class="price" *ngIf="isActivated">1 de 10 días</span>
           <br>
         </div>
       </ion-col>
     </ion-row>
-    <div class="description" *ngIf="showTours"> 
+    <div class="description" *ngIf="showTours || isActivated || isValid"> 
       <p>{{current_tour?.body}}</p>
     </div>
     <!--LOGIN-->
@@ -75,10 +75,10 @@
           <h3>¿Tienes un código?</h3>
       </ion-col>
       <ion-col size="12">
-          <ion-input placeholder="Escríbelo aquí"></ion-input>
+          <ion-input [(ngModel)]="couponCode" placeholder="Escríbelo aquí"></ion-input>
       </ion-col>
       <ion-col size="12"> 
-          <ion-button class="primary" (click)="validate(true)">Validar</ion-button>
+          <ion-button class="primary" (click)="validate(couponCode)" [disabled]="couponCode===undefined">Validar</ion-button>
       </ion-col>
       <ion-col size="12"> 
         <p class="warn-text">Si no tienes un código y quieres este paquete</p>
@@ -91,16 +91,16 @@
           <h3>Tú código</h3>
       </ion-col>
       <ion-col size="12">
-          <p class="coupon-code">01000000</p>
+          <p class="coupon-code" >{{couponCode}}</p>
       </ion-col>
       <ion-col size="12"> 
-        <p class="warn-text">Es valido, si lo activas ahora solo podrás usarlo durante los siguientes <span class="valid-days">X</span> días</p>
+        <p class="warn-text">Es valido, si lo activas ahora solo podrás usarlo durante los siguientes <span class="valid-days">10</span> días</p>
         <ion-button class="primary" (click)="activate()">Activar ahora</ion-button>
         <ion-button class="cancel-btn">Despues</ion-button>
       </ion-col>
     </ion-row>
     <!--When is activated-->
-    <ion-grid class="content-list" *ngIf="isActivated == true">  
+    <ion-grid class="content-list">  
         <ion-row *ngFor="let audio of audiosList; let i = index">
           <ion-col size="2" class="index-col">
             <span class="index">{{i+1}}</span>
@@ -109,10 +109,11 @@
             <span class="file-tour-name">{{audio.name}}</span>
             <br>
             <p class="file-tour-desc"> Dolorum inventore nam convallis eveniet hac class adipiscing blanditiis. Praesentium turpis cursus epteur.</p>
-            <ion-progress-bar value="0.5"></ion-progress-bar>
+            <ion-range #progressBar [(ngModel)]="audio.audioelement.progress" max="100" color="success" (touchend)="seek(audio.audioelement, i)" (mouseup)="seek(audio.audioelement,i)"></ion-range>
           </ion-col >
           <ion-col size="3" class="play-div">
-            <img src="../../assets/img/play.svg"/>
+            <img src="../../assets/img/play.svg" (click)="play(audio.audioelement)" *ngIf="!audio.isPlaying"/>
+            <img src="../../assets/img/pause.png" (click)="pause(audio.audioelement)" *ngIf="audio.isPlaying"/>
             <br>
             <span class="counter"> 1 de 3</span>
           </ion-col>

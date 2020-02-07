@@ -86,11 +86,11 @@
         <ion-button class="cancel-btn">Seguir Comprando</ion-button>
       </div>
       <div class="column">
-        <ion-button (click)="pay()" [disabled]="cart.length==0" class="primary">Pagar</ion-button>
+        <ion-button (click)="insertCheckout()" [disabled]="cart.length==0" class="primary">Pagar</ion-button>
       </div>
-      <div class="column">
+      <!-- <div class="column">
         <ion-button (click)="paypal()" class="primary">testpaypal</ion-button>
-      </div>
+      </div> -->
     </div>
     <div class="trash-all" *ngIf="cart.length>0" (click)="emptyCurrentCart()">
       <p>Vaciar carrito  </p>

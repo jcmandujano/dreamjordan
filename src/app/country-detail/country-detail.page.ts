@@ -69,19 +69,6 @@ export class CountryDetailPage {
     this.router.navigate(['/tabs/my-cart']);
   }
 
-  buyAll(){
-    /*let array:any = {
-			"type":"carrito_compra",
-			"title":this.paisSelecc.nombrePais,
-			"field_cantidad_articulo":[{"value":1}],
-			"field_costo_articulo":[{"value":this.paisSelecc.field_costo_pais}],
-			"field_costo_total":[{"value":this.paisSelecc.field_costo_pais}],
-			"field_nombre_articulo":[{"value":this.paisSelecc.nombrePais}],
-			"field_tour":[{"target_id":0}],
-			"field_audio":[{"target_id":0}]
-    }*/
-    console.log("compramos todo");
-  }
 
   addToCart(){
     let object:any = {

@@ -142,6 +142,27 @@ export class UserService {
   }
 
   getPurchases(){
+    let cartiems=new Array;
+    return this.http.get<Array<any>>(this.co.API+'user/checkout_app?_format=json',{ withCredentials: true }).pipe(
+      map(
+        res => { 
+          let objeto = new Array;
+          for(let i in res){
+            objeto = JSON.parse(res[i].checkout_elements);
+            for(let j in objeto){
+                cartiems.push(objeto[j]);
+            }
+          }
+          return cartiems;
+        },
+        (err: HttpErrorResponse) => { 
+          console.log(err);
+        }
+      )
+    );
+  }
+
+  getPurchaseInfo(){
     return this.http.get<Array<any>>(this.co.API+'user/checkout_app?_format=json',{ withCredentials: true }).pipe(
       map(
         res => { 
@@ -154,4 +175,29 @@ export class UserService {
     );
   }
 
+  getProcessedItems(idtour, tipo){
+    console.log("idtour",idtour);
+    console.log("tipo", tipo);
+    let cartiems=new Array;
+    return this.http.get<Array<any>>(this.co.API+'user/checkout_app?_format=json',{ withCredentials: true }).pipe(
+      map(
+        res => { 
+          let objeto = new Array;
+          for(let i in res){
+            objeto = JSON.parse(res[i].checkout_elements);
+            for(let j in objeto){
+              if(objeto[j].field_tipo == tipo && objeto[j].tour == idtour){
+                objeto[j].status=res[i].field_status;
+                cartiems.push(objeto[j]);
+              }
+            }
+          }
+          return cartiems;
+        },
+        (err: HttpErrorResponse) => { 
+          console.log(err);
+        }
+      )
+    );
+  }
 }

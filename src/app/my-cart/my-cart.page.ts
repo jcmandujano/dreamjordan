@@ -7,8 +7,6 @@ import { UserService } from '../api/user.service';
 import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-
-
 @Component({
   selector: 'app-my-cart',
   templateUrl: './my-cart.page.html',
@@ -30,6 +28,7 @@ export class MyCartPage {
     email: new FormControl(null,Validators.required),
     password: new FormControl(null,Validators.required)
   });
+  transaction_id: string = "Test";
   
   constructor( private cartserv : CartService,
     public co: CommonService,
@@ -75,12 +74,16 @@ export class MyCartPage {
     this.cartserv.emptyCart();
   }
 
-  pay(){
-    if(this.user.account.current_user){
+  insertCheckout(){
+    this,this.paypalWithPaypal();
+    /* if(this.user.account.current_user){
       this.co.showLoader();
-      this.cartserv.insertSinglePurchase().subscribe(
+      this.cartserv.insertSinglePurchase("checkout", "hola mundo", this.transaction_id, false).subscribe(
         (res:any) => { 
           this.co.hideLoader();
+          this.co.presentToast("La compra se relizo correctamente");
+          this.paypalWithPaypal();
+          this.cartserv.emptyCart();
         },
         (err: HttpErrorResponse) => { 
           //console.log(err);
@@ -96,12 +99,10 @@ export class MyCartPage {
       this.co.presentAlert('Error','Para poder comprar es necesario hacer registrarse o acceder.',"");
       this.showLogin=true;
       this.showCart = false;
-    }
-    
-    console.log("pagameee");
+    } */
   }
 
-  paypal(){
+  paypalWithPaypal(){
     this.payPal.init({
       PayPalEnvironmentProduction: 'ATNskmqDdI_ouR_lIK8vgq2VZWOj3pHdAUz8RNy3CtEVYOiZbrVWohvnZeBqqaFXtsRDc1E36J1E26fx',
       PayPalEnvironmentSandbox: 'ATNskmqDdI_ouR_lIK8vgq2VZWOj3pHdAUz8RNy3CtEVYOiZbrVWohvnZeBqqaFXtsRDc1E36J1E26fx'
@@ -111,7 +112,7 @@ export class MyCartPage {
         // Only needed if you get an "Internal Service Error" after PayPal login!
         //payPalShippingAddressOption: 2 // PayPalShippingAddressOptionPayPal
       })).then(() => {
-        let payment = new PayPalPayment('3.33', 'MXN', 'Description', 'sale');
+        let payment = new PayPalPayment(this.getTotal().toString(), 'MXN', 'Description', 'sale');
         this.payPal.renderSinglePaymentUI(payment).then((data) => {
           console.log("se logro",data);
           // Successfully paid
@@ -121,6 +122,7 @@ export class MyCartPage {
         });
       }, () => {
         console.log("error en configuracion");
+        this.co.presentToast("Error en configuracion");
         // Error in configuration
       });
     }, () => {
