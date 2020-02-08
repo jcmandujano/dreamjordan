@@ -11,7 +11,7 @@ import { BehaviorSubject } from 'rxjs';
   templateUrl: './dreamjordan-plans.page.html',
   styleUrls: ['./dreamjordan-plans.page.scss'],
 })
-export class DreamjordanPlansPage implements OnInit {
+export class DreamjordanPlansPage {
   DreamJordanTours:any;
   cart=[];
   cartItemCount: BehaviorSubject<number>;
@@ -20,7 +20,7 @@ export class DreamjordanPlansPage implements OnInit {
     public co: CommonService,
     private cartserv:CartService) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.cart = this.cartserv.getCart();
     this.cartItemCount = this.cartserv.getCartItemCount();
     this.co.showLoader();

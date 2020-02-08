@@ -59,7 +59,6 @@ export class HomePage {
       }); 
     }
     this.recuperaPaises();
-    this.recuperaDreamJordan();
   }
 
  /* loadStorageItems(){ SEGUIMIS DESPUES∫
@@ -73,6 +72,7 @@ export class HomePage {
     //recuperamos paises
     this.user.getPaises().subscribe(res => { 
       this.paises = res;
+      this.recuperaDreamJordan();
       //console.log("paises",this.paises)
     },
     (err: HttpErrorResponse) => { 

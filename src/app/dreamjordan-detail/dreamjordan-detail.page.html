@@ -42,7 +42,8 @@
           <ion-button (click)="doLogin(login_data.value)" [disabled]="!login_data.valid">Acceder</ion-button>
         </ion-col>
         <ion-col size="12"> 
-          <ion-button (click)="muestraRegistro()">Registro</ion-button>
+          <!-- <ion-button (click)="muestraRegistro()">Registro</ion-button> -->
+          <ion-button>Registro</ion-button>
         </ion-col>
         <ion-col size="12"> 
           <p>Para poder obtener el contenido es necesario acceder, si no estas registrado, puedes hacerlo rapidamente.</p>
@@ -113,9 +114,7 @@
           </ion-col >
           <ion-col size="3" class="play-div">
             <img src="../../assets/img/play.svg" (click)="play(audio.audioelement)" *ngIf="!audio.isPlaying"/>
-            <img src="../../assets/img/pause.png" (click)="pause(audio.audioelement)" *ngIf="audio.isPlaying"/>
-            <br>
-            <span class="counter"> 1 de 3</span>
+            <img src="../../assets/img/pause.svg" (click)="pause(audio.audioelement)" *ngIf="audio.isPlaying"/>
           </ion-col>
         </ion-row>
       </ion-grid>

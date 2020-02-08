@@ -4,8 +4,9 @@ import { BehaviorSubject } from 'rxjs';
 import { CommonService } from '../api/common.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../api/user.service';
-import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';
+import { PayPal, PayPalPayment, PayPalConfiguration, PayPalPaymentDetails } from '@ionic-native/paypal/ngx';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-my-cart',
@@ -33,6 +34,7 @@ export class MyCartPage {
   constructor( private cartserv : CartService,
     public co: CommonService,
     public user : UserService,
+    private router:Router,
     private payPal: PayPal) { }
 
   muestraRegistro(){
@@ -75,15 +77,14 @@ export class MyCartPage {
   }
 
   insertCheckout(){
-    this,this.paypalWithPaypal();
-    /* if(this.user.account.current_user){
+    //this.paypalWithPaypal();
+     if(this.user.account.current_user){
       this.co.showLoader();
       this.cartserv.insertSinglePurchase("checkout", "hola mundo", this.transaction_id, false).subscribe(
         (res:any) => { 
           this.co.hideLoader();
           this.co.presentToast("La compra se relizo correctamente");
           this.paypalWithPaypal();
-          this.cartserv.emptyCart();
         },
         (err: HttpErrorResponse) => { 
           //console.log(err);
@@ -99,7 +100,7 @@ export class MyCartPage {
       this.co.presentAlert('Error','Para poder comprar es necesario hacer registrarse o acceder.',"");
       this.showLogin=true;
       this.showCart = false;
-    } */
+    } 
   }
 
   paypalWithPaypal(){
@@ -112,9 +113,12 @@ export class MyCartPage {
         // Only needed if you get an "Internal Service Error" after PayPal login!
         //payPalShippingAddressOption: 2 // PayPalShippingAddressOptionPayPal
       })).then(() => {
+        //let paymentDetails = new PayPalPaymentDetails(this.cart);
         let payment = new PayPalPayment(this.getTotal().toString(), 'MXN', 'Description', 'sale');
         this.payPal.renderSinglePaymentUI(payment).then((data) => {
-          console.log("se logro",data);
+          console.log("se logro",data); 
+          this.emptyCurrentCart();
+          this.router.navigate(['/tabs/my-purchases']);
           // Successfully paid
         }, () => {
           console.log("cancelado");
@@ -173,6 +177,10 @@ export class MyCartPage {
       }
     );
     console.log("datos",data);
+  }
+
+  goHome(){
+    this.router.navigate(['/']);
   }
 
 }

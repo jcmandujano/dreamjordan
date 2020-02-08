@@ -176,8 +176,6 @@ export class UserService {
   }
 
   getProcessedItems(idtour, tipo){
-    console.log("idtour",idtour);
-    console.log("tipo", tipo);
     let cartiems=new Array;
     return this.http.get<Array<any>>(this.co.API+'user/checkout_app?_format=json',{ withCredentials: true }).pipe(
       map(

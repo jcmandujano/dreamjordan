@@ -27,7 +27,7 @@
         <img class="portait-img" *ngIf="item.dj_tour_img" [src]="co.API+item.dj_tour_img"/>
         <!-- <img class="portait-img" src="./assets/img/exampleImage.png"/> -->
         <div class="bottom-slider-text">
-          <span class="title-slider">{{item.title}}</span>
+          <span class="title-slider" (click)="goToDetail(item)">{{item.title}}</span>
           <br>
           <!-- <span class="sub-slider">Jordania</span> -->
         </div>

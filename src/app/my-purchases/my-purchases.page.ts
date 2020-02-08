@@ -11,7 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './my-purchases.page.html',
   styleUrls: ['./my-purchases.page.scss'],
 })
-export class MyPurchasesPage implements OnInit {
+export class MyPurchasesPage  {
   myPurchases:any;
   cart=[];
   cartItemCount: BehaviorSubject<number>;
@@ -20,7 +20,7 @@ export class MyPurchasesPage implements OnInit {
     private user : UserService,
     public co : CommonService) { }
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.co.showLoader();
     this.cart = this.cartserv.getCart();
     this.cartItemCount = this.cartserv.getCartItemCount();
@@ -45,6 +45,18 @@ export class MyPurchasesPage implements OnInit {
 
   openCart(){
     this.router.navigate(['/tabs/my-cart']);
+  }
+
+
+  goToDetail(item:any){
+    console.log("elemento seleccionado",item.audio);
+    if(item.audio){
+      //se envia a country-detail
+      this.router.navigate(['/tabs/coupon-validator']);
+    }else{
+      //se manda a dream-jordan-detail
+      this.router.navigate(['/tabs/dreamjordan-detail/'+item.tour]);
+    }
   }
 
 }

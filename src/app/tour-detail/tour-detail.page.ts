@@ -24,7 +24,7 @@ export interface Track{
   templateUrl: './tour-detail.page.html',
   styleUrls: ['./tour-detail.page.scss'],
 })
-export class TourDetailPage implements OnInit{
+export class TourDetailPage{
   /*Variables para el carrito*/
   cart=[];
   products = [];
@@ -47,6 +47,7 @@ export class TourDetailPage implements OnInit{
   playlist = new Array();
   @ViewChildren(IonRange) ranges : QueryList<IonRange>;
   /*variables para audio player*/
+  blockByGlobalPurchase:boolean=false;
 
   constructor(private router:Router,
     public tourService:TourService,
@@ -58,28 +59,23 @@ export class TourDetailPage implements OnInit{
       this.idPais = this.active.snapshot.paramMap.get("idpais");
   }
 
-  ngOnInit(){
-    this.products = this.cartserv.getProducts();
-    this.cart = this.cartserv.getCart();
-    this.cartItemCount = this.cartserv.getCartItemCount();
-  }
-
   addToCart(product){
+    console.log("item",product);
     this.cartserv.addProduct(product);
   }
 
   ionViewDidEnter() {
     this.co.showLoader();
     this.getTourInfo()
-    this.getPurchasedItems();
     this.tourService.getAudiosxTour(this.nid).subscribe(
       (res:any) => { 
         this.audiosArray = res;
        /*  for(let obj of this.audiosArray){
           obj.amount=1;
         } */
-        this.co.hideLoader();
-        this.prepareItems();
+        
+        this.getPurchasedItems();
+        
       },
       (err: HttpErrorResponse) => { 
         //console.log(err);
@@ -91,6 +87,21 @@ export class TourDetailPage implements OnInit{
         this.co.presentAlert('Error','Hubo un problema al recuperar la información.',message);
       }
     ); 
+    this.products = this.cartserv.getProducts();
+    this.cart = this.cartserv.getCart();
+    console.log("carrito",this.cart);
+    this.checkIfIsPurchased();
+    this.cartItemCount = this.cartserv.getCartItemCount();
+  }
+
+  checkIfIsPurchased(){
+    for(let i in this.cart ){
+      if(this.cart[i].nid==this.idPais){
+        console.log("bloqueado");
+        this.blockByGlobalPurchase=true;
+      }
+    }
+    //blockByGlobalPurchase
   }
 
   prepareItems(){
@@ -111,6 +122,7 @@ export class TourDetailPage implements OnInit{
     this.tourService.getSingleTour(this.idPais,this.nid).subscribe(
       (res:any) => { 
         this.currentTour = res[0];
+        //console.log("tour",this.currentTour);
       },
       (err: HttpErrorResponse) => { 
         //console.log(err);
@@ -123,14 +135,6 @@ export class TourDetailPage implements OnInit{
     );
   }
 
-  /* buy(flag:boolean){ SE COMENTA POR QUE YA SE INTEGRO en "prepareItems"
-    this.comprado = flag;
-    this.audiosArray.forEach(element => {
-      element.audioelement=this.start(element);
-      element.progress=0;
-    });
-  } */
-
   openCart(){
     this.router.navigate(['/tabs/my-cart']);
   }
@@ -141,11 +145,26 @@ export class TourDetailPage implements OnInit{
       if(res.length>0){
         this.isPurchased = true;
       }
+      this.co.hideLoader();
+      this.prepareItems();      
     },
       (err: HttpErrorResponse) => { 
         console.log("error",err);
       }); 
   } 
+
+  buyAllTour(){
+    let object:any = {
+      "nid": this.nid,
+      "mid": "0",
+      "name": this.currentTour.title,
+      "field_costo": this.currentTour.field_costo,
+      "field_media_audio_file": "",
+      "amount": 1
+    }
+    this.blockByGlobalPurchase=true;
+    this.cartserv.addProduct(object); 
+  }
 
   /*METODOS PARA AUDIO PLAYER*/
   start(track:Track){

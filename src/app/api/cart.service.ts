@@ -52,7 +52,7 @@ export class CartService {
     let added = false;
     for(let p of this.cart){
       if(p.nid === product.nid && p.mid === product.mid){
-        p.amount += 1;
+        //p.amount += 1;
         added = true;
         break;
       }
@@ -60,31 +60,32 @@ export class CartService {
     if(!added){
       this.cart.push(product);
       let item = {id: product.nid, element: this.cart}
+      this.cartItemCount.next(this.cartItemCount.value + 1 );
     }
-    this.cartItemCount.next(this.cartItemCount.value + 1 );
+    
     //console.log("test",this.cart);
     
   }
 
-  decreaseProduct(product){
-    /*for(let [index,p] of this.cart.entries()){
+  /**decreaseProduct(product){
+    for(let [index,p] of this.cart.entries()){
       if(p.nid === product.nid){
         p.ammount -= 1;
         if(p.ammount == 0){
           this.cart.splice(index,1);
         }
       }
-    }*/
+    }
     this.cartItemCount.next(this.cartItemCount.value - 1);
-  }
+  }*/
 
   removeProduct(product){
-    /*for(let [index, p] of this.cart.entries()){
+    for(let [index, p] of this.cart.entries()){
       if(p.nid === product.nid){
-        this.cartItemCount.next(this.cartItemCount.value - p.ammount);
+        this.cartItemCount.next(this.cartItemCount.value - p.amount);
         this.cart.splice(index,1);
       }
-    }*/
+    }
   }
 
   emptyCart(){

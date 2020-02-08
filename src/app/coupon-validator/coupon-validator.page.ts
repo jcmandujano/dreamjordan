@@ -3,6 +3,8 @@ import { UserService } from '../api/user.service';
 import { CommonService } from '../api/common.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
+import { CartService } from '../api/cart.service';
 
 @Component({
   selector: 'app-coupon-validator',
@@ -14,6 +16,8 @@ export class CouponValidatorPage implements OnInit {
   showValidator:boolean = false;
   muestraLogin: boolean = true;
   isValid : boolean = false;
+  cartItemCount: BehaviorSubject<number>;
+  cart=[];
 
   login_data = new FormGroup({
     email: new FormControl(null,Validators.required),
@@ -25,7 +29,8 @@ export class CouponValidatorPage implements OnInit {
     password: new FormControl(null,Validators.required)
   });
   constructor(public user : UserService,
-    public co: CommonService) { }
+    public co: CommonService,
+    private cartserv:CartService) { }
 
   ngOnInit() {
   }
@@ -46,6 +51,8 @@ export class CouponValidatorPage implements OnInit {
         console.log("error",err);
       }); 
     }
+    this.cart = this.cartserv.getCart();
+    this.cartItemCount = this.cartserv.getCartItemCount();
   }
 
   validate(){

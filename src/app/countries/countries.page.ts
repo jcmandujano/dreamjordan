@@ -11,7 +11,7 @@ import { NativeStorage } from '@ionic-native/native-storage/ngx';
   templateUrl: './countries.page.html',
   styleUrls: ['./countries.page.scss'],
 })
-export class CountriesPage implements OnInit {
+export class CountriesPage {
   paises : any;
   skeletons:any;
   cartItemCount: BehaviorSubject<number>;
@@ -23,7 +23,7 @@ export class CountriesPage implements OnInit {
     private nativeStorage: NativeStorage) { }
     
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.nativeStorage.getItem('carrito')
     .then(
       data => console.log(data),

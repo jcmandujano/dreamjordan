@@ -22,7 +22,7 @@
         <br>
        <!--  <ion-button (click)="buy(true)" *ngIf="comprado == false">Comprar Todo</ion-button>
         <ion-button (click)="buy(false)" *ngIf="comprado">Comprar Todo</ion-button> -->
-        <ion-button (click)="buy(false)" [disabled]="isPurchased==true">Comprar Todo</ion-button> 
+        <ion-button (click)="buyAllTour()" [disabled]="isPurchased==true || blockByGlobalPurchase == true">Comprar Todo</ion-button> 
       </div>
     </ion-col>
   </ion-row>
@@ -44,12 +44,11 @@
       <ion-col size="3" class="centered" *ngIf="audio.comprado!==true">
         <span class="price">{{audio.field_costo| currency:'USD'}}</span>
         <br>
-        <ion-button (click)="addToCart(audio)">Comprar</ion-button>
+        <ion-button (click)="addToCart(audio)" [disabled]="blockByGlobalPurchase == true">Comprar</ion-button>
       </ion-col>
       <ion-col size="3" class="play-div" *ngIf="audio.comprado===true">
-        <p>{{audio.isPlaying}}</p>
         <img src="../../assets/img/play.svg" (click)="play(audio.audioelement)" *ngIf="!audio.isPlaying"/>
-        <img src="../../assets/img/pause.png" (click)="pause(audio.audioelement)" *ngIf="audio.isPlaying"/>
+        <img src="../../assets/img/pause.svg" (click)="pause(audio.audioelement)" *ngIf="audio.isPlaying"/>
         <br>
         <span class="counter"> 1 de 3</span>
       </ion-col>
@@ -73,7 +72,7 @@
       <ion-col size="3" class="play-div">
         <p>{{audio.isPlaying}}</p>
         <img src="../../assets/img/play.svg" (click)="play(audio.audioelement)" *ngIf="!audio.isPlaying"/>
-        <img src="../../assets/img/pause.png" (click)="pause(audio.audioelement)" *ngIf="audio.isPlaying"/>
+        <img src="../../assets/img/pause.svg" (click)="pause(audio.audioelement)" *ngIf="audio.isPlaying"/>
         <br>
         <span class="counter"> 1 de 3</span>
       </ion-col>

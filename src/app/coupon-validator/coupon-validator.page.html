@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-buttons slot="primary">
       <ion-icon class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
-        <ion-badge class="notifications-badge">05</ion-badge>
+      <ion-badge *ngIf="cart.length > 0" class="notifications-badge">{{cartItemCount | async}}</ion-badge>
       <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>

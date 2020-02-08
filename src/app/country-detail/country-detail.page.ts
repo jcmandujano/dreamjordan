@@ -27,11 +27,6 @@ export class CountryDetailPage {
       this.idPais = this.active.snapshot.paramMap.get("id");
   }
 
-  ngOnInit(){
-    this.cart = this.cartserv.getCart();
-    this.cartItemCount = this.cartserv.getCartItemCount();
-  }
-
 
   ionViewDidEnter() {
     this.co.showLoader();
@@ -59,6 +54,8 @@ export class CountryDetailPage {
       this.co.hideLoader();
       console.log("error",err);
     });
+    this.cart = this.cartserv.getCart();
+    this.cartItemCount = this.cartserv.getCartItemCount();
   }
 
   tourDetail(nid){
@@ -72,7 +69,7 @@ export class CountryDetailPage {
 
   addToCart(){
     let object:any = {
-      "nid": "0",
+      "nid": this.idPais,
       "mid": "0",
       "name": this.paisSelecc.nombrePais,
       "field_costo": this.paisSelecc.field_costo_pais,

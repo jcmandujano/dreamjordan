@@ -173,6 +173,7 @@ export class DreamjordanDetailPage {
       this.addToCart();
       this.cartserv.insertSinglePurchase("checkout", this.current_tour.title, coupon, false).subscribe(
         (res:any) => { 
+          this.nodeid = res.checkout;
           this.co.hideLoader();
           this.co.presentToast("Se realizo la compra correctamente");
           this.isValid=true;
