@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+        <img class="logo" src="./assets/img/logo.svg"/>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-icon (click)="openCart()" class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
+      <!-- <ion-badge *ngIf="cart.length > 0" class="notifications-badge">{{cartItemCount | async}}</ion-badge> -->
+      <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="header">
+    <h3>Preguntas Frecuentes.</h3>
+  </div>
+  <div class="preguntas">
+    <ol>
+      <li>¿Qué paquetes tienen?</li>
+      <p>Los audios se pueden comprar solos o en varios paquetes para un solo sitio, con un tema o bien con descuentos para familias o amigos. </p>
+      <li>Si no entendí, ¿puedo oír el audio varías veces?</li>
+      <p>Si, hasta 3. </p>
+      <li>¿Tienen algún tiempo de uso?</li>
+      <p>Si, desde el momento que activas tu paquete tiene cierto tiempo de validez.</p>
+      <li>¿Los puedo compartir?</li>
+      <p>No, cada audio comprado puede usarse en un dispositivo únicamente.  </p>
+      <li>¿Necesito internet para oírlos?</li>
+      <p>No, los puedes descargar en tu hotel o en tu casa y oírlos sin internet. </p>
+      <li>¿Los debo oír en el sitio?</li>
+      <p>Puedes oírlos mientras visitas o puedes oírlos antes de tu viaje como preparación para saber que vas a ver si es que luego vas a visitar con guía.  </p>
+      <li>¿Le puedo poner pausa?</li>
+      <p>Si. Puedes parar y seguir a tu gusto.  </p>
+      <li>¿En que idiomas existen?</li>
+      <p>De momento, en inglés y español.  </p>
+      <li>¿Los tienen para otros países?</li>
+      <p>Tendremos, espérenlos  </p>
+      <li>¿Es compatible con iOS y Android?</li>
+      <p>Si.</p>
+      <li>¿Puedo comprar para toda mi familia?</li>
+      <p>Si, puedes hacer un paquete familiar con descuento pagado por la misma persona.</p>
+    </ol>
+  </div>
+
+</ion-content>

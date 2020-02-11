@@ -97,6 +97,56 @@ const routes: Routes =[
             import('../my-cart/my-cart.module').then( m => m.MyCartPageModule)
           }
         ]
+      },
+      {
+        path: 'about',
+        children: [
+          {
+            path: '',
+            loadChildren: () => 
+            import('../about/about.module').then( m => m.AboutPageModule)
+          }
+        ]
+      },
+      {
+        path: 'faq',
+        children: [
+          {
+            path: '',
+            loadChildren: () => 
+            import('../faqs/faqs.module').then( m => m.FAQsPageModule)
+          }
+        ]
+      },
+      {
+        path: 'contact',
+        children: [
+          {
+            path: '',
+            loadChildren: () => 
+            import('../contact/contact.module').then( m => m.ContactPageModule)
+          }
+        ]
+      },
+      {
+        path: 'my-account',
+        children: [
+          {
+            path: '',
+            loadChildren: () => 
+            import('../my-account/my-account.module').then( m => m.MyAccountPageModule)
+          }
+        ]
+      },
+      {
+        path: 'login',
+        children: [
+          {
+            path: '',
+            loadChildren: () => 
+            import('../login/login.module').then( m => m.LoginPageModule)
+          }
+        ]
       }
      ]
    },

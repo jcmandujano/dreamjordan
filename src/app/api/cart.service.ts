@@ -44,7 +44,6 @@ export class CartService {
   }
 
   setCartItemCount(value){
-    console.log("valllll",value);
     this.cartItemCount.next(value);
   }
 

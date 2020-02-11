@@ -7,11 +7,22 @@ import { UserService } from '../api/user.service';
 import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
 
+export interface Track{
+  nid:string;
+  mid:string;
+  name:string;
+  field_costo:string;
+  field_media_audio_file:string;
+  amount:number;
+  isPlaying:boolean;
+}
+
 @Component({
   selector: 'app-country-detail',
   templateUrl: './country-detail.page.html',
   styleUrls: ['./country-detail.page.scss'],
 })
+
 export class CountryDetailPage {
   idPais: any;
   paisSelecc : any;
@@ -68,14 +79,26 @@ export class CountryDetailPage {
 
 
   addToCart(){
-    let object:any = {
-      "nid": this.idPais,
-      "mid": "0",
-      "name": this.paisSelecc.nombrePais,
-      "field_costo": this.paisSelecc.field_costo_pais,
-      "field_media_audio_file": "",
-      "amount": 1
-    }
-    this.cartserv.addProduct(object);
+    let cartElement : Track;
+    this.tours.forEach(element => {
+      this.tourService.getAudiosxTour(element.nid).subscribe(
+        (res:any) => { 
+          res.forEach(el => {
+          cartElement = el
+          cartElement.amount = 1;
+          this.cartserv.addProduct(cartElement);
+          });
+        },
+        (err: HttpErrorResponse) => { 
+          //console.log(err);
+          this.co.hideLoader();
+          let message = err.error.message;
+          if(err.status == 400){
+            message = '.';
+          }
+          this.co.presentAlert('Error','Hubo un problema al recuperar la información.',message);
+        }
+      ); 
+    });
   }
 }

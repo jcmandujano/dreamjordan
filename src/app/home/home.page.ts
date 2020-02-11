@@ -83,7 +83,7 @@ export class HomePage {
   recuperaDreamJordan(){
     this.tourService.getDreamJordanTours().subscribe(res => { 
       this.DreamJordanTours = res;
-     console.log("toursDreamJordan",res);
+    // console.log("toursDreamJordan",res);
     },
     (err: HttpErrorResponse) => { 
       console.log("error",err);

@@ -40,7 +40,7 @@ export class DreamjordanDetailPage {
   showRegister:boolean = false; //muestra registro
   showLogin: boolean = false; //muestra login
   showTours:boolean = false;//muestra tours
-
+  fechaComprado:Date;
   couponCode:string;
   tipo_tour:string = "2";
   nodeid:any;
@@ -119,6 +119,12 @@ export class DreamjordanDetailPage {
   isTourPurchased(){
     this.user.getPurchaseInfo().subscribe(res =>{
       let itemsComprados:any;
+      //console.log("fecha", res[0].field_fecha_comprado );
+      if(res.length>0){
+        this.fechaComprado = new Date(res[0].field_fecha_comprado);
+        //console.log("fecha", this.fechaComprado );
+        this.getDaysLeft();
+      }
       res.forEach(element => {
         itemsComprados=JSON.parse(element.checkout_elements);
         itemsComprados.forEach(checkout_item => {
@@ -140,6 +146,27 @@ export class DreamjordanDetailPage {
         console.log("error",err);
       }); 
   } 
+
+  getCurrentDate(){
+    var d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
+  getDaysLeft(){
+    let today =  new Date(;
+    let diff = new Date(this.fechaComprado - today)
+    
+    console.log("hoy", today);
+  }
 
   //once a tour was purchased or validated retrieve all the audios by tour JCMV
   getAudiosByTour(){

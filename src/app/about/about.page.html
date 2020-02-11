@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+        <img class="logo" src="./assets/img/logo.svg"/>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-icon (click)="openCart()" class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
+      <!-- <ion-badge *ngIf="cart.length > 0" class="notifications-badge">{{cartItemCount | async}}</ion-badge> -->
+      <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="header">
+    <h3>¿Qué es Dream Jordan?</h3>
+    <p class="header-text">Esta App se hizo pensando en las personas que no quieren llevar guías, que les gusta viajar más libres o bien que no tienen el presupuesto para hacerlo. El viajar tan lejos y no enterarte que ves es una pena y si traes un libro o un mapa muchas veces no tienes la información suficiente para saber que estás viendo. 
+      <br>Con la app, tienes un guía que te platica paso a paso cómo es el lugar que visitas. Una persona que conoce y que le gustan los sitios turísticos de Jordania, te acompaña y te cuenta sobre ellos, cómo si te hiciera una visita guiada. </p>
+  </div>
+</ion-content>

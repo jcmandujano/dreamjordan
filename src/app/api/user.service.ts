@@ -184,7 +184,7 @@ export class UserService {
           for(let i in res){
             objeto = JSON.parse(res[i].checkout_elements);
             for(let j in objeto){
-              if(objeto[j].field_tipo == tipo && objeto[j].tour == idtour){
+              if(objeto[j].tour == idtour){
                 objeto[j].status=res[i].field_status;
                 cartiems.push(objeto[j]);
               }

@@ -69,11 +69,7 @@ export class TourDetailPage{
     this.getTourInfo()
     this.tourService.getAudiosxTour(this.nid).subscribe(
       (res:any) => { 
-        this.audiosArray = res;
-       /*  for(let obj of this.audiosArray){
-          obj.amount=1;
-        } */
-        
+        this.audiosArray = res;        
         this.getPurchasedItems();
         
       },
@@ -142,6 +138,7 @@ export class TourDetailPage{
   getPurchasedItems(){
     this.user.getProcessedItems(this.nid, this.tipo_tour).subscribe(res =>{
       this.toursComprados=res;
+      console.log("hey",res);
       if(res.length>0){
         this.isPurchased = true;
       }
@@ -154,16 +151,11 @@ export class TourDetailPage{
   } 
 
   buyAllTour(){
-    let object:any = {
-      "nid": this.nid,
-      "mid": "0",
-      "name": this.currentTour.title,
-      "field_costo": this.currentTour.field_costo,
-      "field_media_audio_file": "",
-      "amount": 1
-    }
+    let tourElement:Track;
     this.blockByGlobalPurchase=true;
-    this.cartserv.addProduct(object); 
+    this.audiosArray.forEach(element => {
+      this.cartserv.addProduct(element);
+    });
   }
 
   /*METODOS PARA AUDIO PLAYER*/

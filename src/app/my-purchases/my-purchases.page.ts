@@ -52,7 +52,7 @@ export class MyPurchasesPage  {
     console.log("elemento seleccionado",item.audio);
     if(item.audio){
       //se envia a country-detail
-      this.router.navigate(['/tabs/coupon-validator']);
+      this.router.navigate(['/tabs/tour-detail/'+item.tid+'/'+item.tour]);
     }else{
       //se manda a dream-jordan-detail
       this.router.navigate(['/tabs/dreamjordan-detail/'+item.tour]);
