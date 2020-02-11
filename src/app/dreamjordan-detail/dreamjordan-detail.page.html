@@ -18,7 +18,7 @@
       <ion-col size="7">
         <div class="header-text">
           <h4>{{current_tour?.title}}</h4>
-          <span class="price" *ngIf="isActivated">1 de 10 días</span>
+          <span class="price" *ngIf="isActivated">{{getDaysLeft()}} de 10 días</span>
           <br>
         </div>
       </ion-col>

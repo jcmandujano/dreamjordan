@@ -162,10 +162,9 @@ export class DreamjordanDetailPage {
   }
 
   getDaysLeft(){
-    let today =  new Date(;
-    let diff = new Date(this.fechaComprado - today)
-    
-    console.log("hoy", today);
+    let today =  new Date();
+    let diff = (today.getTime() - this.fechaComprado.getTime()) /(1000 * 3600 * 24);
+    return parseInt(diff.toString())
   }
 
   //once a tour was purchased or validated retrieve all the audios by tour JCMV
