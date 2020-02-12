@@ -35,7 +35,7 @@ export class TourDetailPage{
   nid:any;
   audiosArray:any;
   idPais:any;
-  comprado:boolean = false;  
+  comprado:boolean = false;  1
   currentTour:any;
   tipo_tour:string = "1";
   toursComprados:any;

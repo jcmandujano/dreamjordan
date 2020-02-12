@@ -62,21 +62,7 @@ export class CartService {
       this.cartItemCount.next(this.cartItemCount.value + 1 );
     }
     
-    //console.log("test",this.cart);
-    
   }
-
-  /**decreaseProduct(product){
-    for(let [index,p] of this.cart.entries()){
-      if(p.nid === product.nid){
-        p.ammount -= 1;
-        if(p.ammount == 0){
-          this.cart.splice(index,1);
-        }
-      }
-    }
-    this.cartItemCount.next(this.cartItemCount.value - 1);
-  }*/
 
   removeProduct(product){
     for(let [index, p] of this.cart.entries()){
@@ -90,10 +76,6 @@ export class CartService {
   emptyCart(){
     this.cart = [];
     this.cartItemCount.next(0);
-  }
-
-  getPurchasesByUser(){
-    console.log("obtenemos las compras del usuario");
   }
 
   insertSinglePurchase(type:string, title:string, trans_id:string, status:boolean){
@@ -111,6 +93,7 @@ export class CartService {
       "field_fecha_comprado":[{"value":today}],
       "field_elementos":this.itemsCarrito
     };
+    console.log("checkout",datos);
     return this.http.post(
       this.co.API+'user/checkout?_format=json',
       JSON.stringify(datos),
@@ -147,32 +130,6 @@ export class CartService {
    // console.log("objeto completo",this.itemsCarrito);
   }
 
-  insertMultiPurchase(infoPurchase:any){
-    let headers = new HttpHeaders({
-      'Content-Type':  'application/json',
-      'X-CSRF-Token': this.US.account.csrf_token
-    });
-    let datos =  {
-      "type":"checkout",
-      "title":"hola mundo Checkout",
-      "field_transactionid":[{"value":"prueba"}],
-      "field_elementos":infoPurchase
-    };
-    return this.http.post(
-      this.co.API+'user/checkout?_format=json',
-      JSON.stringify(datos),
-      { headers: headers, withCredentials: true }).pipe(
-        map(
-          res => { 
-            return res;
-          },
-          (err: HttpErrorResponse) => { 
-            console.log(err);
-          }
-        )
-      );
-  }
-
   getCurrentDate(){
     var d = new Date(),
         month = '' + (d.getMonth() + 1),
@@ -200,6 +157,45 @@ export class CartService {
 
     return this.http.patch(
       this.co.API+'node/'+nid+'?_format=json',
+      JSON.stringify(datos),
+      { headers: headers, withCredentials: true }).pipe(
+        map(
+          res => { 
+            return res;
+          },
+          (err: HttpErrorResponse) => { 
+            console.log(err);
+          }
+        )
+      );
+  }
+
+  validateCoupon(coupon:string){
+    return this.http.get<Array<any>>(this.co.API+'api/cupones/'+coupon+'?_format=json',{ withCredentials: true }).pipe(
+      map(
+        res => { 
+          return res;
+        },
+        (err: HttpErrorResponse) => { 
+          console.log(err);
+        }
+      )
+    );
+  }
+
+  canjeaCupon(node){
+    let headers = new HttpHeaders({
+      'Content-Type':  'application/json',
+      'X-CSRF-Token': this.US.account.csrf_token
+    });
+    let datos = {
+      "type": [{
+        "target_id": "cupones_app"}],
+        "field_canjeado":[{"value":1}]  
+    };
+
+    return this.http.patch(
+      this.co.API+'node/'+node+'?_format=json',
       JSON.stringify(datos),
       { headers: headers, withCredentials: true }).pipe(
         map(

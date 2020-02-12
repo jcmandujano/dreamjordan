@@ -60,10 +60,10 @@
         <h3>¿Tienes un código?</h3>
     </ion-col>
     <ion-col size="12">
-        <ion-input placeholder="Escríbelo aquí"></ion-input>
+        <ion-input [(ngModel)]="couponCode" placeholder="Escríbelo aquí"></ion-input>
     </ion-col>
     <ion-col size="12"> 
-        <ion-button (click)="validate()">Validar</ion-button>
+        <ion-button (click)="validate()" [disabled]="couponCode===undefined">Validar</ion-button>
     </ion-col>
   </ion-row>
   <!--ya validado-->
@@ -72,12 +72,12 @@
           <h3>Tú código</h3>
       </ion-col>
       <ion-col size="12">
-          <p class="coupon-code">01000000</p>
+          <p class="coupon-code">{{couponCode}}</p>
       </ion-col>
       <ion-col size="12"> 
-        <p class="warn-text">Es valido, si lo activas ahora solo podrás usarlo durante los siguientes <span class="valid-days">X</span> días</p>
-        <ion-button class="primary" >Activar ahora</ion-button>
-        <ion-button class="cancel-btn">Despues</ion-button>
+        <p class="warn-text">Es valido, si lo activas ahora solo podrás usarlo durante los siguientes <span class="valid-days">10</span> días</p>
+        <ion-button class="primary" (click)="activate()">Activar ahora</ion-button>
+        <ion-button class="cancel-btn" (click)="goHome()">Despues</ion-button>
       </ion-col>
     </ion-row>
 

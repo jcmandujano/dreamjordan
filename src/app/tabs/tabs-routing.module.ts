@@ -148,6 +148,17 @@ const routes: Routes =[
           }
         ]
       }
+      ,
+      {
+        path: 'registro',
+        children: [
+          {
+            path: '',
+            loadChildren: () => 
+            import('../register/register.module').then( m => m.RegisterPageModule)
+          }
+        ]
+      }
      ]
    },
     {

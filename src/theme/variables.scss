@@ -4,7 +4,7 @@
 /** Ionic CSS Variables **/
 :root {
 
-  --ion-font-family: 'Open Sans Condensed';
+  --ion-font-family: 'Open Sans Condensed' ;
   --font-alt:'Karla';
   /** primary **/
   --ion-color-primary: #F07530;
@@ -90,12 +90,12 @@
   --naranja-dark: #df5f16;
   --gris-light: #E6E6E6; 
 
-  html.ios {
-    --ion-default-font:var(--ion-font-family);
+.ios {
+    --ion-default-font:var(--ion-font-family) !important;
   }
 
   html.md {
-    --ion-default-font:var(--ion-font-family);
+    --ion-default-font:var(--ion-font-family) !important;
   }
 
 

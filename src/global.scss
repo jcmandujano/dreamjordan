@@ -27,6 +27,14 @@
 
 @import url('https://fonts.googleapis.com/css?family=Karla:400,400i,700,700i|Open+Sans+Condensed:300,300i,700');
 
+:root,
+:root[mode="md"],
+:root[mode="ios"]{
+  --ion-font-family: 'Open Sans Condensed' ;
+  font-family: var(--ion-font-family) !important;
+}
+
+
 //pasamos los estilos del swipper aca por que en la vista no lo acepta
 .swiper-pagination {
     text-align: right !important;

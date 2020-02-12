@@ -25,7 +25,9 @@ export interface Track{
 
 export class CountryDetailPage {
   idPais: any;
+  toursComprados= new Array;
   paisSelecc : any;
+  tipo_tour:string = "1";
   tours:any;
   cart=[];
   cartItemCount: BehaviorSubject<number>;
@@ -45,6 +47,7 @@ export class CountryDetailPage {
       (res:any) => { 
         this.co.hideLoader();
         this.tours = res;
+        this.getPurchasedItems();
       },
       (err: HttpErrorResponse) => { 
         console.log(err);
@@ -69,6 +72,19 @@ export class CountryDetailPage {
     this.cartItemCount = this.cartserv.getCartItemCount();
   }
 
+  getPurchasedItems(){
+    this.user.getPurchaseInfo().subscribe(res =>{
+      res.forEach(element => {
+        this.toursComprados.push(JSON.parse(element.checkout_elements));
+      });
+      this.co.hideLoader();     
+    },
+      (err: HttpErrorResponse) => { 
+        console.log("error",err);
+      }); 
+  } 
+
+
   tourDetail(nid){
     this.router.navigate(['/tabs/tour-detail/'+this.idPais+'/'+nid]);
   }
@@ -77,17 +93,21 @@ export class CountryDetailPage {
     this.router.navigate(['/tabs/my-cart']);
   }
 
-
   addToCart(){
     let cartElement : Track;
     this.tours.forEach(element => {
       this.tourService.getAudiosxTour(element.nid).subscribe(
         (res:any) => { 
-          res.forEach(el => {
-          cartElement = el
-          cartElement.amount = 1;
-          this.cartserv.addProduct(cartElement);
-          });
+          for(let j in res){
+            for(let i in this.toursComprados){
+             if( (this.toursComprados[i][0].audio != res[j].mid)){
+              cartElement = res[j]
+              cartElement.amount = 1;
+              //console.log("cartelement",cartElement);
+              this.cartserv.addProduct(cartElement);
+             }
+            }
+          }
         },
         (err: HttpErrorResponse) => { 
           //console.log(err);
@@ -99,6 +119,6 @@ export class CountryDetailPage {
           this.co.presentAlert('Error','Hubo un problema al recuperar la información.',message);
         }
       ); 
-    });
+    }); 
   }
 }

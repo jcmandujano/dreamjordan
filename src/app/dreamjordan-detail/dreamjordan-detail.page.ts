@@ -86,7 +86,7 @@ export class DreamjordanDetailPage {
       }
     );
     //Check if some user is logged JCMV
-    console.log(this.user.account);
+
     if(this.user.account === undefined){  
       this.user.getLoginStatus().subscribe(res => { 
         this.user.account = res;

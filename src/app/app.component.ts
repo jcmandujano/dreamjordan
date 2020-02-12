@@ -25,12 +25,14 @@ export class AppComponent {
     },
     {
       title: 'Contacto',
-      url: 'tabs/contact',
+      //url: 'tabs/contact',
+      url: '#',
       icon:'mail'
     },
     {
       title: 'Mi cuenta',
-      url: 'tabs/my-account',
+      //url: 'tabs/my-account',
+      url: '#',
       icon:'person'
     }
   ];
@@ -62,7 +64,7 @@ export class AppComponent {
             console.log("no hay nadie");
             this.appPages.push({
               title: 'Ingresar',
-              url: 'tabs/login',
+              url: 'login',
               icon:'close-circle'
             });
           }
