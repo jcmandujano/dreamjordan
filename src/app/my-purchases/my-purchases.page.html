@@ -12,11 +12,11 @@
 </ion-header>
 <ion-content>
   <div class="header">
-    <h3>Mis Compras</h3>
-    <p class="header-text">Aquí se encuentran todos los audios a los que tienes acceso en esta cuenta.</p>
+    <h3>{{ 'MY_PURCH.title' | translate }}</h3>
+    <p class="header-text">{{ 'MY_PURCH.warning' | translate }}</p>
   </div>
   <div class="header" *ngIf="myPurchases?.length==0">
-    <p class="header-text">Aun no has comprado ningun contenido.</p>
+    <p class="header-text">{{ 'MY_PURCH.empty' | translate }}</p>
   </div>
 
   <ion-grid *ngIf="myPurchases?.length>0">

@@ -55,22 +55,22 @@
     <ion-row>
       <div class="welcome">
           <div class="welcome-text">
-            <span class="welcome-title">¡Bienvenido¡</span>
+            <span class="welcome-title">{{ 'HOME.welcome' | translate }}</span>
             <br>
-            <p class="body-welcome">En nuestra app podrás comprar audiotours de diferentes regiones del mundo para que puedas conocer a fondo los lugares que visites.</p>
+            <p class="body-welcome">{{ 'HOME.welcome_txt' | translate }}</p>
           </div>
       </div>
     </ion-row>
     <ion-row>
       <div class="coupon">
-        <span>¿Tienes un código?</span>
+        <span>{{ 'HOME.have_coupon' | translate }}</span>
         <br>
-        <ion-button (click)="validateCoupon()">Canjéalo aquí</ion-button>
+        <ion-button (click)="validateCoupon()">{{ 'HOME.exchange' | translate }}</ion-button>
       </div>
     </ion-row>
     
     <ion-row>
-      <p class="title-carousel">Países</p>
+      <p class="title-carousel">{{ 'HOME.countries' | translate }}</p>
     </ion-row>
     <ion-row>
      <!-- SLIDER 1-->
@@ -86,7 +86,7 @@
     </swiper>
     </ion-row>
     <ion-row>
-      <p class="title-carousel">Paquetes Dream Jordan</p>
+      <p class="title-carousel">{{ 'HOME.djplans' | translate }}</p>
     </ion-row>
     <ion-row>
       <!-- SLIDER 1-->

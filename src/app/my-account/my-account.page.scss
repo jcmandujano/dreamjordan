@@ -16,3 +16,35 @@
     font-size: 0.8rem;
     line-height: 1.2;
 } 
+
+.container{
+    padding: 2rem 2rem;
+    text-align: center;
+}
+
+ion-input{
+    background-color: var(--gris-light);
+    color: var(--negro);
+    border-radius: 100px;
+    margin-bottom: 10px;
+}
+
+.item .item-content {
+    background-color: transparent !important;
+  }
+
+
+  ion-select{
+    background-color: var(--blanco);
+    border-radius: 10px;
+    border: 2px;
+    border-style: solid;
+    border-color: var(--gris-light);
+    width: 100%;
+    font-size: 1rem;
+    .select-icon {
+        .select-icon-inner {
+           color : red !important;
+        }
+      }
+}

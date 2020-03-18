@@ -22,7 +22,7 @@
         <br>
        <!--  <ion-button (click)="buy(true)" *ngIf="comprado == false">Comprar Todo</ion-button>
         <ion-button (click)="buy(false)" *ngIf="comprado">Comprar Todo</ion-button> -->
-        <ion-button (click)="buyAllTour()" [disabled]="isPurchased==true || blockByGlobalPurchase == true">Comprar Todo</ion-button> 
+        <ion-button (click)="buyAllTour()" [disabled]="isPurchased==true || blockByGlobalPurchase == true">{{ 'GRAL.buy_all' | translate }}</ion-button> 
       </div>
     </ion-col>
   </ion-row>

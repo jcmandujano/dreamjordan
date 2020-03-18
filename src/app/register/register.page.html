@@ -6,16 +6,16 @@
         <img class="logo" src="../../assets/img/LOGO-V-B.svg"/>
       </ion-col>
       <ion-col size="12">
-          <ion-input formControlName="email" placeholder="Correo"></ion-input>
+          <ion-input formControlName="email" placeholder="{{ 'LOGREG.email' | translate }}"></ion-input>
       </ion-col>
       <ion-col size="12">
-          <ion-input formControlName="password" placeholder="Contraseña"></ion-input>
+          <ion-input formControlName="password" placeholder="{{ 'LOGREG.password' | translate }}"></ion-input>
         </ion-col>
       <ion-col size="12">
-        <ion-button type="submit" [disabled]="!register_data.valid">Registro</ion-button>
+        <ion-button type="submit" [disabled]="!register_data.valid">{{ 'LOGREG.register' | translate }}</ion-button>
       </ion-col> 
       <ion-col size="12">
-        <ion-button (click)="cancel()" >Cancelar</ion-button>
+        <ion-button (click)="cancel()" >{{ 'LOGREG.cancel' | translate }}</ion-button>
       </ion-col> 
     </ion-row>
   </form>

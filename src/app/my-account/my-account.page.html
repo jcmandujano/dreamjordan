@@ -12,7 +12,25 @@
 </ion-header>
 <ion-content>
   <div class="header">
-    <h3>Mi Cuenta</h3>
+    <h3>{{ 'ACCOUNT.title' | translate }}</h3>
+    <ion-row class="container">
+        <ion-col size="12">
+          <ion-input  placeholder="{{ 'ACCOUNT.email' | translate }}"></ion-input>
+        </ion-col>
+        <ion-col size="12">
+          <ion-input  placeholder="{{ 'ACCOUNT.pass' | translate }}"></ion-input>
+        </ion-col>
+        <ion-col size="12">
+          <ion-input  placeholder="{{ 'ACCOUNT.confirm' | translate }}"></ion-input>
+        </ion-col>
+        <ion-col size="12">
+            <ion-select [(ngModel)]="lang" (ionChange)="choose()" placeholder="{{ 'ACCOUNT.languaje' | translate }}">
+              <ion-select-option value="en">{{ 'ACCOUNT.ing' | translate }}</ion-select-option>
+              <ion-select-option value="es">{{ 'ACCOUNT.span' | translate }}</ion-select-option>
+            </ion-select>
+
+        </ion-col>
+    </ion-row>
     
   </div>
 </ion-content>

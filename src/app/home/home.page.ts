@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 import {TourService} from '../api/tour.service';
 import { Platform } from '@ionic/angular';
 import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
@@ -43,6 +44,7 @@ export class HomePage  {
     public co: CommonService,
     public tourService:TourService,
     private cartserv : CartService,
+    private translateService: TranslateService,
     public platform: Platform) {
       this.cartItemCount = this.cartserv.getCartItemCount();
       this.cart = this.cartserv.getCart();

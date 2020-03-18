@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { SwiperModule } from 'ngx-swiper-wrapper';
 import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
@@ -20,6 +21,7 @@ import { HomePage } from './home.page';
     FormsModule,
     IonicModule,
     SwiperModule,
+    TranslateModule,
     SwiperModule.forRoot(SWIPER_CONFIG),
     RouterModule.forChild([
       {

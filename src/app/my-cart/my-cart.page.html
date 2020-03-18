@@ -19,19 +19,19 @@
         <h3>Login</h3>
       </ion-col>
       <ion-col size="12">
-        <ion-input formControlName="email" placeholder="Correo"></ion-input>
+        <ion-input formControlName="email" placeholder="{{ 'DREAMJORDANDET.email' | translate }}"></ion-input>
       </ion-col>
       <ion-col size="12">
-        <ion-input formControlName="password" placeholder="Password"></ion-input>
+        <ion-input formControlName="password" placeholder="{{ 'DREAMJORDANDET.password' | translate }}"></ion-input>
       </ion-col>
       <ion-col size="12"> 
-        <ion-button (click)="doLogin(login_data.value)" [disabled]="!login_data.valid">Acceder</ion-button>
+        <ion-button (click)="doLogin(login_data.value)" [disabled]="!login_data.valid">{{ 'DREAMJORDANDET.access' | translate }}</ion-button>
       </ion-col>
       <ion-col size="12"> 
-        <ion-button (click)="muestraRegistro()">Registro</ion-button>
+        <ion-button (click)="muestraRegistro()">{{ 'DREAMJORDANDET.Registro' | translate }}</ion-button>
       </ion-col>
       <ion-col size="12"> 
-        <p>Para poder obtener el contenido es necesario acceder, si no estas registrado, puedes hacerlo rapidamente.</p>
+        <p>{{ 'DREAMJORDANDET.registro_label' | translate }}</p>
       </ion-col>
     </form>
   </ion-row>
@@ -39,19 +39,19 @@
   <ion-row class="container" *ngIf="showRegister && showLogin == false">
     <form [formGroup]="register_data" >
       <ion-col size="12">
-        <h3>Registro</h3>
+        <h3>{{ 'DREAMJORDANDET.register' | translate }}</h3>
       </ion-col>
       <ion-col size="12">
-        <ion-input formControlName="email" placeholder="Correo"></ion-input>
+        <ion-input formControlName="email" placeholder="{{ 'DREAMJORDANDET.email' | translate }}"></ion-input>
       </ion-col>
       <ion-col size="12">
-        <ion-input formControlName="password" placeholder="Password"></ion-input>
+        <ion-input formControlName="password" placeholder="{{ 'DREAMJORDANDET.password' | translate }}"></ion-input>
       </ion-col>
       <ion-col size="12"> 
-        <ion-button (click)="register(register_data.value)" [disabled]="!register_data.valid">Registrarse</ion-button>
+        <ion-button (click)="register(register_data.value)" [disabled]="!register_data.valid">{{ 'DREAMJORDANDET.sign_in' | translate }}</ion-button>
       </ion-col>
       <ion-col size="12"> 
-        <p>Para poder obtener el contenido es necesario acceder, si no estas registrado, puedes hacerlo rapidamente.</p>
+        <p>{{ 'DREAMJORDANDET.registro_label' | translate }}</p>
       </ion-col>
     </form>
   </ion-row>
@@ -83,17 +83,17 @@
     </div>
     <div class="row">
       <div class="column">
-        <ion-button class="cancel-btn" (click)="goHome()">Seguir Comprando</ion-button>
+        <ion-button class="cancel-btn" (click)="goHome()">{{ 'CART.keep' | translate }}</ion-button>
       </div>
       <div class="column">
-        <ion-button (click)="insertCheckout()" [disabled]="cart.length==0" class="primary">Pagar</ion-button>
+        <ion-button (click)="insertCheckout()" [disabled]="cart.length==0" class="primary">{{ 'CART.pay' | translate }}</ion-button>
       </div>
       <!-- <div class="column">
         <ion-button (click)="paypal()" class="primary">testpaypal</ion-button>
       </div> -->
     </div>
     <div class="trash-all" *ngIf="cart.length>0" (click)="emptyCurrentCart()">
-      <p>Vaciar carrito  </p>
+      <p>{{ 'CART.empty' | translate }} </p>
       <ion-icon class="trashy" src="./assets/img/trash.svg" ></ion-icon>
     </div>
 </ion-grid>

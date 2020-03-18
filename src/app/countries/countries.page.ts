@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-countries',
   templateUrl: './countries.page.html',
@@ -20,6 +21,7 @@ export class CountriesPage {
     public user : UserService, 
     public co: CommonService,
     private cartserv:CartService,
+    private translateService: TranslateService,
     private nativeStorage: NativeStorage) { }
     
 

@@ -1,0 +1,106 @@
+{
+    "HOME" : {
+        "welcome": "Welcome",
+        "welcome_txt": "In our app you can buy audiotours from different regions of the world so that you can get to know in depth the places you visit.",
+        "have_coupon": "Do you have a code?",
+        "exchange": "redeem it here",
+        "countries": "Countries",
+        "djplans":"Dream Jordan Plans"
+    },
+    "COUNTRIES" : {
+        "countries": "Countries",
+        "counries_desc":"Next to visit any of these countries ?, explore all the podcast we have for you."
+    },
+    "GRAL":{
+        "buy_all": "Buy All"
+    },
+    "DREAMJORDAN":{
+        "dreamjordan_desc":"Next to visit any of these countries?, explore all the podcast we have for you."
+    },
+    "DREAMJORDANDET":{
+        "countdown": "of 10 days",
+        "access":"Access",
+        "register":"Register",
+        "sign_in":"Register",
+        "registro_label":"In order to obtain the content it is necessary to access, if you are not registered, you can do it quickly.",
+        "email":"Email",
+        "password":"Password",
+        "have_coupon": "Do you have a code?",
+        "write_here": "write it here",
+        "validate":"Validate",
+        "if_not":"If you don't have a code and want this package",
+        "contact_ana":"contact Ana",
+        "your_code":"Your code",
+        "isvalid_lab":"It is valid, if you activate it now you can only use it during the following",
+        "days":"days", 
+        "activate_now":"Activate Now",
+        "later":"Later"
+    },
+    "MY_PURCH":{
+        "title":"My Purchases",
+        "warning":"Here are all the purchases you make in this account.",
+        "empty":"You have not yet purchased any content"
+    },
+    "MENU":{
+        "countries":"Countries",
+        "my_purchases":"My Purchases"
+    },
+    "CART":{
+        "keep":"Keep Buying",
+        "pay":"Pay",
+        "empty":"Empty Cart"
+    },
+    "ABOUT":{
+        "title":"What is Drean Jordan?",
+        "part_1":"This App was made thinking of people who do not want to carry guides, who like to travel more freely or who do not have the budget to do so. Traveling so far and not knowing what you see is a shame and if you bring a book or a map many times you do not have enough information to know what you are seeing.",
+        "part_2":"With this app, you have a guide that tells you step by step how the place you visit is. A person who knows and likes Jordan's tourist sites, accompanies you and tells you about them, as if you were taking a guided tour."
+    },
+    "LOGREG":{
+        "email":"Email",
+        "password":"Password",
+        "register":"Register",
+        "cancel":"Cancel"
+    },
+    "FAQ":{
+        "title":"Frequently asked questions",
+        "quest1":"What packages do you have?",
+        "ans1":"Audio can be purchased alone or in several packages for a single site, with a theme or with discounts for families or friends.",
+        "quest2":"If I don't understand, can I hear the audio several times?",
+        "ans2":"Yes, up to 3.",
+        "quest3":"Do they have any time of use?",
+        "ans3":"Yes, from the moment you activate your package it has a validity period.",
+        "quest4":"Can I share them?",
+        "ans4":"No, each purchased audio can be used on one device only.",
+        "quest5":"Do I need the internet to hear them?",
+        "ans5":"No, you can download them at your hotel or at home and listen to them without internet.",
+        "quest6":"Should I hear them on the site?",
+        "ans6":"You can hear them while you visit or you can hear them before your trip in preparation to know what you are going to see if you are going to visit later with a guide.",
+        "quest7":"Can I pause it?",
+        "ans7":"Yes. You can stop and continue as you like.",
+        "quest8":"In what languages do they exist?",
+        "ans8":"At the moment, in English and Spanish.",
+        "quest9":"Do you have them for other countries?",
+        "ans9":"We will have, wait for them",
+        "quest10":"Is it compatible with iOS and Android?",
+        "ans10":"Yes.",
+        "quest11":"Can I buy for all my family?",
+        "ans11":"Yes, you can make a discounted family package paid for by the same person."
+    },
+    "CONTACT":{
+        "title":"Contact us",
+        "text1":"For any questions, problems or clarifications do not hesitate to contact us. We are always ready to help you",
+        "text2":"For reports call us at",
+        "text3":"Write us by Whatsapp or IMO at",
+        "text4":"or send us an email to"
+    },
+    "ACCOUNT":{
+        "title":"My Account",
+        "email":"Email",
+        "pass":"Password",
+        "confirm":"Confirm Password",
+        "languaje":"Language",
+        "ing":"English",
+        "span":"Spanish"
+    }
+}
+  

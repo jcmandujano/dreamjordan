@@ -5,6 +5,8 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {StorageService, Item} from '../app/api/storage.service';
 import {UserService} from '../app/api/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { TranslateService } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-root',
@@ -25,14 +27,14 @@ export class AppComponent {
     },
     {
       title: 'Contacto',
-      //url: 'tabs/contact',
-      url: '#',
+      url: 'tabs/contact',
+     // url: '#',
       icon:'mail'
     },
     {
       title: 'Mi cuenta',
-      //url: 'tabs/my-account',
-      url: '#',
+      url: 'tabs/my-account',
+      //url: '#',
       icon:'person'
     }
   ];
@@ -42,7 +44,8 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private storage : StorageService,
-    public user : UserService
+    public user : UserService,
+    private translateService: TranslateService
   ) {
     this.initializeApp();
   }
@@ -51,6 +54,8 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       if(this.user.account === undefined){
+        this.translateService.setDefaultLang('es'); 
+        this.translateService.use('es');
         this.user.getLoginStatus().subscribe(res => { 
           this.user.account = res;
           if(this.user.account.current_user){
