@@ -40,14 +40,15 @@ export class CouponValidatorPage  {
     private router:Router,
     private cartserv:CartService) { }
 
-  ionViewWillEnter(){
+  ionViewDidEnter(){
+    console.log("hola",this.user.account);
     if(this.user.account === undefined){
       this.co.showLoader();
       this.user.getLoginStatus().subscribe(res => { 
         this.user.account = res;
-        console.log("resp",res);
         this.co.hideLoader();
         if(this.user.account.current_user){
+          console.log("data",this.user.account.current_user);
           this.showValidator = true;
         }
       },
@@ -55,8 +56,10 @@ export class CouponValidatorPage  {
         this.co.hideLoader();
         console.log("error",err);
       }); 
-    }else{
-      this.showValidator=true;
+    }else{ 
+      if(this.user.account.current_user){
+        this.showValidator = true;
+      }
     }
     this.cart = this.cartserv.getCart();
     this.cartItemCount = this.cartserv.getCartItemCount();
@@ -114,7 +117,7 @@ export class CouponValidatorPage  {
           this.co.hideLoader();
           this.cartserv.emptyCart();
           this.canjeaCupon();
-          //banderas para mostrar acttivador
+          //banderas para mostrar activador
           this.showValidator = false;
           this.isValid = true
           this.muestraLogin = false;

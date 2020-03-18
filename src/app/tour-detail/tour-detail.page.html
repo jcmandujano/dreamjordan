@@ -41,11 +41,11 @@
         <p class="file-tour-desc"> Dolorum inventore nam convallis eveniet hac class adipiscing blanditiis. Praesentium turpis cursus epteur.</p>
         <ion-range #progressBar *ngIf="audio.comprado===true" [(ngModel)]="audio.audioelement.progress" max="100" color="success" pin="true" (touchend)="seek(audio.audioelement, i)" (mouseup)="seek(audio.audioelement,i)"></ion-range>
       </ion-col >
-      <ion-col size="3" class="centered" *ngIf="audio.comprado!==true">
+      <!--<ion-col size="3" class="centered" *ngIf="audio.comprado!==true">
         <span class="price">{{audio.field_costo| currency:'USD'}}</span>
         <br>
         <ion-button (click)="addToCart(audio)" [disabled]="blockByGlobalPurchase == true">Comprar</ion-button>
-      </ion-col>
+      </ion-col>-->
       <ion-col size="3" class="play-div" *ngIf="audio.comprado===true">
         <img src="../../assets/img/play.svg" (click)="play(audio.audioelement)" *ngIf="!audio.isPlaying"/>
         <img src="../../assets/img/pause.svg" (click)="pause(audio.audioelement)" *ngIf="audio.isPlaying"/>

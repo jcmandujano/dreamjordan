@@ -93,21 +93,29 @@ export class CountryDetailPage {
     this.router.navigate(['/tabs/my-cart']);
   }
 
+
   addToCart(){
     let cartElement : Track;
     this.tours.forEach(element => {
       this.tourService.getAudiosxTour(element.nid).subscribe(
         (res:any) => { 
-          for(let j in res){
-            for(let i in this.toursComprados){
-             if( (this.toursComprados[i][0].audio != res[j].mid)){
+          if(this.toursComprados.length > 0){
+            for(let j in res){
+              for(let i in this.toursComprados){
+               if( (this.toursComprados[i][0].audio != res[j].mid)){
+                cartElement = res[j]
+                cartElement.amount = 1;
+                this.cartserv.addProduct(cartElement);
+               }
+              }
+            }
+          }else{
+            for(let j in res){
               cartElement = res[j]
               cartElement.amount = 1;
-              //console.log("cartelement",cartElement);
               this.cartserv.addProduct(cartElement);
-             }
             }
-          }
+          } 
         },
         (err: HttpErrorResponse) => { 
           //console.log(err);

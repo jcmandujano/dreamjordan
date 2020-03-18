@@ -73,30 +73,32 @@
       <p class="title-carousel">Países</p>
     </ion-row>
     <ion-row>
-      <ion-slides class="bottom-slider" [options]="slideOpts">
-          <ion-slide *ngFor="let pais of paises">
-            <div class="warp-solid"></div>
-            <img class="fitme" *ngIf="pais.field_imagen == ''" src="./assets/img/exampleImage.png"/>
-            <img class="fitme" *ngIf="pais.field_imagen" [src]="co.API+pais.field_imagen"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider" (click)="countryDetail(pais.tid)">{{pais.nombrePais}}</span>
-            </div>
-          </ion-slide>
-      </ion-slides>
+     <!-- SLIDER 1-->
+     <swiper [config]="slideOpts" >
+      <div *ngFor="let pais of paises">
+        <div class="warp-solid"></div>
+          <img class="fitme" src="./assets/img/exampleImage.png"/>
+          <!-- <img class="fitme" *ngIf="pais.field_imagen" [src]="co.API+pais.field_imagen"/> -->
+          <div class="bottom-slider-text">
+            <span class="title-slider" (click)="countryDetail(pais.tid)">{{pais.nombrePais}}</span>
+          </div>
+      </div>
+    </swiper>
     </ion-row>
     <ion-row>
       <p class="title-carousel">Paquetes Dream Jordan</p>
     </ion-row>
     <ion-row>
-      <ion-slides class="bottom-slider" [options]="slideOpts">
-        <ion-slide *ngFor="let tour of DreamJordanTours">
-          <div class="warp-solid"></div><!--Cuando le pasamos la imagen normal se rome * revisar-->
-          <img src="../../assets/img/exampleImage.png"/>
-          <div class="bottom-slider-text">
-            <span class="title-slider" (click)="tourDetail(tour.nid)">{{tour.title}}</span>
-          </div>
-        </ion-slide>
-    </ion-slides>
+      <!-- SLIDER 1-->
+      <swiper [config]="slideOptsDJ" >
+      <div *ngFor="let tour of DreamJordanTours">
+        <div class="warp-solid"></div><!--Cuando le pasamos la imagen normal se rome * revisar-->
+        <img class="fitme" src="../../assets/img/exampleImage.png"/>
+        <div class="bottom-slider-text">
+          <span class="title-slider" (click)="tourDetail(tour.nid)">{{tour.title}}</span>
+        </div>
+      </div>
+    </swiper>
     </ion-row>
   </ion-grid>
 </ion-content>

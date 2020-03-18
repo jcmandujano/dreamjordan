@@ -1,11 +1,18 @@
 // Ionic Variables and Theming. For more info, please see:
 // http://ionicframework.com/docs/theming/
 
+:root,
+:root[mode=md],
+:root[mode=ios]{
+  --ion-font-family: 'Open Sans Condensed', 'Karla' !important;
+  --font-alt:'Karla';
+  font-family: 'Open Sans Condensed', 'Karla'  !important;
+}
 /** Ionic CSS Variables **/
 :root {
 
-  --ion-font-family: 'Open Sans Condensed' ;
-  --font-alt:'Karla';
+  //--ion-font-family: 'Open Sans Condensed' ;
+  //--font-alt:'Karla';
   /** primary **/
   --ion-color-primary: #F07530;
   --ion-color-primary-rgb: 56, 128, 255;

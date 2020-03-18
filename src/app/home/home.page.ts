@@ -1,49 +1,56 @@
-import { Component } from '@angular/core';
-import {Router, NavigationExtras} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
 import { UserService } from '../api/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonService } from '../api/common.service';
 import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
 import {TourService} from '../api/tour.service';
-import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { Platform } from '@ionic/angular';
-import {StorageService, Item} from '../api/storage.service';
+import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  styleUrls: ['home.page.scss']
 })
-export class HomePage {
-  localItems : Item[]  = [];
+export class HomePage  {
+
   cart=[];
   paises : any;
   cartItemCount: BehaviorSubject<number>;
   DreamJordanTours:any;
-  slideOpts = {
-    freeMode: true,
+  visibles : boolean = false;
+
+  slideOpts: SwiperConfigInterface = {
     slidesPerView: 2,
     spaceBetween: 10,
-    autoHeight:true
-  };
-  
+    autoHeight: true,
+    slidesOffsetBefore : 10,
+    direction: 'horizontal',
+    slidesOffsetAfter: 10
+  }
+  slideOptsDJ : SwiperConfigInterface = {
+    slidesPerView: 2,
+    spaceBetween: 10,
+    autoHeight: true,
+    slidesOffsetBefore : 10,
+    slidesOffsetAfter: 10
+  }
+
   constructor(private router:Router, 
     public user : UserService, 
     public co: CommonService,
     public tourService:TourService,
     private cartserv : CartService,
-    private nativeStorage: NativeStorage,
-    public platform: Platform,
-    private storage : StorageService) {
+    public platform: Platform) {
       this.cartItemCount = this.cartserv.getCartItemCount();
       this.cart = this.cartserv.getCart();
      }
-
-  visibles : boolean = false;
-  
+     
   //valida si existe un usuario logeado JCMV 20012020
   ionViewWillEnter(){
+    
     if(this.user.account === undefined){
       this.co.showLoader();
       this.user.getLoginStatus().subscribe(res => { 
@@ -61,6 +68,24 @@ export class HomePage {
     this.recuperaPaises();
   }
 
+  ngAfterViewInit() {
+    this.slideOpts = {
+      slidesPerView: 2,
+      spaceBetween: 10,
+      autoHeight: true,
+      slidesOffsetBefore : 10,
+      direction: 'horizontal',
+      slidesOffsetAfter: 10
+    }
+    this.slideOptsDJ = {
+      slidesPerView: 2,
+      spaceBetween: 10,
+      autoHeight: true,
+      slidesOffsetBefore : 10,
+      slidesOffsetAfter: 10
+    }
+}
+
  /* loadStorageItems(){ SEGUIMIS DESPUES∫
     this.storage.getItems().then(items =>{
      this.localItems = items;
@@ -73,6 +98,7 @@ export class HomePage {
     this.user.getPaises().subscribe(res => { 
       this.paises = res;
       this.recuperaDreamJordan();
+    
       //console.log("paises",this.paises)
     },
     (err: HttpErrorResponse) => { 
@@ -83,6 +109,7 @@ export class HomePage {
   recuperaDreamJordan(){
     this.tourService.getDreamJordanTours().subscribe(res => { 
       this.DreamJordanTours = res;
+      
     // console.log("toursDreamJordan",res);
     },
     (err: HttpErrorResponse) => { 

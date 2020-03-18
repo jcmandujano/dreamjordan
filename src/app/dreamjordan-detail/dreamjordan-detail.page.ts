@@ -42,8 +42,10 @@ export class DreamjordanDetailPage {
   showTours:boolean = false;//muestra tours
   fechaComprado:Date;
   couponCode:string;
+  idcheckout:any;
   tipo_tour:string = "2";
   nodeid:any;
+  idTourCoupon:any;
   @ViewChildren(IonRange) ranges : QueryList<IonRange>;
 
   //Formdata ocupado para login y registro
@@ -74,6 +76,7 @@ export class DreamjordanDetailPage {
       (res:any) => { 
         this.co.hideLoader();
         this.current_tour = res[0];
+        console.log("current",this.current_tour);
       },
       (err: HttpErrorResponse) => { 
         console.log(err);
@@ -193,7 +196,7 @@ export class DreamjordanDetailPage {
   }
 
   //Store the validate coupon JCMV
-  validate(coupon:string){
+  /*validate(coupon:string){
     if(this.user.account.current_user){
       this.co.showLoader();
       this.addToCart();
@@ -219,9 +222,9 @@ export class DreamjordanDetailPage {
         }
       );
     }
-  }
+  }*/
 
-  //activate the current tour(only if is purchased) to start countdown duration JCMV
+   //activate the current tour(only if is purchased) to start countdown duration JCMV
   activate(){
     this.co.showLoader();
     this.cartserv.activateDreamJordanTour(this.nodeid).subscribe((res) =>{
@@ -236,7 +239,7 @@ export class DreamjordanDetailPage {
       this.co.hideLoader();
       this.cartserv.emptyCart();
     }) 
-  }
+  } 
 
   //Login user JCMV
   doLogin(data){
@@ -282,6 +285,82 @@ export class DreamjordanDetailPage {
       }
     );
   }
+
+  validateCoupon(){
+    this.co.showLoader();
+    this.cartserv.validateCoupon(this.couponCode).subscribe(
+      (res:any) => { 
+        //Si no regresa nada, el cupon no esta dado de alta
+        if(res.length == 0){
+          this.co.hideLoader();
+          this.co.presentAlert("Error", "El cupon no es valido", "");
+        }else if(res[0].field_canjeado === "Activado"){//Si el cupon ya esta canjeado, envia esta alerta
+          this.co.hideLoader();
+          this.co.presentAlert("Error", "El cupon ya ha sido utilizado", "");
+          }else if(res[0].field_tour === ""){//VAlidamos que el cupon este relacionado a un tour
+            this.co.hideLoader();
+            this.co.presentAlert("Error", "El cupon no esta asignado a ningun tour", "");
+        }else{//Si el cupon no esta canjeado, se procede a validarlo
+          //this.co.hideLoader();//borrar
+          console.log(res);
+          this.idTourCoupon = res[0].nid
+          //obtenemos primero el tour asignado al cupon
+          //this.getTourInfo(res[0].field_tour);
+          //Una vez obtenida la informacion
+          this.insert(this.couponCode, this.current_tour);
+        }
+        console.log("cupon",res);
+      },
+      (err: HttpErrorResponse) => { 
+        //console.log(err);
+        this.co.hideLoader();
+        this.co.presentAlert('Error','Hubo un problema al validar la información',"");
+      });
+    }
+
+  //Store the validate coupon JCMV
+  insert(coupon:string, data:any){
+    this.addToCart();
+    this.cartserv.insertSinglePurchase("checkout", data.title, coupon, false).subscribe(
+      (res:any) => { 
+        console.log("insert response ",res);
+        this.idcheckout = res.checkout;
+        this.co.hideLoader();
+        this.cartserv.emptyCart();
+        this.co.presentToast("Se realizo la compra correctamente");
+        this.canjeaCupon();
+        //banderas para mostrar acttivador
+        this.isValid=true;
+        this.isActivated=false; 
+        this.showTours=false
+        this.showLogin = false;
+        //banderas para mostrar acttivador
+      },
+      (err: HttpErrorResponse) => { 
+        console.log(err);
+        this.co.hideLoader();
+        this.cartserv.emptyCart();
+        var message = err.error.message;
+        if(err.status == 400){
+          message = 'Correo electrónico o contraseña no reconocidos.';
+        }
+        this.co.presentAlert('Error','Hubo un problema con la validacion del cupon.',message);
+      }
+    );
+  }
+
+  //Una vez realizado el proceso se desactiva el cupon
+  canjeaCupon(){
+    this.cartserv.canjeaCupon(this.idTourCoupon).subscribe((res) =>{
+      console.log("canjeado",res);
+    },
+    (err: HttpErrorResponse) => { 
+      console.log(err);
+      this.co.hideLoader();
+      this.cartserv.emptyCart();
+    }) 
+  }
+
 
   //Called at the moment to insert purchase with the tour info, once inserted this object will be destroyed JCMV
   //NOTE: When mid==="0" means that the full tour was purchased.
@@ -361,6 +440,8 @@ export class DreamjordanDetailPage {
       this.updateProgress(track);
     }, 1000)
   }
-
+  goHome(){
+    this.router.navigate(['/tabs/dreamjordan-plans']);
+  }
 
 }
