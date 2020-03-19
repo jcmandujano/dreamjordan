@@ -84,7 +84,7 @@ export class MyCartPage {
         (res:any) => { 
           this.co.hideLoader();
           this.co.presentToast("La compra se relizo correctamente");
-          this.paypalWithPaypal();
+          //this.paypalWithPaypal();
         },
         (err: HttpErrorResponse) => { 
           //console.log(err);
@@ -116,6 +116,7 @@ export class MyCartPage {
         //let paymentDetails = new PayPalPaymentDetails(this.cart);
         let payment = new PayPalPayment(this.getTotal().toString(), 'MXN', 'Description', 'sale');
         this.payPal.renderSinglePaymentUI(payment).then((data) => {
+          this.insertCheckout();
           console.log("se logro",data); 
           this.emptyCurrentCart();
           this.router.navigate(['/tabs/my-purchases']);

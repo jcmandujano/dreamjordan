@@ -15,14 +15,15 @@
         "buy_all": "Comprar Todo"
     },
     "DREAMJORDAN":{
-        "dreamjordan_desc":"Next to visit any of these countries?, explore all the podcast we have for you."
+        "dreamjordan_desc":"Si estás viajando con Ana en este apartado podrás encontrar el paquete que contrataste ingresa tu código y desbloquealo, si te interesa adquirir alguno de estos."
     },
     "DREAMJORDANDET":{
         "countdown": "de 10 días",
         "access":"Acceder",
         "register":"Registro",
+        "login":"Iniciar Sesión",
         "sign_in":"Registrarse",
-        "registro_label":"Para poder obtener el contenido es necesario acceder, si no estas registrado, puedes hacerlo rapidamente.",
+        "registro_label":"Para poder obtener el contenido es necesario acceder, si no estas registrado, puedes hacerlo rápidamente.",
         "email":"Correo",
         "password":"Contraseña",
         "have_coupon": "¿Tienes un código?",

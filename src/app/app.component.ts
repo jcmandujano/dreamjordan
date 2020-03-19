@@ -66,7 +66,7 @@ export class AppComponent {
               icon:'close-circle'
             });
           }else{
-            console.log("no hay nadie");
+            //console.log("no hay nadie");
             this.appPages.push({
               title: 'Ingresar',
               url: 'login',

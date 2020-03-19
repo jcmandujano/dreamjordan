@@ -61,7 +61,6 @@ export class CartService {
       let item = {id: product.nid, element: this.cart}
       this.cartItemCount.next(this.cartItemCount.value + 1 );
     }
-    
   }
 
   removeProduct(product){

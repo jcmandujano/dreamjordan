@@ -85,7 +85,7 @@ export class TourDetailPage{
     ); 
     this.products = this.cartserv.getProducts();
     this.cart = this.cartserv.getCart();
-    console.log("carrito",this.cart);
+    //console.log("carrito",this.cart);
     this.checkIfIsPurchased();
     this.cartItemCount = this.cartserv.getCartItemCount();
   }
@@ -118,7 +118,7 @@ export class TourDetailPage{
     this.tourService.getSingleTour(this.idPais,this.nid).subscribe(
       (res:any) => { 
         this.currentTour = res[0];
-        //console.log("tour",this.currentTour);
+        console.log("tour",this.currentTour);
       },
       (err: HttpErrorResponse) => { 
         //console.log(err);
@@ -151,11 +151,21 @@ export class TourDetailPage{
   } 
 
   buyAllTour(){
-    let tourElement:Track;
-    this.blockByGlobalPurchase=true;
-    this.audiosArray.forEach(element => {
-      this.cartserv.addProduct(element);
-    });
+    let data = {
+      nid:this.currentTour.nid,
+      mid:this.currentTour.nid,
+      name:this.currentTour.title,
+      field_costo:this.currentTour.field_costo,
+      field_media_audio_file:"",
+      amount:1
+    }
+    if(this.audiosArray.length==1){
+      console.log("NO ES un paquete");
+      data.field_media_audio_file = this.audiosArray[0].field_media_audio_file;
+      data.mid = this.audiosArray[0].mid;
+    }
+    this.cartserv.addProduct(data);
+
   }
 
   /*METODOS PARA AUDIO PLAYER*/

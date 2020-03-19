@@ -21,6 +21,7 @@
         "countdown": "of 10 days",
         "access":"Access",
         "register":"Register",
+        "login":"Login",
         "sign_in":"Register",
         "registro_label":"In order to obtain the content it is necessary to access, if you are not registered, you can do it quickly.",
         "email":"Email",

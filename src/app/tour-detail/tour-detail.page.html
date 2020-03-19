@@ -30,7 +30,7 @@
     <p>{{currentTour?.body}}</p>
   </div>
   <!--GRID OCUPADO PARA CUANDO AUN NO SE COMPRA CONTENIDO-->
-  <ion-grid class="content-list" *ngIf="comprado == false">  
+  <ion-grid class="content-list" *ngIf="isPurchased == false">  
     <ion-row *ngFor="let audio of audiosArray; let i = index">
       <ion-col size="2" class="index-col">
         <span class="index">{{i+1}}</span>
@@ -55,7 +55,7 @@
     </ion-row>
   </ion-grid>
   <!--GRID OCUPADO PARA CUANDO YA SE COMPRO CONTENIDO-->
-  <ion-grid class="content-list" *ngIf="comprado == true">  
+  <ion-grid class="content-list" *ngIf="isPurchased == true">  
     <ion-row *ngFor="let audio of audiosArray; let i = index">
       <ion-col size="2" class="index-col">
         <span class="index">{{i+1}}</span>

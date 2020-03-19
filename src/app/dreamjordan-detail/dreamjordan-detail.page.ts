@@ -224,6 +224,11 @@ export class DreamjordanDetailPage {
     }
   }*/
 
+  muestraRegistro(){
+    this.showLogin = false;
+    this.showRegister  = true;
+  }
+
    //activate the current tour(only if is purchased) to start countdown duration JCMV
   activate(){
     this.co.showLoader();

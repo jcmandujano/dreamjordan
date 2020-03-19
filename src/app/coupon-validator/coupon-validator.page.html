@@ -15,7 +15,7 @@
   <ion-row class="container" *ngIf="showValidator == false && muestraLogin == true">
     <form [formGroup]="login_data" >
       <ion-col size="12">
-        <h3>Login</h3>
+        <h3>{{ 'DREAMJORDANDET.login' | translate }}</h3>
       </ion-col>
       <ion-col size="12">
         <ion-input formControlName="email" placeholder="{{ 'DREAMJORDANDET.email' | translate }}"></ion-input>

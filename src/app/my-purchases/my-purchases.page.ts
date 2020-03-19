@@ -49,8 +49,8 @@ export class MyPurchasesPage  {
 
 
   goToDetail(item:any){
-    console.log("elemento seleccionado",item.audio);
-    if(item.audio){
+    console.log("elemento seleccionado",item);
+    if(item.tour_img){
       //se envia a country-detail
       this.router.navigate(['/tabs/tour-detail/'+item.tid+'/'+item.tour]);
     }else{
