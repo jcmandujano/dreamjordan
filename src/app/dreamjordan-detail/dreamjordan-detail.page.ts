@@ -8,7 +8,7 @@ import {Router, ActivatedRoute, } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserService} from '../api/user.service'; 
 import {Howl, howler} from 'howler';
-import { IonRange } from '@ionic/angular';
+import { IonRange, NavController } from '@ionic/angular';
 
 export interface Track{
   nid:string;
@@ -63,6 +63,7 @@ export class DreamjordanDetailPage {
     public tourService:TourService,
     public co: CommonService,
     private router:Router,
+    private navCtrl: NavController,
     public user : UserService,
     private cartserv:CartService) { 
     this.id_tour = this.active.snapshot.paramMap.get("id");
@@ -125,7 +126,7 @@ export class DreamjordanDetailPage {
       //console.log("fecha", res[0].field_fecha_comprado );
       if(res.length>0){
         this.fechaComprado = new Date(res[0].field_fecha_comprado);
-        //console.log("fecha", this.fechaComprado );
+        console.log("fecha", this.fechaComprado );
         this.getDaysLeft();
       }
       res.forEach(element => {
@@ -165,9 +166,12 @@ export class DreamjordanDetailPage {
   }
 
   getDaysLeft(){
-    let today =  new Date();
-    let diff = (today.getTime() - this.fechaComprado.getTime()) /(1000 * 3600 * 24);
-    return parseInt(diff.toString())
+    if(this.fechaComprado !=undefined){
+      let today =  new Date();
+      let diff = (today.getTime() - this.fechaComprado.getTime()) /(1000 * 3600 * 24);
+      return parseInt(diff.toString());
+    }
+    
   }
 
   //once a tour was purchased or validated retrieve all the audios by tour JCMV
@@ -232,6 +236,7 @@ export class DreamjordanDetailPage {
    //activate the current tour(only if is purchased) to start countdown duration JCMV
   activate(){
     this.co.showLoader();
+    console.log("nodo",this.nodeid);
     this.cartserv.activateDreamJordanTour(this.nodeid).subscribe((res) =>{
       //console.log("actualizado",res);
       this.co.hideLoader();
@@ -295,6 +300,7 @@ export class DreamjordanDetailPage {
     this.co.showLoader();
     this.cartserv.validateCoupon(this.couponCode).subscribe(
       (res:any) => { 
+        console.log("miciela",res);
         //Si no regresa nada, el cupon no esta dado de alta
         if(res.length == 0){
           this.co.hideLoader();
@@ -329,6 +335,7 @@ export class DreamjordanDetailPage {
     this.cartserv.insertSinglePurchase("checkout", data.title, coupon, false).subscribe(
       (res:any) => { 
         console.log("insert response ",res);
+        this.nodeid = res.checkout;
         this.idcheckout = res.checkout;
         this.co.hideLoader();
         this.cartserv.emptyCart();
@@ -448,5 +455,9 @@ export class DreamjordanDetailPage {
   goHome(){
     this.router.navigate(['/tabs/dreamjordan-plans']);
   }
+
+  goBack() {
+    this.navCtrl.back();
+    }
 
 }

@@ -19,6 +19,20 @@ ion-grid{
     --ion-grid-padding: 15px ;
 }
 
+.cancel-btn{
+    --background: var(--naranja);
+    width:50%;
+    height: 33px;
+    margin-top: 12px;
+    font-weight: bolder;
+    --border-color: #fff;
+    --border-width: 1px;
+    --border-style: solid;
+    --border-radius: 0px;
+    --padding-start: 30px;
+    --padding-end: 30px;  
+}
+
 ion-col{
     --ion-grid-column-padding: 8px;
 }

@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 import {Howl, howler} from 'howler';
 import { IonRange } from '@ionic/angular';
 import { UserService} from '../api/user.service'; 
+import { NavController } from '@ionic/angular';
 
 export interface Track{
   nid:string;
@@ -52,6 +53,7 @@ export class TourDetailPage{
   constructor(private router:Router,
     public tourService:TourService,
     public co: CommonService,
+    private navCtrl: NavController,
     public active : ActivatedRoute,
     public user : UserService,
     private cartserv:CartService) { 
@@ -220,4 +222,7 @@ export class TourDetailPage{
     }, 1000)
   }
 
+  goBack() {
+    this.navCtrl.back();
+    }
 }

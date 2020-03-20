@@ -59,4 +59,8 @@ export class MyPurchasesPage  {
     }
   }
 
+  goHome(){
+    this.router.navigate(['/']);
+  }
+
 }

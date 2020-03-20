@@ -81,7 +81,7 @@
       </ion-col>
       <ion-col size="12"> 
         <p class="warn-text">{{ 'DREAMJORDANDET.if_not' | translate }}</p>
-          <ion-button class="primary">{{ 'DREAMJORDANDET.contact_ana' | translate }}</ion-button>
+          <ion-button class="primary" href="https://api.whatsapp.com/send?phone=5215554094418">{{ 'DREAMJORDANDET.contact_ana' | translate }}</ion-button>
       </ion-col>
     </ion-row>
     <!-- cupon Validado -->
@@ -116,4 +116,9 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+      <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+        <ion-fab-button (click)="goBack()" routerDirection="back" color="light" size="small">
+          <ion-icon name="arrow-back"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
 </ion-content>

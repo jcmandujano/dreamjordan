@@ -14,14 +14,16 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-
+  
   public appPages = [{
     title: 'Sobre Dream Jordan',
+    enTitle:'About',
     url: 'tabs/about',
     icon:'information-circle'
     },
     {
       title: 'F.A.Q.',
+      enTitle:'F.A.',
       url: 'tabs/faq',
       icon:'help-circle'
     },

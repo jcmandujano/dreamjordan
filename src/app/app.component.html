@@ -9,11 +9,29 @@
       </ion-header>
       <ion-content>
         <ion-list>
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
-            <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
-              <ion-icon slot="start" [name]="p.icon"></ion-icon>
+          <ion-menu-toggle auto-hide="false" >
+            <ion-item routerDirection="'root'" routerLink="tabs/about">
+              <ion-icon slot="start" name="information-circle"></ion-icon>
               <ion-label>
-                {{p.title}}
+                {{ 'SIDEMENU.about' | translate }}
+              </ion-label>
+            </ion-item>
+            <ion-item routerDirection="'root'" routerLink="tabs/about">
+              <ion-icon slot="start" name="information-circle"></ion-icon>
+              <ion-label>
+                {{ 'SIDEMENU.faq' | translate }}
+              </ion-label>
+            </ion-item>
+            <ion-item routerDirection="'root'" routerLink="tabs/contact">
+              <ion-icon slot="start" name="mail"></ion-icon>
+              <ion-label>
+                {{ 'SIDEMENU.contact' | translate }}
+              </ion-label>
+            </ion-item>
+            <ion-item routerDirection="'root'" routerLink="tabs/my-account">
+              <ion-icon slot="start" name="person"></ion-icon>
+              <ion-label>
+                {{ 'SIDEMENU.account' | translate }}
               </ion-label>
             </ion-item>
           </ion-menu-toggle>

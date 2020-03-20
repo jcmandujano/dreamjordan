@@ -12,10 +12,10 @@
         "counries_desc":"Next to visit any of these countries ?, explore all the podcast we have for you."
     },
     "GRAL":{
-        "buy_all": "Buy All"
+        "buy_all": "Buy"
     },
     "DREAMJORDAN":{
-        "dreamjordan_desc":"Next to visit any of these countries?, explore all the podcast we have for you."
+        "dreamjordan_desc":"If you are traveling with Ana, enter the tour you hired, enter your code and download your audios. If you want to book a trip with Dream Jordan, contact Ana at"
     },
     "DREAMJORDANDET":{
         "countdown": "of 10 days",
@@ -47,14 +47,14 @@
         "my_purchases":"My Purchases"
     },
     "CART":{
-        "keep":"Keep Buying",
+        "keep":"Continue shopping",
         "pay":"Pay",
         "empty":"Empty Cart"
     },
     "ABOUT":{
         "title":"What is Drean Jordan?",
-        "part_1":"This App was made thinking of people who do not want to carry guides, who like to travel more freely or who do not have the budget to do so. Traveling so far and not knowing what you see is a shame and if you bring a book or a map many times you do not have enough information to know what you are seeing.",
-        "part_2":"With this app, you have a guide that tells you step by step how the place you visit is. A person who knows and likes Jordan's tourist sites, accompanies you and tells you about them, as if you were taking a guided tour."
+        "part_1":"Dream Jordan is the perfect companion app for adventurous travelers. When we travel, we want to see the sights, eat the food and experience the life. For those of us who won’t have a tourist guide, whether by choice or due to limited budget.",
+        "part_2":" On top of this, books and maps are bulky, limited and become outdated very quickly. Dream Jordan is the solution for this.  You’ll have a tourist guide in your pocket. It’s like having a local with you at all times telling stories and insider tips just like a private guided tour, only that this one, goes at your own pace."
     },
     "LOGREG":{
         "email":"Email",
@@ -102,6 +102,12 @@
         "languaje":"Language",
         "ing":"English",
         "span":"Spanish"
+    },
+    "SIDEMENU":{
+        "about":"About Dream Jordan",
+        "faq":"F.A.Q.",
+        "contact":"Contact",
+        "account":"My account"
     }
 }
   

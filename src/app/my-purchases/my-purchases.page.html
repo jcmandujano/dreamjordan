@@ -16,7 +16,7 @@
     <p class="header-text">{{ 'MY_PURCH.warning' | translate }}</p>
   </div>
   <div class="header" *ngIf="myPurchases?.length==0">
-    <p class="header-text">{{ 'MY_PURCH.empty' | translate }}</p>
+    <ion-button class="cancel-btn" (click)="goHome()">{{ 'CART.keep' | translate }}</ion-button>
   </div>
 
   <ion-grid *ngIf="myPurchases?.length>0">

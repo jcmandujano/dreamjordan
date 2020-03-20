@@ -78,4 +78,9 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button (click)="goBack()" routerDirection="back" color="light" size="small">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

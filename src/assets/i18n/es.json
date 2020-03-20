@@ -12,10 +12,10 @@
         "counries_desc":"¿Próximo a visitar alguno de estos países?, explora todos los podcast que tenemos para ti."
     },
     "GRAL":{
-        "buy_all": "Comprar Todo"
+        "buy_all": "Comprar"
     },
     "DREAMJORDAN":{
-        "dreamjordan_desc":"Si estás viajando con Ana en este apartado podrás encontrar el paquete que contrataste ingresa tu código y desbloquealo, si te interesa adquirir alguno de estos."
+        "dreamjordan_desc":"Si estás viajando con Ana, entra al tour que contrataste, ingresa tu código y descarga tus audios. Si quieres contratar un viaje con Dream Jordan, contacta a Ana en "
     },
     "DREAMJORDANDET":{
         "countdown": "de 10 días",
@@ -40,7 +40,7 @@
     "MY_PURCH":{
         "title":"Mis Compras",
         "warning":"Aquí se encuentran todas las compras que realizas en esta cuenta.",
-        "empty":"Aun no has comprado ningun contenido."
+        "empty":"Aún no has comprado ningún contenido."
     },
     "MENU":{
         "countries":"Países",
@@ -88,11 +88,11 @@
         "ans11":"Si, puedes hacer un paquete familiar con descuento pagado por la misma persona."
     },
     "CONTACT":{
-        "title":"Contactanos",
-        "text1":"Para cualquier duda, problema o aclaracion no dudes en ponerte en contacto con nosotros. Siempre estamos dispuestos a ayudarte",
+        "title":"Contáctanos",
+        "text1":"Para cualquier duda, problema o aclaración no dudes en ponerte en contacto con nosotros. Siempre estamos dispuestos a ayudarte.",
         "text2":"Para informes llámanos al",
         "text3":"Escríbenos por Whatsapp o IMO al",
-        "text4":"ó envíanos un correo a"
+        "text4":"Ó envíanos un correo a"
     },
     "ACCOUNT":{
         "title":"Mi Cuenta",
@@ -102,6 +102,12 @@
         "languaje":"Idioma",
         "ing":"Inglés",
         "span":"Español"
+    },
+    "SIDEMENU":{
+        "about":"Sobre Dream Jordan",
+        "faq":"F.A.Q.",
+        "contact":"Contacto",
+        "account":"Mi cuenta"
     }
 }
   

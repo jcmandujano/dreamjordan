@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../api/user.service';
 import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
+import { NavController } from '@ionic/angular';
 
 export interface Track{
   nid:string;
@@ -35,6 +36,7 @@ export class CountryDetailPage {
     public tourService:TourService,
     public user : UserService,
     public co: CommonService,
+    private navCtrl: NavController,
     public active : ActivatedRoute,
     private cartserv:CartService) { 
       this.idPais = this.active.snapshot.paramMap.get("id");
@@ -129,4 +131,8 @@ export class CountryDetailPage {
       ); 
     }); 
   }
+
+  goBack() {
+    this.navCtrl.back();
+    }
 }
