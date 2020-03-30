@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {Router} from '@angular/router';
 import { UserService } from '../api/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -6,9 +6,10 @@ import { CommonService } from '../api/common.service';
 import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
 import {TourService} from '../api/tour.service';
-import { Platform } from '@ionic/angular';
+import { Platform, } from '@ionic/angular';
 import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
 import { TranslateService } from '@ngx-translate/core';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -16,12 +17,22 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['home.page.scss']
 })
 export class HomePage  {
-
+  @ViewChild('slides',{static: true}) slides;
   cart=[];
   paises : any;
   cartItemCount: BehaviorSubject<number>;
-  DreamJordanTours:any;
+  DreamJordanTours:object;
+  sliderTours:object;
   visibles : boolean = false;
+  sliderEnded=false;
+  jdtoursEnded=false;
+  countriesEnded=false;
+
+
+  slideOptsHome: SwiperConfigInterface = {
+    initialSlide: 0,
+    slidesPerView: 1,
+  };
 
   slideOpts: SwiperConfigInterface = {
     slidesPerView: 2,
@@ -48,11 +59,12 @@ export class HomePage  {
     public platform: Platform) {
       this.cartItemCount = this.cartserv.getCartItemCount();
       this.cart = this.cartserv.getCart();
+      console.log("Constructor");
      }
      
   //valida si existe un usuario logeado JCMV 20012020
   ionViewWillEnter(){
-    
+    console.log("ionViewWillEnter");
     if(this.user.account === undefined){
       this.co.showLoader();
       this.user.getLoginStatus().subscribe(res => { 
@@ -70,25 +82,7 @@ export class HomePage  {
     this.recuperaPaises();
   }
 
-  ngAfterViewInit() {
-    this.slideOpts = {
-      slidesPerView: 2,
-      spaceBetween: 10,
-      autoHeight: true,
-      slidesOffsetBefore : 10,
-      direction: 'horizontal',
-      slidesOffsetAfter: 10
-    }
-    this.slideOptsDJ = {
-      slidesPerView: 2,
-      spaceBetween: 10,
-      autoHeight: true,
-      slidesOffsetBefore : 10,
-      slidesOffsetAfter: 10
-    }
-}
-
- /* loadStorageItems(){ SEGUIMIS DESPUES∫
+ /* loadStorageItems(){ SEGUIMIS DESPUES
     this.storage.getItems().then(items =>{
      this.localItems = items;
      console.log("items",this.localItems);
@@ -98,10 +92,12 @@ export class HomePage  {
   recuperaPaises(){
     //recuperamos paises
     this.user.getPaises().subscribe(res => { 
-      this.paises = res;
-      this.recuperaDreamJordan();
-    
-      //console.log("paises",this.paises)
+        this.paises = res;
+        console.log("paises",this.paises);
+        this.recuperaDreamJordan();
+        this.recuperaSliderTours();
+        this.countriesEnded = true
+        
     },
     (err: HttpErrorResponse) => { 
       console.log("error",err);
@@ -109,10 +105,24 @@ export class HomePage  {
   }
 
   recuperaDreamJordan(){
-    this.tourService.getDreamJordanTours().subscribe(res => { 
-      this.DreamJordanTours = res;
-      
-    // console.log("toursDreamJordan",res);
+    this.tourService.getDreamJordanTours().pipe(
+      finalize(() => 
+      this.jdtoursEnded = true),
+    ).subscribe(res => { 
+      this.DreamJordanTours = res
+    },
+    (err: HttpErrorResponse) => { 
+      console.log("error",err);
+    });
+  }
+
+  recuperaSliderTours(){
+    this.tourService.getSliderTours().pipe(
+      finalize(() => 
+      this.sliderEnded = true),
+    ).subscribe(res => { 
+      this.sliderTours = res;
+      //console.log("sliderhome",this.sliderTours);
     },
     (err: HttpErrorResponse) => { 
       console.log("error",err);
@@ -132,7 +142,17 @@ export class HomePage  {
     this.router.navigateByUrl('/tabs/country-detail/'+idPais);
   }
 
-  tourDetail(nid){
-    this.router.navigate(['/tabs/dreamjordan-detail/'+nid]);
+  tourDetail(nid, tid, djtour){
+    if(djtour == 1){
+      this.router.navigate(['/tabs/dreamjordan-detail/'+nid]);
+    }else{
+      this.router.navigate(['/tabs/tour-detail/'+tid+'/'+nid]);
+    }
+    
+  }
+
+  saveme(){
+    console.log("AUCSILIO");
+    setTimeout(() => this.slides.update(), 100);
   }
 }

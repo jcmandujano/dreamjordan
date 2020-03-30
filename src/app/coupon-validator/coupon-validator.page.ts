@@ -197,7 +197,8 @@ export class CouponValidatorPage  {
     this.user.login(data.email,data.password).subscribe(
       (res:any) => { 
         this.co.hideLoader();
-        this.user.account = res;
+        console.log("HIJO",res);
+        this.user.account.current_user = res;
         this.showValidator = true;
       },
       (err: HttpErrorResponse) => { 

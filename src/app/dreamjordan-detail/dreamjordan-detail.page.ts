@@ -177,7 +177,7 @@ export class DreamjordanDetailPage {
   //once a tour was purchased or validated retrieve all the audios by tour JCMV
   getAudiosByTour(){
     this.co.showLoader();
-    this.tourService.getDreamJordanAudios(this.id_tour).subscribe(
+    this.tourService.getAudiosxTour(this.id_tour).subscribe(
       (res:any) => { 
         this.co.hideLoader();
         this.audiosList = res;

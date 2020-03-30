@@ -56,19 +56,22 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       if(this.user.account === undefined){
-        this.translateService.setDefaultLang('es'); 
-        this.translateService.use('es');
+        
         this.user.getLoginStatus().subscribe(res => { 
           this.user.account = res;
           if(this.user.account.current_user){
-            console.log("Ya tenemos a alguieen1 ",res);
+            console.log("Ya tenemos a alguieen1 ",res.current_user.lang);
+            this.translateService.setDefaultLang(res.current_user.lang); 
+            this.translateService.use(res.current_user.lang);
             this.appPages.push({
               title: 'Cerrar sesion',
               url: 'tabs/logout',
               icon:'close-circle'
             });
           }else{
-            //console.log("no hay nadie");
+            this.translateService.setDefaultLang('es'); 
+            this.translateService.use('es');
+            console.log("no hay nadie");
             this.appPages.push({
               title: 'Ingresar',
               url: 'login',

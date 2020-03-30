@@ -50,12 +50,13 @@ export class MyPurchasesPage  {
 
   goToDetail(item:any){
     console.log("elemento seleccionado",item);
-    if(item.tour_img){
-      //se envia a country-detail
-      this.router.navigate(['/tabs/tour-detail/'+item.tid+'/'+item.tour]);
-    }else{
+    if(item.field_dream_jordan == 1){
       //se manda a dream-jordan-detail
       this.router.navigate(['/tabs/dreamjordan-detail/'+item.tour]);
+    }else{
+      //se envia a country-detail
+      this.router.navigate(['/tabs/tour-detail/'+item.tid+'/'+item.tour]);
+      
     }
   }
 

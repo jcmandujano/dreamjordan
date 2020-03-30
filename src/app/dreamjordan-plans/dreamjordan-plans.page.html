@@ -20,7 +20,7 @@
     <ion-row>
       <ion-col size="6" *ngFor="let tour of DreamJordanTours">
         <div class="warp-solid"></div>
-        <img class="portait-img" [src]="co.API+tour.field_imagen_dream_jordan_tour">
+        <img class="portait-img" [src]="co.API+tour.field_imagen_tour_app">
         <div class="bottom-slider-text" (click)="tourDetail(tour.nid)">
           <span class="title-slider">{{tour.title}}</span>
         </div>
