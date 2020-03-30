@@ -39,6 +39,8 @@ export class MyAccountPage implements OnInit {
         this.co.hideLoader();
         console.log("error",err);
       }); 
+    }else{
+      this.email = this.user.account.current_user.email;
     }
 
   }

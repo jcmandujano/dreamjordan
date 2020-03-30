@@ -50,6 +50,8 @@ export class CouponValidatorPage  {
         if(this.user.account.current_user){
           console.log("data",this.user.account.current_user);
           this.showValidator = true;
+          this.couponCode=undefined;
+          this.isValid=false;
         }
       },
       (err: HttpErrorResponse) => { 
@@ -59,6 +61,8 @@ export class CouponValidatorPage  {
     }else{ 
       if(this.user.account.current_user){
         this.showValidator = true;
+        this.couponCode=undefined;
+        this.isValid=false;
       }
     }
     this.cart = this.cartserv.getCart();

@@ -38,8 +38,7 @@
       <div class="coupon">
         <span>{{ 'HOME.have_coupon' | translate }}</span>
         <br>
-        <!-- <ion-button (click)="validateCoupon()">{{ 'HOME.exchange' | translate }}</ion-button> -->
-        <ion-button (click)="saveme()">{{ 'HOME.exchange' | translate }}</ion-button>
+        <ion-button (click)="validateCoupon()">{{ 'HOME.exchange' | translate }}</ion-button>
       </div>
     </ion-row>
     
@@ -78,7 +77,7 @@
           <div class="warp-solid"></div>
           <img [src]="co.API+tour.field_imagen_tour_app"/>
           <div class="bottom-slider-text">
-            <span class="title-slider">Los imperdibles de Jordania</span>
+            <span class="title-slider" (click)="tourDetail(tour.nid, 0, tour.field_dream_jordan)" > {{tour.title}} </span>
           </div>
         </ion-slide>
     </ion-slides>

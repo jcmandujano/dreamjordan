@@ -15,14 +15,15 @@
     <h3>{{ 'ACCOUNT.title' | translate }}</h3>
     <ion-row class="container">
         <ion-col size="12">
-          <ion-input  placeholder="{{ 'ACCOUNT.email' | translate }}">{{email}} </ion-input>
+          <ion-input  *ngIf="email == ''" placeholder="{{ 'ACCOUNT.email' | translate }}" disabled> </ion-input>
+          <ion-input  *ngIf="email != ''" disabled>{{email}} </ion-input>
         </ion-col>
-        <ion-col size="12">
+        <!-- <ion-col size="12">
           <ion-input  placeholder="{{ 'ACCOUNT.pass' | translate }}"></ion-input>
         </ion-col>
         <ion-col size="12">
           <ion-input  placeholder="{{ 'ACCOUNT.confirm' | translate }}"></ion-input>
-        </ion-col>
+        </ion-col> -->
         <ion-col size="12">
             <ion-select [(ngModel)]="lang" (ionChange)="choose()" placeholder="{{ 'ACCOUNT.languaje' | translate }}">
               <ion-select-option value="en">{{ 'ACCOUNT.ing' | translate }}</ion-select-option>
