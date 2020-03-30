@@ -1,9 +1,22 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-
+  <form [formGroup]="register_data" (ngSubmit)="doLogin(register_data.value)">
+    <div class="warp-solid"></div>
+    <ion-row class="container">
+      <ion-col size="12">
+        <img class="logo" src="../../assets/img/LOGO-V-B.svg"/>
+      </ion-col>
+      <ion-col size="12">
+          <ion-input formControlName="email" placeholder="{{ 'LOGREG.email' | translate }}"></ion-input>
+      </ion-col>
+      <ion-col size="12">
+          <ion-input formControlName="password" placeholder="{{ 'LOGREG.password' | translate }}"></ion-input>
+        </ion-col>
+      <ion-col size="12">
+        <ion-button type="submit" [disabled]="!register_data.valid">{{ 'LOGREG.register' | translate }}</ion-button>
+      </ion-col> 
+      <ion-col size="12">
+        <ion-button (click)="cancel()" >{{ 'LOGREG.cancel' | translate }}</ion-button>
+      </ion-col> 
+    </ion-row>
+  </form>
 </ion-content>

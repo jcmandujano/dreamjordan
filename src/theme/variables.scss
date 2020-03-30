@@ -1,11 +1,18 @@
 // Ionic Variables and Theming. For more info, please see:
 // http://ionicframework.com/docs/theming/
 
+:root,
+:root[mode=md],
+:root[mode=ios]{
+  --ion-font-family: 'Open Sans Condensed', 'Karla' !important;
+  --font-alt:'Karla';
+  font-family: 'Open Sans Condensed', 'Karla'  !important;
+}
 /** Ionic CSS Variables **/
 :root {
 
-  --ion-font-family: 'Open Sans Condensed';
-  --font-alt:'Karla';
+  //--ion-font-family: 'Open Sans Condensed' ;
+  //--font-alt:'Karla';
   /** primary **/
   --ion-color-primary: #F07530;
   --ion-color-primary-rgb: 56, 128, 255;
@@ -85,16 +92,17 @@
   --gris: #707070;
   --aqua1: #42BFBC;
   --aqua2: #00A5A5;
-  --naranja-light: #FEFAF7;
+  //--naranja-light: #FEFAF7;old
+  --naranja-light: #FFF4EB;  
   --naranja-dark: #df5f16;
   --gris-light: #E6E6E6; 
 
-  html.ios {
-    --ion-default-font:var(--ion-font-family);
+.ios {
+    --ion-default-font:var(--ion-font-family) !important;
   }
 
   html.md {
-    --ion-default-font:var(--ion-font-family);
+    --ion-default-font:var(--ion-font-family) !important;
   }
 
 

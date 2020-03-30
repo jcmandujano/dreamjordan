@@ -25,21 +25,25 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-@import url('https://fonts.googleapis.com/css?family=Karla:400,400i,700,700i|Open+Sans+Condensed:300,300i,700');
-
 //pasamos los estilos del swipper aca por que en la vista no lo acepta
 .swiper-pagination {
     text-align: right !important;
-    padding-right: 10px;
-    padding-bottom: 8px;
+    padding-right: 10px !important;
+    padding-bottom: 8px !important;
 }  
 
 .swiper-pagination-bullet{
-    border-radius: 0;
+    border-radius: 0 !important;
     margin: 0 3px !important;
-    width: 12px;
-    height: 12px;
+    width: 12px !important;
+    height: 12px !important;
 }
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+  background: var(--naranja) !important;
+}
+
 
 //Header css
 .logo{
@@ -159,3 +163,9 @@
 ion-content{
   --background: var(--naranja-light);
 }
+
+ion-range{
+  --bar-height: 10px;
+  --bar-background-active:var(--naranja);
+}
+

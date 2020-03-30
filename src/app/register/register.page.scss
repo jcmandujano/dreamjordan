@@ -1,0 +1,47 @@
+ion-content{
+    --background:  url("../../assets/img/bg2.png") no-repeat center center / cover;
+}
+
+.logo{
+    width: 60%;
+    height: auto;
+    max-width: 200px;
+
+}
+
+.container{
+    padding: 5rem 3rem;
+    text-align: center;
+}
+
+ion-button{
+    --background: transparent;
+    font-size: 1.5rem;
+    width: 61%;
+    height: 58px;
+    margin-top: 15px;
+    font-weight: bolder;
+    --border-color: #fff;
+    --border-width: 2px;
+    --border-style: solid;
+    --border-radius: 0px;
+    --padding-start: 30px;
+    --padding-end: 30px;
+    max-width: 250px;
+}
+
+.warp-solid{
+    width: 100%;
+    position: absolute;
+    background-color: rgba(60, 40, 21, .5);
+    height: 100%;
+    z-index: 0;
+    mix-blend-mode: multiply;
+}
+
+ion-input{
+    background-color: rgba(255, 255, 255, .5);
+    color: var(--blanco);
+    font-weight: bold;
+    border-radius: 100px;
+}

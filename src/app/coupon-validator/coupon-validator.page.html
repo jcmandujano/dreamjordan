@@ -5,36 +5,76 @@
     </ion-buttons>
     <ion-buttons slot="primary">
       <ion-icon class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
-        <ion-badge class="notifications-badge">05</ion-badge>
+      <ion-badge *ngIf="cart.length > 0" class="notifications-badge">{{cartItemCount | async}}</ion-badge>
       <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content> 
+  <!--LOGIN-->
+  <ion-row class="container" *ngIf="showValidator == false && muestraLogin == true">
+    <form [formGroup]="login_data" >
+      <ion-col size="12">
+        <h3>{{ 'DREAMJORDANDET.login' | translate }}</h3>
+      </ion-col>
+      <ion-col size="12">
+        <ion-input formControlName="email" placeholder="{{ 'DREAMJORDANDET.email' | translate }}"></ion-input>
+      </ion-col>
+      <ion-col size="12">
+        <ion-input formControlName="password" placeholder="{{ 'DREAMJORDANDET.password' | translate }}"></ion-input>
+      </ion-col>
+      <ion-col size="12"> 
+        <ion-button (click)="doLogin(login_data.value)" [disabled]="!login_data.valid">{{ 'DREAMJORDANDET.access' | translate }}</ion-button>
+      </ion-col>
+      <ion-col size="12"> 
+        <ion-button (click)="muestraRegistro()">{{ 'DREAMJORDANDET.register' | translate }}</ion-button>
+      </ion-col>
+        <p>{{ 'DREAMJORDANDET.registro_label' | translate }}</p>
+    </form>
+  </ion-row>
+  <!--REGISTRO-->
+  <ion-row class="container" *ngIf="showRegister && muestraLogin == false">
+    <form [formGroup]="register_data" >
+      <ion-col size="12">
+        <h3>{{ 'DREAMJORDANDET.register' | translate }}</h3>
+      </ion-col>
+      <ion-col size="12">
+        <ion-input formControlName="email" placeholder="{{ 'DREAMJORDANDET.email' | translate }}"></ion-input>
+      </ion-col>
+      <ion-col size="12">
+        <ion-input formControlName="password" placeholder="{{ 'DREAMJORDANDET.password' | translate }}"></ion-input>
+      </ion-col>
+      <ion-col size="12"> 
+        <ion-button (click)="register(register_data.value)" [disabled]="!register_data.valid">{{ 'DREAMJORDANDET.sign_in' | translate }}</ion-button>
+      </ion-col>
+        <p>{{ 'DREAMJORDANDET.registro_label' | translate }}</p>
+
+    </form>
+  </ion-row>
   <!--is not valid-->
-  <ion-row class="container" *ngIf="isValid == false">
+  <ion-row class="container" *ngIf="showValidator">
     <ion-col size="12">
-        <h3>¿Tienes un código?</h3>
+        <h3>{{ 'DREAMJORDANDET.have_coupon' | translate }}</h3>
     </ion-col>
     <ion-col size="12">
-        <ion-input placeholder="Escríbelo aquí"></ion-input>
+        <ion-input [(ngModel)]="couponCode" placeholder="{{ 'DREAMJORDANDET.write_here' | translate }}"></ion-input>
     </ion-col>
     <ion-col size="12"> 
-        <ion-button (click)="validate()">Validar</ion-button>
+        <ion-button (click)="validate()" [disabled]="couponCode===undefined">{{ 'DREAMJORDANDET.validate' | translate }}</ion-button>
     </ion-col>
   </ion-row>
   <!--ya validado-->
   <ion-row class="container" *ngIf="isValid">
       <ion-col size="12">
-          <h3>Tú código</h3>
+          <h3>{{ 'DREAMJORDANDET.your_code' | translate }}</h3>
       </ion-col>
       <ion-col size="12">
-          <p class="coupon-code">01000000</p>
+          <p class="coupon-code">{{couponCode}}</p>
       </ion-col>
       <ion-col size="12"> 
-        <p class="warn-text">Es valido, si lo activas ahora solo podrás usarlo durante los siguientes <span class="valid-days">X</span> días</p>
-        <ion-button class="primary" >Activar ahora</ion-button>
-        <ion-button class="cancel-btn">Despues</ion-button>
+        <p class="warn-text">{{ 'DREAMJORDANDET.isvalid_lab' | translate }} <span class="valid-days">10</span> {{ 'DREAMJORDANDET.days' | translate }}</p>
+        <ion-button class="primary" (click)="activate()">{{ 'DREAMJORDANDET.activate_now' | translate }}</ion-button>
+        <ion-button class="cancel-btn" (click)="goHome()">{{ 'DREAMJORDANDET.later' | translate }}</ion-button>
       </ion-col>
     </ion-row>
 

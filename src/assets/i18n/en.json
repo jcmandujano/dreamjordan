@@ -1,0 +1,113 @@
+{
+    "HOME" : {
+        "welcome": "Welcome",
+        "welcome_txt": "In our app you can buy audiotours from different regions of the world so that you can get to know in depth the places you visit.",
+        "have_coupon": "Do you have a code?",
+        "exchange": "redeem it here",
+        "countries": "Countries",
+        "djplans":"Dream Jordan Plans"
+    },
+    "COUNTRIES" : {
+        "countries": "Countries",
+        "counries_desc":"Next to visit any of these countries ?, explore all the podcast we have for you."
+    },
+    "GRAL":{
+        "buy_all": "Buy"
+    },
+    "DREAMJORDAN":{
+        "dreamjordan_desc":"If you are traveling with Ana, enter the tour you hired, enter your code and download your audios. If you want to book a trip with Dream Jordan, contact Ana at"
+    },
+    "DREAMJORDANDET":{
+        "countdown": "of 10 days",
+        "access":"Access",
+        "register":"Register",
+        "login":"Login",
+        "sign_in":"Register",
+        "registro_label":"In order to obtain the content it is necessary to access, if you are not registered, you can do it quickly.",
+        "email":"Email",
+        "password":"Password",
+        "have_coupon": "Do you have a code?",
+        "write_here": "write it here",
+        "validate":"Validate",
+        "if_not":"If you don't have a code and want this package",
+        "contact_ana":"contact Ana",
+        "your_code":"Your code",
+        "isvalid_lab":"It is valid, if you activate it now you can only use it during the following",
+        "days":"days", 
+        "activate_now":"Activate Now",
+        "later":"Later"
+    },
+    "MY_PURCH":{
+        "title":"My Purchases",
+        "warning":"Here are all the purchases you make in this account.",
+        "empty":"You have not yet purchased any content"
+    },
+    "MENU":{
+        "countries":"Countries",
+        "my_purchases":"My Purchases"
+    },
+    "CART":{
+        "keep":"Continue shopping",
+        "pay":"Pay",
+        "empty":"Empty Cart"
+    },
+    "ABOUT":{
+        "title":"What is Drean Jordan?",
+        "part_1":"Dream Jordan is the perfect companion app for adventurous travelers. When we travel, we want to see the sights, eat the food and experience the life. For those of us who won’t have a tourist guide, whether by choice or due to limited budget.",
+        "part_2":" On top of this, books and maps are bulky, limited and become outdated very quickly. Dream Jordan is the solution for this.  You’ll have a tourist guide in your pocket. It’s like having a local with you at all times telling stories and insider tips just like a private guided tour, only that this one, goes at your own pace."
+    },
+    "LOGREG":{
+        "email":"Email",
+        "password":"Password",
+        "register":"Register",
+        "cancel":"Cancel"
+    },
+    "FAQ":{
+        "title":"Frequently asked questions",
+        "quest1":"What packages do you have?",
+        "ans1":"Audio can be purchased alone or in several packages for a single site, with a theme or with discounts for families or friends.",
+        "quest2":"If I don't understand, can I hear the audio several times?",
+        "ans2":"Yes, up to 3.",
+        "quest3":"Do they have any time of use?",
+        "ans3":"Yes, from the moment you activate your package it has a validity period.",
+        "quest4":"Can I share them?",
+        "ans4":"No, each purchased audio can be used on one device only.",
+        "quest5":"Do I need the internet to hear them?",
+        "ans5":"No, you can download them at your hotel or at home and listen to them without internet.",
+        "quest6":"Should I hear them on the site?",
+        "ans6":"You can hear them while you visit or you can hear them before your trip in preparation to know what you are going to see if you are going to visit later with a guide.",
+        "quest7":"Can I pause it?",
+        "ans7":"Yes. You can stop and continue as you like.",
+        "quest8":"In what languages do they exist?",
+        "ans8":"At the moment, in English and Spanish.",
+        "quest9":"Do you have them for other countries?",
+        "ans9":"We will have, wait for them",
+        "quest10":"Is it compatible with iOS and Android?",
+        "ans10":"Yes.",
+        "quest11":"Can I buy for all my family?",
+        "ans11":"Yes, you can make a discounted family package paid for by the same person."
+    },
+    "CONTACT":{
+        "title":"Contact us",
+        "text1":"For any questions, problems or clarifications do not hesitate to contact us. We are always ready to help you",
+        "text2":"For reports call us at",
+        "text3":"Write us by Whatsapp or IMO at",
+        "text4":"or send us an email to"
+    },
+    "ACCOUNT":{
+        "title":"My Account",
+        "email":"Email",
+        "pass":"Password",
+        "confirm":"Confirm Password",
+        "languaje":"Language",
+        "ing":"English",
+        "span":"Spanish"
+    },
+    "SIDEMENU":{
+        "about":"About Dream Jordan",
+        "faq":"F.A.Q.",
+        "contact":"Contact",
+        "account":"My account"
+    }
+}
+  

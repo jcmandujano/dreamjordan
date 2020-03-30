@@ -39,8 +39,9 @@ ion-button{
     padding: 1rem 1.5rem;
     font-family: var(--font-alt);
     color: var(--negro);
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     line-height: 1.2;
+    text-align: center;
 }
 
 .title-slider{
@@ -83,4 +84,8 @@ ion-grid{
 .bottom-slider-text{
     text-align: center;
     width: 70%;
+}
+
+ion-icon{
+    color: var(--naranja)
 }

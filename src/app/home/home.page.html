@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-buttons slot="primary">
       <ion-icon (click)="openCart()" class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
-        <ion-badge class="notifications-badge">05</ion-badge>
+      <ion-badge *ngIf="cart.length > 0" class="notifications-badge">{{cartItemCount | async}}</ion-badge>
       <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
@@ -13,41 +13,14 @@
 <ion-content>
   <ion-grid>
     <ion-row>
-      <ion-slides class="home-slide" pager="true">
-          <ion-slide>
+      <ion-slides class="home-slide" pager="true" *ngIf="sliderEnded">
+          <ion-slide  *ngFor="let slide of sliderTours">
             <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="slider-text">
-              <span class="title-slider">Ciudad de Amman</span>
+            <img [src]="co.API+slide.field_imagen_tour_app"/>
+            <div class="slider-text" (click)="tourDetail(slide.nid, slide.tid, slide.field_dream_jordan)">
+              <span class="title-slider" > {{slide.title}} </span>
               <br>
-              <span class="sub-slider">Jordania</span>
-            </div>
-          </ion-slide>
-          <ion-slide>
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="slider-text">
-              <span class="title-slider">Ciudad de Amman</span>
-              <br>
-              <span class="sub-slider">Jordania</span>
-            </div>
-          </ion-slide>
-          <ion-slide>
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="slider-text">
-              <span class="title-slider">Ciudad de Amman</span>
-              <br>
-              <span class="sub-slider">Jordania</span>
-            </div>
-          </ion-slide>
-          <ion-slide>
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="slider-text">
-              <span class="title-slider">Ciudad de Amman</span>
-              <br>
-              <span class="sub-slider">Jordania</span>
+              <span class="sub-slider"> {{slide.field_paises}} </span>
             </div>
           </ion-slide>
       </ion-slides>
@@ -55,143 +28,59 @@
     <ion-row>
       <div class="welcome">
           <div class="welcome-text">
-            <span class="welcome-title">!Bienvenido¡</span>
+            <span class="welcome-title">{{ 'HOME.welcome' | translate }}</span>
             <br>
-            <p class="body-welcome">En nuestra app podrás comprar audiotours de diferentes regiones del mundo para que puedas conocer a fondo los lugares que visites.</p>
+            <p class="body-welcome">{{ 'HOME.welcome_txt' | translate }}</p>
           </div>
       </div>
     </ion-row>
     <ion-row>
       <div class="coupon">
-        <span>¿Tienes un código?</span>
+        <span>{{ 'HOME.have_coupon' | translate }}</span>
         <br>
-        <ion-button (click)="validateCoupon()">Canjealo aqui</ion-button>
+        <ion-button (click)="validateCoupon()">{{ 'HOME.exchange' | translate }}</ion-button>
       </div>
     </ion-row>
-    <ion-row *ngIf="visibles">
-      <p class="title-carousel">Mis Compras</p>
-    </ion-row>
-    <ion-row *ngIf="visibles">
-      <ion-slides class="bottom-slider" [options]="slideOpts">
-          <ion-slide >
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider">Petra y Little Petra</span>
-              <br>
-              <span class="sub-slider">Jordania</span>
-            </div>
-          </ion-slide>
-          <ion-slide >
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider">Xochimilco</span>
-              <br>
-              <span class="sub-slider">México</span>
-            </div>
-          </ion-slide>
-          <ion-slide >
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider">El Castillo del Desierto</span>
-              <br>
-              <span class="sub-slider">Jordania</span>
-            </div>
-          </ion-slide>
-          <ion-slide >
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider">Petra y Little Petra</span>
-              <br>
-              <span class="sub-slider">Jordania</span>
-            </div>
-          </ion-slide>
-          <ion-slide >
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider">Xochimilco</span>
-              <br>
-              <span class="sub-slider">México</span>
-            </div>
-          </ion-slide>
-          <ion-slide >
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider">El Castillo del Desierto</span>
-              <br>
-              <span class="sub-slider">Jordania</span>
-            </div>
-          </ion-slide>
-      </ion-slides>
+    
+    <ion-row>
+      <p class="title-carousel">{{ 'HOME.countries' | translate }}</p>
     </ion-row>
     <ion-row>
-      <p class="title-carousel">Países</p>
-    </ion-row>
-    <ion-row>
-      <ion-slides class="bottom-slider" [options]="slideOpts">
-          <ion-slide *ngFor="let pais of paises">
-            <div class="warp-solid"></div>
-            <img *ngIf="pais.field_imagen == ''" src="./assets/img/exampleImage.png"/>
-            <img *ngIf="pais.field_imagen"[src]="co.API+pais.field_imagen"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider">{{pais.nombrePais}}</span>
-            </div>
-          </ion-slide>
-      </ion-slides>
-    </ion-row>
-    <ion-row>
-      <p class="title-carousel">Paquetes Dream Jordan</p>
-    </ion-row>
-    <ion-row>
-      <ion-slides class="bottom-slider" [options]="slideOpts">
-          <ion-slide >
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider">Los imperdibles de Jordania</span>
-            </div>
-          </ion-slide>
-          <ion-slide >
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider">Viaje Rápido Israel / Jordania (8 días)</span>
-            </div>
-          </ion-slide>
-          <ion-slide >
-            <div class="warp-solid"></div>
-            <img src="./assets/img/exampleImage.png"/>
-            <div class="bottom-slider-text">
-              <span class="title-slider">Viaje Relámpago a Jordania e Israel 3 Días</span>
-            </div>
-          </ion-slide>
-        <ion-slide >
-          <div class="warp-solid"></div>
-          <img src="./assets/img/exampleImage.png"/>
+     <!-- SLIDER 1-->
+     <!-- <swiper [config]="slideOpts" >
+      <div *ngFor="let pais of paises">
+        <div class="warp-solid"></div>
+          <img class="fitme" src="./assets/img/exampleImage.png"/>
+          <!-- <img class="fitme" *ngIf="pais.field_imagen" [src]="co.API+pais.field_imagen"/>
           <div class="bottom-slider-text">
-            <span class="title-slider">Los imperdibles de Jordania</span>
+            <span class="title-slider" (click)="countryDetail(pais.tid)">{{pais.nombrePais}}</span>
+          </div>
+      </div>
+    </swiper> -->
+    <ion-slides class="bottom-slider" [options]="slideOptsDJ" *ngIf="jdtoursEnded && sliderEnded && countriesEnded">
+      <ion-slide *ngFor="let pais of paises">
+        <div class="warp-solid"></div>
+        <img [src]="co.API+pais.field_imagen" />
+        <div class="bottom-slider-text">
+          <span class="title-slider"(click)="countryDetail(pais.tid)">{{pais.nombrePais}}</span>
+        </div>
+      </ion-slide>
+    </ion-slides>
+    </ion-row>
+    <ion-row>
+      <p class="title-carousel">{{ 'HOME.djplans' | translate }}</p>
+    </ion-row>
+    <ion-row>
+      <!-- SLIDER 1-->
+      <ion-slides class="bottom-slider" [options]="slideOptsDJ" *ngIf="jdtoursEnded">
+        <ion-slide *ngFor="let tour of DreamJordanTours">
+          <div class="warp-solid"></div>
+          <img [src]="co.API+tour.field_imagen_tour_app"/>
+          <div class="bottom-slider-text">
+            <span class="title-slider" (click)="tourDetail(tour.nid, 0, tour.field_dream_jordan)" > {{tour.title}} </span>
           </div>
         </ion-slide>
-        <ion-slide >
-          <div class="warp-solid"></div>
-          <img src="./assets/img/exampleImage.png"/>
-          <div class="bottom-slider-text">
-            <span class="title-slider">Viaje Rápido Israel / Jordania (8 días)</span>
-          </div>
-        </ion-slide>
-        <ion-slide >
-          <div class="warp-solid"></div>
-          <img src="./assets/img/exampleImage.png"/>
-          <div class="bottom-slider-text">
-            <span class="title-slider">Viaje Relámpago a Jordania e Israel 3 Días</span>
-          </div>
-        </ion-slide>
-      </ion-slides>
+    </ion-slides>
     </ion-row>
   </ion-grid>
 </ion-content>

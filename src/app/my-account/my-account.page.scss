@@ -1,0 +1,50 @@
+.header{
+    padding: 2rem 2.4rem;
+    padding-bottom: 0px;
+    text-align: center;
+    h3{
+        color: var(--naranja);
+        font-weight: bold;
+        margin-top: 10px;
+        margin-bottom: 30px;
+    }
+}
+
+.header-text{
+    font-family: var(--font-alt);
+    color: var(--negro);
+    font-size: 0.8rem;
+    line-height: 1.2;
+} 
+
+.container{
+    padding: 2rem 2rem;
+    text-align: center;
+}
+
+ion-input{
+    background-color: var(--gris-light);
+    color: var(--negro);
+    border-radius: 100px;
+    margin-bottom: 10px;
+}
+
+.item .item-content {
+    background-color: transparent !important;
+  }
+
+
+  ion-select{
+    background-color: var(--blanco);
+    border-radius: 10px;
+    border: 2px;
+    border-style: solid;
+    border-color: var(--gris-light);
+    width: 100%;
+    font-size: 1rem;
+    .select-icon {
+        .select-icon-inner {
+           color : red !important;
+        }
+      }
+}

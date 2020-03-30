@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+        <img class="logo" src="./assets/img/logo.svg"/>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-icon  class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
+      <!-- <ion-badge *ngIf="cart.length > 0" class="notifications-badge">{{cartItemCount | async}}</ion-badge> -->
+      <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="header">
+    <h3>{{ 'ACCOUNT.title' | translate }}</h3>
+    <ion-row class="container">
+        <ion-col size="12">
+          <ion-input  *ngIf="email == ''" placeholder="{{ 'ACCOUNT.email' | translate }}" disabled> </ion-input>
+          <ion-input  *ngIf="email != ''" disabled>{{email}} </ion-input>
+        </ion-col>
+        <!-- <ion-col size="12">
+          <ion-input  placeholder="{{ 'ACCOUNT.pass' | translate }}"></ion-input>
+        </ion-col>
+        <ion-col size="12">
+          <ion-input  placeholder="{{ 'ACCOUNT.confirm' | translate }}"></ion-input>
+        </ion-col> -->
+        <ion-col size="12">
+            <ion-select [(ngModel)]="lang" (ionChange)="choose()" placeholder="{{ 'ACCOUNT.languaje' | translate }}">
+              <ion-select-option value="en">{{ 'ACCOUNT.ing' | translate }}</ion-select-option>
+              <ion-select-option value="es">{{ 'ACCOUNT.span' | translate }}</ion-select-option>
+            </ion-select>
+
+        </ion-col>
+    </ion-row>
+    
+  </div>
+</ion-content>

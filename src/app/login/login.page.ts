@@ -53,4 +53,12 @@ export class LoginPage implements OnInit {
     );
   }
 
+  registrar(){
+    this.router.navigate(['/registro']);
+  }
+
+  cancel(){
+    this.router.navigate(['/tabs/home']);
+  }
+
 }

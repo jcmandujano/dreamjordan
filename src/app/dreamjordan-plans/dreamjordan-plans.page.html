@@ -4,8 +4,8 @@
           <img class="logo" src="./assets/img/logo.svg"/>
       </ion-buttons>
       <ion-buttons slot="primary">
-        <ion-icon class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
-          <ion-badge class="notifications-badge">05</ion-badge>
+        <ion-icon (click)="openCart()" class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
+        <ion-badge *ngIf="cart.length > 0" class="notifications-badge">{{cartItemCount | async}}</ion-badge>
         <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
       </ion-buttons>
     </ion-toolbar>
@@ -14,13 +14,13 @@
 <ion-content>
   <div class="header">
     <h3>Dream Jordan</h3>
-    <p class="header-text">Si estás viajando con Ana en este apartado podrás encontrar el paquete que contrataste ingresa tu código y desbloquealo, si te interesa adquirir alguno de estos.</p>
+    <p class="header-text">{{ 'DREAMJORDAN.dreamjordan_desc' | translate }}<a href="mailto:contacto@dreamjordan.com">contacto@dreamjordan.com</a></p> 
   </div>
   <ion-grid>
     <ion-row>
       <ion-col size="6" *ngFor="let tour of DreamJordanTours">
         <div class="warp-solid"></div>
-        <img class="portait-img" [src]="co.API+tour.field_imagen_dream_jordan_tour">
+        <img class="portait-img" [src]="co.API+tour.field_imagen_tour_app">
         <div class="bottom-slider-text" (click)="tourDetail(tour.nid)">
           <span class="title-slider">{{tour.title}}</span>
         </div>

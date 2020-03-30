@@ -4,8 +4,8 @@
           <img class="logo" src="./assets/img/logo.svg"/>
       </ion-buttons>
       <ion-buttons slot="primary">
-        <ion-icon class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
-          <ion-badge class="notifications-badge">05</ion-badge>
+        <ion-icon (click)="openCart()" class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
+        <ion-badge *ngIf="cart.length > 0" class="notifications-badge">{{cartItemCount | async}}</ion-badge>
         <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
       </ion-buttons>
     </ion-toolbar>
@@ -13,16 +13,16 @@
 
 <ion-content>
   <div class="header">
-    <h3>Países</h3>
-    <p class="header-text">¿Próximo a visitar alguno de estos países?, explora todos los podcast que tenemos para ti.</p>
+    <h3>{{ 'COUNTRIES.countries' | translate }}</h3>
+    <p class="header-text">{{ 'COUNTRIES.counries_desc' | translate }}</p>
   </div>
   <ion-grid>
     <ion-row *ngIf="paises">
       <ion-col size="6" *ngFor="let pais of paises">
         <div class="warp-solid"></div>
-        <img class="portait-img" *ngIf="pais.field_imagen == ''" src="./assets/img/exampleImage.png" (click)="countryDetail(pais.tid, pais)"/>
-        <img class="portait-img" *ngIf="pais.field_imagen" [src]="co.API+pais.field_imagen" (click)="countryDetail(pais.tid, pais)"/>
-        <div class="bottom-slider-text" (click)="countryDetail(pais.tid, pais)">
+        <img class="portait-img" *ngIf="pais.field_imagen == ''" src="./assets/img/exampleImage.png" (click)="countryDetail(pais.tid)"/>
+        <img class="portait-img" *ngIf="pais.field_imagen" [src]="co.API+pais.field_imagen" (click)="countryDetail(pais.tid)"/>
+        <div class="bottom-slider-text" (click)="countryDetail(pais.tid)">
           <span class="title-slider">{{pais.nombrePais}}</span>
         </div>
       </ion-col>

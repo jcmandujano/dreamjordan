@@ -4,100 +4,32 @@
         <img class="logo" src="./assets/img/logo.svg"/>
     </ion-buttons>
     <ion-buttons slot="primary">
-      <ion-icon class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
-        <ion-badge class="notifications-badge">05</ion-badge>
+      <ion-icon (click)="openCart()" class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
+      <ion-badge *ngIf="cart.length > 0" class="notifications-badge">{{cartItemCount | async}}</ion-badge>
       <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
   <div class="header">
-    <h3>Mis Compras</h3>
-    <p class="header-text">Aquí se encuentran todos los audios a los que tienes acceso en esta cuenta.</p>
+    <h3>{{ 'MY_PURCH.title' | translate }}</h3>
+    <p class="header-text">{{ 'MY_PURCH.warning' | translate }}</p>
   </div>
-  <div class="coupon">
-    <span>¿Tienes un código?</span>
-    <br>
-    <ion-button (click)="validateCoupon()">Canjealo aqui</ion-button>
+  <div class="header" *ngIf="myPurchases?.length==0">
+    <ion-button class="cancel-btn" (click)="goHome()">{{ 'CART.keep' | translate }}</ion-button>
   </div>
-  <ion-grid>
+
+  <ion-grid *ngIf="myPurchases?.length>0">
     <ion-row>
-      <ion-col size="6">
+      <ion-col size="6" *ngFor="let item of myPurchases; let i = index">
         <div class="warp-solid"></div>
-        <img class="portait-img" src="./assets/img/exampleImage.png"/>
+        <img class="portait-img" *ngIf="item.tour_img" [src]="co.API+item.tour_img"/>
+        <img class="portait-img" *ngIf="item.dj_tour_img" [src]="co.API+item.dj_tour_img"/>
+        <!-- <img class="portait-img" src="./assets/img/exampleImage.png"/> -->
         <div class="bottom-slider-text">
-          <span class="title-slider">Petra y Little Petra</span>
+          <span class="title-slider" (click)="goToDetail(item)">{{item.title}}</span>
           <br>
-          <span class="sub-slider">Jordania</span>
-        </div>
-      </ion-col>
-      <ion-col size="6">
-        <div class="warp-solid"></div>
-        <img class="portait-img" src="./assets/img/2.jpeg"/>
-        <div class="bottom-slider-text">
-          <span class="title-slider">Xochimilco</span>
-          <br>
-          <span class="sub-slider">México</span>
-        </div>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="6">
-        <div class="warp-solid"></div>
-        <img class="portait-img" src="./assets/img/3.jpg"/>
-        <div class="bottom-slider-text">
-            <span class="title-slider">Petra y Little Petra</span>
-            <br>
-            <span class="sub-slider">Jordania</span>
-        </div>
-      </ion-col>
-      <ion-col size="6">
-        <div class="warp-solid"></div>
-        <img class="portait-img" src="./assets/img/4.png"/>
-        <div class="bottom-slider-text">
-            <span class="title-slider">Xochimilco</span>
-            <br>
-            <span class="sub-slider">México</span>
-        </div>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="6">
-        <div class="warp-solid"></div>
-        <img class="portait-img" src="./assets/img/4.png"/>
-        <div class="bottom-slider-text">
-            <span class="title-slider">Petra y Little Petra</span>
-            <br>
-            <span class="sub-slider">Jordania</span>
-        </div>
-      </ion-col>
-      <ion-col size="6">
-        <div class="warp-solid"></div>
-        <img class="portait-img" src="./assets/img/1.jpeg"/>
-        <div class="bottom-slider-text">
-            <span class="title-slider">Xochimilco</span>
-            <br>
-            <span class="sub-slider">México</span>
-        </div>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="6">
-        <div class="warp-solid"></div>
-        <img class="portait-img" src="./assets/img/3.jpg"/>
-        <div class="bottom-slider-text">
-            <span class="title-slider">Petra y Little Petra</span>
-            <br>
-            <span class="sub-slider">Jordania</span>
-        </div>
-      </ion-col>
-      <ion-col size="6">
-        <div class="warp-solid"></div>
-        <img class="portait-img" src="./assets/img/2.jpeg"/>
-        <div class="bottom-slider-text">
-            <span class="title-slider">Xochimilco</span>
-            <br>
-            <span class="sub-slider">México</span>
+            <span class="sub-slider">{{item.name}}</span> 
         </div>
       </ion-col>
     </ion-row>

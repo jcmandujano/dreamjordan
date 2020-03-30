@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+        <img class="logo" src="./assets/img/logo.svg"/>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-icon class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
+      <!-- <ion-badge *ngIf="cart.length > 0" class="notifications-badge">{{cartItemCount | async}}</ion-badge> -->
+      <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="header">
+    <h3>{{ 'FAQ.title' | translate }}</h3>
+  </div>
+  <div class="preguntas">
+    <ol>
+      <li>{{ 'FAQ.quest1' | translate }}</li>
+      <p>{{ 'FAQ.ans1' | translate }} </p>
+      <li>{{ 'FAQ.quest2' | translate }}</li>
+      <p>{{ 'FAQ.ans2' | translate }} </p>
+      <li>{{ 'FAQ.quest3' | translate }}</li>
+      <p>{{ 'FAQ.ans3' | translate }} </p>
+      <li>{{ 'FAQ.quest4' | translate }}</li>
+      <p>{{ 'FAQ.ans4' | translate }} </p>
+      <li>{{ 'FAQ.quest5' | translate }}</li>
+      <p>{{ 'FAQ.ans5' | translate }} </p>
+      <li>{{ 'FAQ.quest6' | translate }}</li>
+      <p>{{ 'FAQ.ans6' | translate }} </p>
+      <li>{{ 'FAQ.quest7' | translate }}</li>
+      <p>{{ 'FAQ.ans7' | translate }} </p>
+      <li>{{ 'FAQ.quest8' | translate }}</li>
+      <p>{{ 'FAQ.ans8' | translate }} </p>
+      <li>{{ 'FAQ.quest9' | translate }}</li>
+      <p>{{ 'FAQ.ans9' | translate }} </p>
+      <li>{{ 'FAQ.quest10' | translate }}</li>
+      <p>{{ 'FAQ.ans10' | translate }} </p>
+      <li>{{ 'FAQ.quest11' | translate }}</li>
+      <p>{{ 'FAQ.ans11' | translate }} </p>
+    </ol>
+  </div>
+
+</ion-content>
