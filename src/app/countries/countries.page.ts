@@ -7,6 +7,7 @@ import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { TranslateService } from '@ngx-translate/core';
+import {TourService} from '../api/tour.service';
 @Component({
   selector: 'app-countries',
   templateUrl: './countries.page.html',
@@ -21,6 +22,7 @@ export class CountriesPage {
     public user : UserService, 
     public co: CommonService,
     private cartserv:CartService,
+    public tourServ:TourService,
     private translateService: TranslateService,
     private nativeStorage: NativeStorage) { }
     
@@ -35,7 +37,7 @@ export class CountriesPage {
     this.cart = this.cartserv.getCart();
     //recuperamos paises
     this.co.showLoader();
-    this.user.getPaises().subscribe(res => { 
+    this.tourServ.getPaises().subscribe(res => { 
       this.co.hideLoader();
       this.paises = res;
       //console.log("paises",res);

@@ -147,8 +147,7 @@ const routes: Routes =[
             import('../login/login.module').then( m => m.LoginPageModule)
           }
         ]
-      }
-      ,
+      },
       {
         path: 'registro',
         children: [
@@ -156,6 +155,16 @@ const routes: Routes =[
             path: '',
             loadChildren: () => 
             import('../register/register.module').then( m => m.RegisterPageModule)
+          }
+        ]
+      },
+      {
+        path: 'test-download',
+        children: [
+          {
+            path: '',
+            loadChildren: () => 
+            import('../test-download/test-download.module').then( m => m.TestDownloadPageModule)
           }
         ]
       }

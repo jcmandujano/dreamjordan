@@ -14,6 +14,7 @@ export interface Product{
   field_costo:number;
   field_media_audio_file:string;
   amount:number;
+  image:string;
 }
 
 @Injectable({

@@ -81,6 +81,7 @@ export class HomePage  {
     }
     this.recuperaPaises();
   }
+  
 
  /* loadStorageItems(){ SEGUIMIS DESPUES
     this.storage.getItems().then(items =>{
@@ -91,12 +92,15 @@ export class HomePage  {
 
   recuperaPaises(){
     //recuperamos paises
-    this.user.getPaises().subscribe(res => { 
+    this.tourService.getPaises().pipe(
+      finalize(() => 
+      this.countriesEnded = true),
+    ).subscribe(res => { 
         this.paises = res;
-        console.log("paises",this.paises);
+        console.log("paises",res);
         this.recuperaDreamJordan();
         this.recuperaSliderTours();
-        this.countriesEnded = true
+        
         
     },
     (err: HttpErrorResponse) => { 

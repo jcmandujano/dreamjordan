@@ -115,20 +115,6 @@ export class UserService {
       );
   }
 
-  getPaises(){
-   // console.log("que",this.translate.currentLang)
-    return this.http.get<Array<any>>(this.co.API+'api/'+this.translate.currentLang+'/paises-app/?_format=json',{ withCredentials: true }).pipe(
-      map(
-        res => { 
-          return res;
-        },
-        (err: HttpErrorResponse) => { 
-          console.log(err);
-        }
-      )
-    );
-  }
-
   getPaisById(idPais){
     return this.http.get<Array<any>>(this.co.API+'api/'+this.translate.currentLang+'/paises-app/'+idPais+'?_format=json',{ withCredentials: true }).pipe(
       map(

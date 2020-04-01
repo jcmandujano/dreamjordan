@@ -53,6 +53,20 @@ export class TourService {
       );
     }
 
+    getPaises(){
+      console.log("que",this.translate.currentLang);
+       return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/paises-app/?_format=json',{ withCredentials: true }).pipe(
+         map(
+           res => { 
+             return res;
+           },
+           (err: HttpErrorResponse) => { 
+             console.log(err);
+           }
+         )
+       );
+     }
+
     getDreamJordanTours(){
       return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/djtours-app/1/?_format=json',{ withCredentials: true }).pipe(
         map(

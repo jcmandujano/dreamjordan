@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>testDownload</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-button (click)="saveAudio()">PRUEBAME</ion-button>
+  <br>
+  <ion-button (click)="playAudio()">Play</ion-button>
+
+  <audio id="test" [src]="fileurl" controls></audio>
+</ion-content>

@@ -47,24 +47,15 @@
     </ion-row>
     <ion-row>
      <!-- SLIDER 1-->
-     <!-- <swiper [config]="slideOpts" >
-      <div *ngFor="let pais of paises">
-        <div class="warp-solid"></div>
-          <img class="fitme" src="./assets/img/exampleImage.png"/>
-          <!-- <img class="fitme" *ngIf="pais.field_imagen" [src]="co.API+pais.field_imagen"/>
-          <div class="bottom-slider-text">
-            <span class="title-slider" (click)="countryDetail(pais.tid)">{{pais.nombrePais}}</span>
-          </div>
-      </div>
-    </swiper> -->
-    <ion-slides class="bottom-slider" [options]="slideOptsDJ" *ngIf="jdtoursEnded && sliderEnded && countriesEnded">
+    
+    <ion-slides class="bottom-slider" [options]="slideOptsDJ" *ngIf="countriesEnded === true">
       <ion-slide *ngFor="let pais of paises">
         <div class="warp-solid"></div>
         <img [src]="co.API+pais.field_imagen" />
         <div class="bottom-slider-text">
           <span class="title-slider"(click)="countryDetail(pais.tid)">{{pais.nombrePais}}</span>
         </div>
-      </ion-slide>
+      </ion-slide> 
     </ion-slides>
     </ion-row>
     <ion-row>

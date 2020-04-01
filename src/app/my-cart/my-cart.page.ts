@@ -59,6 +59,7 @@ export class MyCartPage {
     }
     this.cartItemCount = this.cartserv.getCartItemCount();
     this.cart = this.cartserv.getCart();
+    console.log("cart",this.cart);
   }
 
   //Delete selected item from the cart list JCMV

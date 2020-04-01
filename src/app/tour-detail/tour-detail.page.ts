@@ -159,7 +159,8 @@ export class TourDetailPage{
       name:this.currentTour.title,
       field_costo:this.currentTour.field_costo,
       field_media_audio_file:"",
-      amount:1
+      amount:1,
+      image:this.currentTour.field_imagen_tour_app
     }
     if(this.audiosArray.length==1){
       console.log("NO ES un paquete");

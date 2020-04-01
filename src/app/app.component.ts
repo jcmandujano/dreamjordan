@@ -54,6 +54,8 @@ export class AppComponent {
 
 
   initializeApp() {
+    this.translateService.setDefaultLang('es'); 
+    this.translateService.use('es');
     this.platform.ready().then(() => {
       if(this.user.account === undefined){
         

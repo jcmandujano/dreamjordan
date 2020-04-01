@@ -59,7 +59,7 @@
 <ion-grid class="content-list" *ngIf="showCart">  
   <ion-row *ngFor="let item of cart">
     <ion-col size="3" class="index-col">
-      <img class="tmb-img" src="../../assets/img/3.jpg"/>
+      <img class="tmb-img" [src]="co.API+item.image"/>
     </ion-col>
     <ion-col size="6">
       <p class="file-tour-name">{{item.name}}  <!-- <span class="file-tour-desc">País completo</span> --></p>
