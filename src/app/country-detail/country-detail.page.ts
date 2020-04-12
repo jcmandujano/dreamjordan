@@ -65,9 +65,10 @@ export class CountryDetailPage {
     this.user.getPaisById(this.idPais).subscribe(res => { 
       this.co.hideLoader();
       this.paisSelecc = res[0];
-    },
+    }, 
     (err: HttpErrorResponse) => { 
       this.co.hideLoader();
+      this.co.presentAlert("Error","Ocurrio un problema al recuperar la información del pais",err.message);
       console.log("error",err);
     });
     this.cart = this.cartserv.getCart();
@@ -97,39 +98,41 @@ export class CountryDetailPage {
 
 
   addToCart(){
-    let cartElement : Track;
-    this.tours.forEach(element => {
-      this.tourService.getAudiosxTour(element.nid).subscribe(
-        (res:any) => { 
-          if(this.toursComprados.length > 0){
-            for(let j in res){
-              for(let i in this.toursComprados){
-               if( (this.toursComprados[i][0].audio != res[j].mid)){
-                cartElement = res[j]
-                cartElement.amount = 1;
-                this.cartserv.addProduct(cartElement);
-               }
-              }
+    let data = {}
+    console.log("comprados",this.toursComprados);
+    if(this.toursComprados.length > 0){
+      this.tours.forEach(element => {
+        //console.log("elementos",element);
+        for(let i in this.toursComprados){
+          if( (this.toursComprados[i][0].tour != element.nid)){
+            data = {
+              nid:element.nid,
+              mid:"0",
+              name:element.title,
+              field_costo:element.field_costo,
+              field_media_audio_file:"",
+              amount:1,
+              image:element.field_imagen_tour_app
             }
-          }else{
-            for(let j in res){
-              cartElement = res[j]
-              cartElement.amount = 1;
-              this.cartserv.addProduct(cartElement);
-            }
-          } 
-        },
-        (err: HttpErrorResponse) => { 
-          //console.log(err);
-          this.co.hideLoader();
-          let message = err.error.message;
-          if(err.status == 400){
-            message = '.';
+           this.cartserv.addProduct(data);
           }
-          this.co.presentAlert('Error','Hubo un problema al recuperar la información.',message);
         }
-      ); 
-    }); 
+      }); 
+    }else{
+      this.tours.forEach(element => {
+        //console.log("elementos",element);
+        data = {
+          nid:element.nid,
+          mid:"0",
+          name:element.title,
+          field_costo:element.field_costo,
+          field_media_audio_file:"",
+          amount:1,
+          image:element.field_imagen_tour_app
+        }
+       this.cartserv.addProduct(data);
+      }); 
+    }
   }
 
   goBack() {

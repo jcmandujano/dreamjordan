@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { UserService } from '../api/user.service';
 import { CommonService } from '../api/common.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormControl, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { CartService } from '../api/cart.service';
 import {TourService} from '../api/tour.service';
 import {Router, ActivatedRoute, } from '@angular/router';
+import { StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-coupon-validator',
@@ -14,9 +14,7 @@ import {Router, ActivatedRoute, } from '@angular/router';
   styleUrls: ['./coupon-validator.page.scss'],
 })
 export class CouponValidatorPage  {
-  showRegister:boolean = false;
-  showValidator:boolean = false;
-  muestraLogin: boolean = true;
+  showValidator:boolean = true;
   couponCode:string;
   isValid : boolean = false;
   cartItemCount: BehaviorSubject<number>;
@@ -24,47 +22,25 @@ export class CouponValidatorPage  {
   tourInfo:any;
   idcheckout:any;
   idTourCoupon:any;
+  currentUser:any;
 
-  login_data = new FormGroup({
-    email: new FormControl(null,Validators.required),
-    password: new FormControl(null,Validators.required)
-  });
-
-  register_data = new FormGroup({
-    email: new FormControl(null,Validators.required),
-    password: new FormControl(null,Validators.required)
-  });
   constructor(public user : UserService,
     public co: CommonService,
     public tourService:TourService,
+    private storage : StorageService,
     private router:Router,
     private cartserv:CartService) { }
 
   ionViewDidEnter(){
-    console.log("hola",this.user.account);
-    if(this.user.account === undefined){
-      this.co.showLoader();
-      this.user.getLoginStatus().subscribe(res => { 
-        this.user.account = res;
-        this.co.hideLoader();
-        if(this.user.account.current_user){
-          console.log("data",this.user.account.current_user);
-          this.showValidator = true;
-          this.couponCode=undefined;
-          this.isValid=false;
-        }
-      },
-      (err: HttpErrorResponse) => { 
-        this.co.hideLoader();
-        console.log("error",err);
-      }); 
-    }else{ 
-      if(this.user.account.current_user){
+    this.storage.getObject("userdata").then(data => {
+      console.log("USUARIO DESDE HOME",data);
+      this.currentUser=data;
+      if(data){
         this.showValidator = true;
         this.couponCode=undefined;
         this.isValid=false;
       }
-    }
+    });
     this.cart = this.cartserv.getCart();
     this.cartItemCount = this.cartserv.getCartItemCount();
   }
@@ -84,13 +60,10 @@ export class CouponValidatorPage  {
             this.co.hideLoader();
             this.co.presentAlert("Error", "El cupon no esta asignado a ningun tour", "");
         }else{//Si el cupon no esta canjeado, se procede a validarlo
-          //this.co.hideLoader();//borrar
-          console.log(res);
           this.idTourCoupon = res[0].nid
           //obtenemos primero el tour asignado al cupon
           this.getTourInfo(res[0].field_tour);
         }
-        console.log("cupon",res);
       },
       (err: HttpErrorResponse) => { 
         //console.log(err);
@@ -101,10 +74,12 @@ export class CouponValidatorPage  {
 
   //Una vez realizado el proceso se desactiva el cupon
   canjeaCupon(){
+    console.log("QUEPASA",this.idTourCoupon);
     this.cartserv.canjeaCupon(this.idTourCoupon).subscribe((res) =>{
       console.log("canjeado",res);
     },
     (err: HttpErrorResponse) => { 
+      this.co.presentAlert("Error", "Ocurrio un problema al canjear el codigo", err.error.message);
       console.log(err);
       this.co.hideLoader();
       this.cartserv.emptyCart();
@@ -116,7 +91,7 @@ export class CouponValidatorPage  {
       this.addToCart(data);
       this.cartserv.insertSinglePurchase("checkout", data.title, coupon, false).subscribe(
         (res:any) => { 
-          console.log("insert response ",res);
+          //console.log("insert response ",res);
           this.idcheckout = res.checkout;
           this.co.hideLoader();
           this.cartserv.emptyCart();
@@ -124,19 +99,13 @@ export class CouponValidatorPage  {
           //banderas para mostrar activador
           this.showValidator = false;
           this.isValid = true
-          this.muestraLogin = false;
-          this.showRegister = false;
-          //banderas para mostrar acttivador
+          //banderas para mostrar activador
         },
         (err: HttpErrorResponse) => { 
           console.log(err);
           this.co.hideLoader();
           this.cartserv.emptyCart();
-          var message = err.error.message;
-          if(err.status == 400){
-            message = 'Correo electrónico o contraseña no reconocidos.';
-          }
-          this.co.presentAlert('Error','Hubo un problema con la validacion del cupon.',message);
+          this.co.presentAlert('Error','Hubo un problema con la validacion del cupon.',err.error.message);
         }
       );
   }
@@ -158,8 +127,7 @@ export class CouponValidatorPage  {
     this.tourService.getDreamJordanTourDetail(nid).subscribe(
       (res:any) => { 
         this.tourInfo = res[0];
-        console.log("INFO TOUR",this.tourInfo);
-        
+        //console.log("INFO TOUR",this.tourInfo);
         //Una vez obtenida la informacion
         this.insert(this.couponCode, this.tourInfo);
       },
@@ -185,60 +153,11 @@ export class CouponValidatorPage  {
       this.router.navigate(['/tabs/dreamjordan-detail/'+this.tourInfo.nid]);
     },
     (err: HttpErrorResponse) => { 
+      this.co.presentAlert("Error", "Ocurrio un error al activar su codigo", err);
       console.log(err);
       this.co.hideLoader();
       this.cartserv.emptyCart();
     }) 
-  }
-
-  muestraRegistro(){
-    this.muestraLogin = false;
-    this.showRegister  = true;
-  }
-
-  doLogin(data){
-    this.co.showLoader();
-    this.user.login(data.email,data.password).subscribe(
-      (res:any) => { 
-        this.co.hideLoader();
-        console.log("HIJO",res);
-        this.user.account.current_user = res;
-        this.showValidator = true;
-      },
-      (err: HttpErrorResponse) => { 
-        //console.log(err);
-        this.co.hideLoader();
-        var message = err.error.message;
-        if(err.status == 400){
-          message = 'Correo electrónico o contraseña no reconocidos.';
-        }
-        this.co.presentAlert('Error','¡UPS!, hubo un problema al iniciar sesión.',message);
-      }
-    );
-    //console.log("datos",data);
-  }
-
-  register(data){
-    this.co.showLoader();
-    this.user.register(data.email,data.password).subscribe(
-      (res:any) => { 
-        this.co.hideLoader();
-        this.user.account = res;
-        this.showValidator = true;
-        this.showRegister = false;
-        this.doLogin(data);
-      },
-      (err: HttpErrorResponse) => { 
-        //console.log(err);
-        this.co.hideLoader();
-        var message = err.error.message;
-        if(err.status == 400){
-          message = 'Correo electrónico o contraseña no reconocidos.';
-        }
-        this.co.presentAlert('Error','¡UPS!, hubo un problema al registrar el usuario.',message);
-      }
-    );
-    console.log("datos",data);
   }
 
   goHome(){

@@ -15,7 +15,7 @@ export class TourService {
     private translate: TranslateService) { }
 
     getToursByCountry(id_pais){
-      return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/tours-app/'+ id_pais +'?_format=json',{ withCredentials: true }).pipe(
+      return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/tours-app/'+ id_pais +'?_format=json').pipe(
         map(
           res => { 
             return res;
@@ -28,7 +28,7 @@ export class TourService {
     }
 
     getSingleTour(id_pais, nid){
-      return this.http.get<Array<any>>(this.co.API+'api/tours-app/'+ id_pais +'/'+ nid+'?_format=json',{ withCredentials: true }).pipe(
+      return this.http.get<Array<any>>(this.co.API+'api/tours-app/'+ id_pais +'/'+ nid+'?_format=json').pipe(
         map(
           res => { 
             return res;
@@ -41,7 +41,7 @@ export class TourService {
     }
 
     getAudiosxTour(nid){
-      return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/audiosxtour/'+ nid +'?_format=json',{ withCredentials: true }).pipe(
+      return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/audiosxtour/'+ nid +'?_format=json').pipe(
         map(
           res => { 
             return res;
@@ -54,8 +54,7 @@ export class TourService {
     }
 
     getPaises(){
-      console.log("que",this.translate.currentLang);
-       return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/paises-app/?_format=json',{ withCredentials: true }).pipe(
+       return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/paises-app/?_format=json').pipe(
          map(
            res => { 
              return res;
@@ -68,7 +67,7 @@ export class TourService {
      }
 
     getDreamJordanTours(){
-      return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/djtours-app/1/?_format=json',{ withCredentials: true }).pipe(
+      return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/djtours-app/1/?_format=json').pipe(
         map(
           res => { 
             return res;
@@ -81,7 +80,7 @@ export class TourService {
     }
 
     getSliderTours(){
-      return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/home-tours/?_format=json',{ withCredentials: true }).pipe(
+      return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/home-tours/?_format=json').pipe(
         map(
           res => { 
             return res;
@@ -93,7 +92,7 @@ export class TourService {
       );
     }
     getDreamJordanTourDetail(nid){
-      return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/djtours-app/1/'+nid+'?_format=json',{ withCredentials: true }).pipe(
+      return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/djtours-app/1/'+nid+'?_format=json').pipe(
         map(
           res => { 
             return res;
@@ -106,7 +105,7 @@ export class TourService {
     }
 
     getDreamJordanAudios(nid){
-      return this.http.get<Array<any>>(this.co.API+'api/audios-dream-jordan/'+nid+'?_format=json',{ withCredentials: true }).pipe(
+      return this.http.get<Array<any>>(this.co.API+'api/audios-dream-jordan/'+nid+'?_format=json').pipe(
         map(
           res => { 
             return res;

@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { map } from 'rxjs/operators';
 import { CommonService } from '../api/common.service';
 import { TranslateService } from '@ngx-translate/core';
+import {StorageService} from '../storage.service';
+import { BehaviorSubject } from 'rxjs';
 
 export interface Account{
   csrf_token: string;
@@ -13,9 +15,9 @@ export interface Account{
 export interface CurrentUser{
   uid: string;
   name: string;
+  pass: string;
   email: string;
   lang: string;
-  //payment_methods: Array<PaymentMethod>;
 }
 
 @Injectable({
@@ -24,7 +26,12 @@ export interface CurrentUser{
 
 export class UserService {
 
+  authenticationState = new BehaviorSubject(false);
   private _account:Account;
+  private _userData:{
+    user:string;
+    pass:string;
+  } = null;
 
   get account(): Account{
     return this._account;
@@ -33,14 +40,22 @@ export class UserService {
     this._account = account;
   }
 
+  get userData() : { user:string;pass:string;}{
+    return this._userData;
+  }
+  set userData(userData: { user:string;pass:string;}){
+    this._userData = userData;
+  }
+
   constructor(
     public http: HttpClient,
     public co: CommonService,
+    public storage : StorageService,
     private translate: TranslateService
   ) { }
 
   getLoginStatus(){
-    return this.http.get<Account>(this.co.API+'user/me/null?_format=json',{ withCredentials: true }).pipe(
+    return this.http.get<Account>(this.co.API+'user/me/null?_format=json').pipe(
       map(
         res => { 
           return res;
@@ -50,6 +65,18 @@ export class UserService {
         }
       )
     );
+  }
+
+  customLoginStatus(){
+    return this.storage.getObject("userdata").then(data => {
+     if(data!=null){
+      this.authenticationState.next(true);
+       return data;
+     }else{
+       this.authenticationState.next(false);
+       return data;
+     }
+    });
   }
 
   login(username:string,password:string){
@@ -63,9 +90,10 @@ export class UserService {
     return this.http.post<Account>(
       this.co.API+'user/clogin?_format=json',
       JSON.stringify(datos),
-      { headers: headers, withCredentials: true }).pipe(
+      { headers: headers }).pipe(
         map(
           res => { 
+            this.authenticationState.next(true);
             return res;
           },
           (err: HttpErrorResponse) => { 
@@ -88,9 +116,10 @@ export class UserService {
     return this.http.post<Account>(
       this.co.API+'user/register?_format=json',
       JSON.stringify(datos),
-      { headers: headers, withCredentials: true }).pipe(
+      { headers: headers}).pipe(
         map(
           res => { 
+            this.authenticationState.next(true);
             return res;
           },
           (err: HttpErrorResponse) => { 
@@ -102,10 +131,11 @@ export class UserService {
 
   logout(){
     return this.http.get<Account>(
-      this.co.API+'user/clogout?_format=json',
-      { withCredentials: true }).pipe(
+      this.co.API+'user/clogout?_format=json').pipe(
         map(
           res => { 
+            console.log("Saliendo", res);
+            this.authenticationState.next(false);
             return res;
           },
           (err: HttpErrorResponse) => { 
@@ -116,7 +146,7 @@ export class UserService {
   }
 
   getPaisById(idPais){
-    return this.http.get<Array<any>>(this.co.API+'api/'+this.translate.currentLang+'/paises-app/'+idPais+'?_format=json',{ withCredentials: true }).pipe(
+    return this.http.get<Array<any>>(this.co.API+'/'+this.translate.currentLang+'/api/paises-app/'+idPais+'?_format=json').pipe(
       map(
         res => { 
           return res;
@@ -130,7 +160,7 @@ export class UserService {
 
   getPurchases(){
     let cartiems=new Array;
-    return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/user/checkout_app?_format=json',{ withCredentials: true }).pipe(
+    return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/user/checkout_app?_format=json').pipe(
       map(
         res => { 
           let objeto = new Array;
@@ -150,7 +180,7 @@ export class UserService {
   }
 
   getPurchaseInfo(){
-    return this.http.get<Array<any>>(this.co.API+'user/checkout_app?_format=json',{ withCredentials: true }).pipe(
+    return this.http.get<Array<any>>(this.co.API+'user/checkout_app?_format=json').pipe(
       map(
         res => { 
           return res;
@@ -164,7 +194,7 @@ export class UserService {
 
   getProcessedItems(idtour, tipo){
     let cartiems=new Array;
-    return this.http.get<Array<any>>(this.co.API+'user/checkout_app?_format=json',{ withCredentials: true }).pipe(
+    return this.http.get<Array<any>>(this.co.API+'user/checkout_app?_format=json').pipe(
       map(
         res => { 
           let objeto = new Array;
@@ -188,8 +218,7 @@ export class UserService {
 
   updateLang(lang:string){
     let headers = new HttpHeaders({
-      'Content-Type':  'application/json',
-      'X-CSRF-Token': this.account.csrf_token
+      'Content-Type':  'application/json'
 
     });
     let datos =  {

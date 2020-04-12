@@ -1,11 +1,10 @@
-import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, ViewChildren, QueryList } from '@angular/core';
 import {TourService} from '../api/tour.service';
 import { CommonService } from '../api/common.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
 import {Router, ActivatedRoute, } from '@angular/router';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserService} from '../api/user.service'; 
 import {Howl, howler} from 'howler';
 import { IonRange, NavController } from '@ionic/angular';
@@ -32,13 +31,11 @@ export class DreamjordanDetailPage {
   audiosList:any;
   cart=[];
   cartItemCount: BehaviorSubject<number>;
-
   player:Howl = null;
+
   isValid : boolean = false;//cupon validado
   isActivated: boolean = false;//validado y activado
   isPurchased:boolean = false; //comprado
-  showRegister:boolean = false; //muestra registro
-  showLogin: boolean = false; //muestra login
   showTours:boolean = false;//muestra tours
   fechaComprado:Date;
   couponCode:string;
@@ -47,17 +44,6 @@ export class DreamjordanDetailPage {
   nodeid:any;
   idTourCoupon:any;
   @ViewChildren(IonRange) ranges : QueryList<IonRange>;
-
-  //Formdata ocupado para login y registro
-  login_data = new FormGroup({
-    email: new FormControl(null,Validators.required),
-    password: new FormControl(null,Validators.required)
-  });
-
-  register_data = new FormGroup({
-    email: new FormControl(null,Validators.required),
-    password: new FormControl(null,Validators.required)
-  });
   
   constructor(public active :ActivatedRoute,
     public tourService:TourService,
@@ -67,17 +53,18 @@ export class DreamjordanDetailPage {
     public user : UserService,
     private cartserv:CartService) { 
     this.id_tour = this.active.snapshot.paramMap.get("id");
+    this.cart = this.cartserv.getCart();
+    this.cartItemCount = this.cartserv.getCartItemCount();
   }
 
   ionViewWillEnter() {
-    this.cart = this.cartserv.getCart();
-    this.cartItemCount = this.cartserv.getCartItemCount();
     this.co.showLoader();
     this.tourService.getDreamJordanTourDetail(this.id_tour).subscribe(
       (res:any) => { 
         this.co.hideLoader();
         this.current_tour = res[0];
-        console.log("current",this.current_tour);
+        this.isTourPurchased();
+        //console.log("current",this.current_tour);
       },
       (err: HttpErrorResponse) => { 
         console.log(err);
@@ -89,35 +76,6 @@ export class DreamjordanDetailPage {
         this.co.presentAlert('Error','Hubo un problema al recuperar la información.',message);
       }
     );
-    //Check if some user is logged JCMV
-
-    if(this.user.account === undefined){  
-      this.user.getLoginStatus().subscribe(res => { 
-        this.user.account = res;
-        if(this.user.account.current_user != null){
-          this.showTours=true;
-          this.showLogin=false;
-          this.isTourPurchased();
-          this.co.hideLoader();
-        }else{
-          this.showLogin=true;
-        }
-      },
-      (err: HttpErrorResponse) => { 
-        this.co.hideLoader();
-        console.log("error",err);
-      }); 
-    }else{
-      if(this.user.account.current_user != null){
-        console.log("no hay nadie")
-        this.showTours=true;
-        this.showLogin=false;
-        this.isTourPurchased();
-      }else{
-        this.showLogin=true;
-      }
-     
-    }
   }
 
   isTourPurchased(){
@@ -144,6 +102,7 @@ export class DreamjordanDetailPage {
           }
         });
       });
+      
     },
       (err: HttpErrorResponse) => { 
         this.co.hideLoader();
@@ -199,40 +158,6 @@ export class DreamjordanDetailPage {
     );
   }
 
-  //Store the validate coupon JCMV
-  /*validate(coupon:string){
-    if(this.user.account.current_user){
-      this.co.showLoader();
-      this.addToCart();
-      this.cartserv.insertSinglePurchase("checkout", this.current_tour.title, coupon, false).subscribe(
-        (res:any) => { 
-          this.nodeid = res.checkout;
-          this.co.hideLoader();
-          this.co.presentToast("Se realizo la compra correctamente");
-          this.isValid=true;
-          this.isActivated=false; 
-          this.showTours=false
-          this.cartserv.emptyCart();
-        },
-        (err: HttpErrorResponse) => { 
-          //console.log(err);
-          this.co.hideLoader();
-          this.cartserv.emptyCart();
-          var message = err.error.message;
-          if(err.status == 400){
-            message = 'Correo electrónico o contraseña no reconocidos.';
-          }
-          this.co.presentAlert('Error','Hubo un problema al iniciar sesión.',message);
-        }
-      );
-    }
-  }*/
-
-  muestraRegistro(){
-    this.showLogin = false;
-    this.showRegister  = true;
-  }
-
    //activate the current tour(only if is purchased) to start countdown duration JCMV
   activate(){
     this.co.showLoader();
@@ -250,51 +175,6 @@ export class DreamjordanDetailPage {
       this.cartserv.emptyCart();
     }) 
   } 
-
-  //Login user JCMV
-  doLogin(data){
-    this.co.showLoader();
-    this.user.login(data.email,data.password).subscribe(
-      (res:any) => { 
-        this.co.hideLoader();
-        this.user.account = res;
-        this.showTours = true;
-        
-      },
-      (err: HttpErrorResponse) => { 
-        //console.log(err);
-        this.co.hideLoader();
-        var message = err.error.message;
-        if(err.status == 400){
-          message = 'Correo electrónico o contraseña no reconocidos.';
-        }
-        this.co.presentAlert('Error','Hubo un problema al iniciar sesión.',message);
-      }
-    );
-  }
-
-  //Register user and do login process JCMV
-  register(data){
-    this.co.showLoader();
-    this.user.register(data.email,data.password).subscribe(
-      (res:any) => { 
-        this.co.hideLoader();
-        this.user.account = res;
-        this.showTours = true;
-        this.showRegister = false;
-        this.doLogin(data);
-      },
-      (err: HttpErrorResponse) => { 
-        //console.log(err);
-        this.co.hideLoader();
-        var message = err.error.message;
-        if(err.status == 400){
-          message = 'Correo electrónico o contraseña no reconocidos.';
-        }
-        this.co.presentAlert('Error','Hubo un problema al registrar el usuario.',message);
-      }
-    );
-  }
 
   validateCoupon(){
     this.co.showLoader();
@@ -345,7 +225,6 @@ export class DreamjordanDetailPage {
         this.isValid=true;
         this.isActivated=false; 
         this.showTours=false
-        this.showLogin = false;
         //banderas para mostrar acttivador
       },
       (err: HttpErrorResponse) => { 

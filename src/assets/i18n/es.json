@@ -107,7 +107,9 @@
         "about":"Sobre Dream Jordan",
         "faq":"F.A.Q.",
         "contact":"Contacto",
-        "account":"Mi cuenta"
+        "account":"Mi cuenta",
+        "login":"Iniciar Sesión",
+        "logout":"Cerrar Sesión"
     }
 }
   

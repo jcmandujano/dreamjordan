@@ -6,7 +6,10 @@
     <ion-tab-button tab="countries">
       <ion-label>{{ 'MENU.countries' | translate }}</ion-label>
     </ion-tab-button>
-    <ion-tab-button tab="dreamjordan-plans">
+    <ion-tab-button tab="login" *ngIf="sessionState==false">
+      <ion-label>Dream Jordan</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="dreamjordan-plans" *ngIf="sessionState">
       <ion-label>Dream Jordan</ion-label>
     </ion-tab-button>
     <ion-tab-button tab="my-purchases">

@@ -4,7 +4,7 @@
       <img class="logo" src="./assets/img/logo.svg"/>
     </ion-buttons>
     <ion-buttons slot="primary">
-      <ion-icon class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
+      <ion-icon (click)="openCart()" class="toolbar-icons" name="cart" color="primary"></ion-icon>
       <ion-badge *ngIf="cart.length > 0" class="notifications-badge">{{cartItemCount | async}}</ion-badge>
       <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
     </ion-buttons>
@@ -12,64 +12,14 @@
 </ion-header>
 
 <ion-content>
-   <!--LOGIN-->
-   <ion-row class="container" *ngIf="showCart == false && showLogin == true">
-    <form [formGroup]="login_data" >
-      <ion-col size="12">
-        <h3>Login</h3>
-      </ion-col>
-      <ion-col size="12">
-        <ion-input formControlName="email" placeholder="{{ 'DREAMJORDANDET.email' | translate }}"></ion-input>
-      </ion-col>
-      <ion-col size="12">
-        <ion-input formControlName="password" placeholder="{{ 'DREAMJORDANDET.password' | translate }}"></ion-input>
-      </ion-col>
-      <ion-col size="12"> 
-        <ion-button (click)="doLogin(login_data.value)" [disabled]="!login_data.valid">{{ 'DREAMJORDANDET.access' | translate }}</ion-button>
-      </ion-col>
-      <ion-col size="12"> 
-        <ion-button (click)="muestraRegistro()">{{ 'DREAMJORDANDET.register' | translate }}</ion-button>
-      </ion-col>
-      <ion-col size="12"> 
-        <p>{{ 'DREAMJORDANDET.registro_label' | translate }}</p>
-      </ion-col>
-    </form>
-  </ion-row>
-  <!--REGISTRO-->
-  <ion-row class="container" *ngIf="showRegister && showLogin == false">
-    <form [formGroup]="register_data" >
-      <ion-col size="12">
-        <h3>{{ 'DREAMJORDANDET.register' | translate }}</h3>
-      </ion-col>
-      <ion-col size="12">
-        <ion-input formControlName="email" placeholder="{{ 'DREAMJORDANDET.email' | translate }}"></ion-input>
-      </ion-col>
-      <ion-col size="12">
-        <ion-input formControlName="password" placeholder="{{ 'DREAMJORDANDET.password' | translate }}"></ion-input>
-      </ion-col>
-      <ion-col size="12"> 
-        <ion-button (click)="register(register_data.value)" [disabled]="!register_data.valid">{{ 'DREAMJORDANDET.sign_in' | translate }}</ion-button>
-      </ion-col>
-      <ion-col size="12"> 
-        <p>{{ 'DREAMJORDANDET.registro_label' | translate }}</p>
-      </ion-col>
-    </form>
-  </ion-row>
 <!--GRID OCUPADO PARA CUANDO AUN NO SE COMPRA CONTENIDO-->
-<ion-grid class="content-list" *ngIf="showCart">  
+<ion-grid class="content-list">  
   <ion-row *ngFor="let item of cart">
     <ion-col size="3" class="index-col">
       <img class="tmb-img" [src]="co.API+item.image"/>
     </ion-col>
     <ion-col size="6">
       <p class="file-tour-name">{{item.name}}  <!-- <span class="file-tour-desc">País completo</span> --></p>
-      <!-- <ion-select class="cart-select" [(ngModel)]="item.amount" [selectedText]="item.amount">
-        <ion-select-option value="1" >1</ion-select-option>
-        <ion-select-option value="2" >2</ion-select-option>
-        <ion-select-option value="3" >3</ion-select-option>
-        <ion-select-option value="4" >4</ion-select-option>
-        <ion-select-option value="5" >5</ion-select-option>
-      </ion-select>  -->
     </ion-col >
     <ion-col size="2" class="centered">
       <span class="price">{{item.field_costo | currency:'USD'}}</span>
