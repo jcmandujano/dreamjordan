@@ -27,10 +27,11 @@ export class DreamjordanPlansPage {
     this.tourService.getDreamJordanTours().subscribe(res => { 
       this.co.hideLoader();
       this.DreamJordanTours = res;
-      console.log("toursDreamJordan",res);
+      //console.log("toursDreamJordan",res);
     },
     (err: HttpErrorResponse) => { 
       this.co.hideLoader();
+      this.co.presentAlert("Error","Ocurrio un problema al recuperar el tour",err.message);
       console.log("error",err);
     });
   }

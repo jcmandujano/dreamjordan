@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { PlanDetailPageRoutingModule } from './plan-detail-routing.module';
+import { TestDownloadPageRoutingModule } from './test-download-routing.module';
 
-import { PlanDetailPage } from './plan-detail.page';
+import { TestDownloadPage } from './test-download.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    PlanDetailPageRoutingModule
+    TestDownloadPageRoutingModule
   ],
-  declarations: [PlanDetailPage]
+  declarations: [TestDownloadPage]
 })
-export class PlanDetailPageModule {}
+export class TestDownloadPageModule {}

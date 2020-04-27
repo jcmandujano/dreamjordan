@@ -18,17 +18,17 @@ export class MyPurchasesPage  {
   constructor(private router:Router,
     private cartserv:CartService,
     private user : UserService,
-    public co : CommonService) { }
+    public co : CommonService) { 
+      this.cart = this.cartserv.getCart();
+      this.cartItemCount = this.cartserv.getCartItemCount();
+    }
 
   ionViewWillEnter() {
     this.co.showLoader();
-    this.cart = this.cartserv.getCart();
-    this.cartItemCount = this.cartserv.getCartItemCount();
     this.user.getPurchases().subscribe(
       (res:any) => { 
         this.co.hideLoader();
         this.myPurchases = res;
-        console.log("respuesta",res);
       },
       (err: HttpErrorResponse) => { 
         //console.log(err);
@@ -56,7 +56,6 @@ export class MyPurchasesPage  {
     }else{
       //se envia a country-detail
       this.router.navigate(['/tabs/tour-detail/'+item.tid+'/'+item.tour]);
-      
     }
   }
 

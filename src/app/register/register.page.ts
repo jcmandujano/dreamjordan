@@ -4,6 +4,7 @@ import { FormControl, Validators, FormGroup, ReactiveFormsModule } from '@angula
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../api/user.service';
 import { CommonService } from '../api/common.service';
+import { StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-register',
@@ -19,6 +20,7 @@ export class RegisterPage implements OnInit {
 
   constructor(private router:Router, 
     public user : UserService, 
+    public storage: StorageService,
     private route: ActivatedRoute,
     public co: CommonService) { }
 
@@ -51,7 +53,17 @@ export class RegisterPage implements OnInit {
     this.user.login(data.email,data.password).subscribe(
       (res:any) => { 
         this.co.hideLoader();
-        this.user.account = res;
+        //this.user.account = res;
+        this.user.userData={
+          user:res.current_user.name,
+          pass:data.password
+        };
+        this.storage.setObject('userdata',{
+          user:res.current_user.name,
+          pass:data.password,
+          lang:res.current_user.lang,
+          token:res.csrf_token
+        });
         this.router.navigate(['/tabs/home']);
       },
       (err: HttpErrorResponse) => { 

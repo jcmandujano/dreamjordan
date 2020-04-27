@@ -10,6 +10,7 @@ import { Platform, } from '@ionic/angular';
 import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
 import { TranslateService } from '@ngx-translate/core';
 import { finalize } from 'rxjs/operators';
+import { StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-home',
@@ -27,7 +28,8 @@ export class HomePage  {
   sliderEnded=false;
   jdtoursEnded=false;
   countriesEnded=false;
-
+  currentUser:any;
+  sessionState:boolean;
 
   slideOptsHome: SwiperConfigInterface = {
     initialSlide: 0,
@@ -39,14 +41,6 @@ export class HomePage  {
     spaceBetween: 10,
     autoHeight: true,
     slidesOffsetBefore : 10,
-    direction: 'horizontal',
-    slidesOffsetAfter: 10
-  }
-  slideOptsDJ : SwiperConfigInterface = {
-    slidesPerView: 2,
-    spaceBetween: 10,
-    autoHeight: true,
-    slidesOffsetBefore : 10,
     slidesOffsetAfter: 10
   }
 
@@ -54,50 +48,45 @@ export class HomePage  {
     public user : UserService, 
     public co: CommonService,
     public tourService:TourService,
+    private storage : StorageService,
     private cartserv : CartService,
     private translateService: TranslateService,
     public platform: Platform) {
       this.cartItemCount = this.cartserv.getCartItemCount();
       this.cart = this.cartserv.getCart();
-      console.log("Constructor");
      }
      
   //valida si existe un usuario logeado JCMV 20012020
   ionViewWillEnter(){
-    console.log("ionViewWillEnter");
-    if(this.user.account === undefined){
-      this.co.showLoader();
-      this.user.getLoginStatus().subscribe(res => { 
-        this.user.account = res;
-        this.co.hideLoader();
-        if(this.user.account.current_user){
-          console.log("Ya tenemos a alguieen1 ",res);
+    this.user.customLoginStatus().then(data => {
+      //console.log("USUARIO DESDE TABS",data);
+      if(data!= null){
+        this.currentUser=data;
+      }
+      this.user.authenticationState.subscribe(state => {
+        if (state) {
+          this.sessionState=state;
+          //console.log("user is logged in ", state);
+        } else {
+          this.sessionState=state;
+          //console.log("user is NOT logged in ",state);
         }
-      },
-      (err: HttpErrorResponse) => { 
-        this.co.hideLoader();
-        console.log("error",err);
-      }); 
-    }
+      });
+    });
     this.recuperaPaises();
   }
 
- /* loadStorageItems(){ SEGUIMIS DESPUES
-    this.storage.getItems().then(items =>{
-     this.localItems = items;
-     console.log("items",this.localItems);
-    });
-  }*/
-
   recuperaPaises(){
     //recuperamos paises
-    this.user.getPaises().subscribe(res => { 
+    this.co.showLoader();
+    this.tourService.getPaises().pipe(
+      finalize(() => {
+        this.countriesEnded = true;
+      }),
+    ).subscribe(res => { 
         this.paises = res;
-        console.log("paises",this.paises);
         this.recuperaDreamJordan();
         this.recuperaSliderTours();
-        this.countriesEnded = true
-        
     },
     (err: HttpErrorResponse) => { 
       console.log("error",err);
@@ -105,9 +94,12 @@ export class HomePage  {
   }
 
   recuperaDreamJordan(){
+    //this.co.showLoader();
     this.tourService.getDreamJordanTours().pipe(
-      finalize(() => 
-      this.jdtoursEnded = true),
+      finalize(() => {
+        this.jdtoursEnded = true;
+        this.co.hideLoader();
+      }),
     ).subscribe(res => { 
       this.DreamJordanTours = res
     },
@@ -118,11 +110,12 @@ export class HomePage  {
 
   recuperaSliderTours(){
     this.tourService.getSliderTours().pipe(
-      finalize(() => 
-      this.sliderEnded = true),
+      finalize(() => {
+        this.sliderEnded = true;
+        this.co.hideLoader();
+      }),
     ).subscribe(res => { 
       this.sliderTours = res;
-      //console.log("sliderhome",this.sliderTours);
     },
     (err: HttpErrorResponse) => { 
       console.log("error",err);
@@ -131,7 +124,12 @@ export class HomePage  {
 
   // funcion llamada desde el boton "valida cupon"
   validateCoupon(){
+    if(this.sessionState){
       this.router.navigate(['/tabs/coupon-validator']);
+    }else{
+      this.router.navigate(['/tabs/login']);
+    }
+      
   }
 
   openCart(){
@@ -149,10 +147,5 @@ export class HomePage  {
       this.router.navigate(['/tabs/tour-detail/'+tid+'/'+nid]);
     }
     
-  }
-
-  saveme(){
-    console.log("AUCSILIO");
-    setTimeout(() => this.slides.update(), 100);
   }
 }

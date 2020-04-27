@@ -1,15 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+        <img class="logo" src="./assets/img/logo.svg"/>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-icon (click)="openCart()" class="toolbar-icons" name="cart" color="primary"></ion-icon>
+      <ion-badge class="notifications-badge">0</ion-badge>
+      <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 <ion-content>
   <form [formGroup]="register_data" (ngSubmit)="doLogin(register_data.value)">
-    <div class="warp-solid"></div>
     <ion-row class="container">
       <ion-col size="12">
-        <img class="logo" src="../../assets/img/LOGO-V-B.svg"/>
+        <h3>{{ 'DREAMJORDANDET.register' | translate }}</h3>
       </ion-col>
       <ion-col size="12">
           <ion-input formControlName="email" placeholder="{{ 'LOGREG.email' | translate }}"></ion-input>
       </ion-col>
       <ion-col size="12">
-          <ion-input formControlName="password" placeholder="{{ 'LOGREG.password' | translate }}"></ion-input>
+          <ion-input type="password" formControlName="password" placeholder="{{ 'LOGREG.password' | translate }}"></ion-input>
         </ion-col>
       <ion-col size="12">
         <ion-button type="submit" [disabled]="!register_data.valid">{{ 'LOGREG.register' | translate }}</ion-button>
@@ -17,6 +28,8 @@
       <ion-col size="12">
         <ion-button (click)="cancel()" >{{ 'LOGREG.cancel' | translate }}</ion-button>
       </ion-col> 
+      <p>{{ 'DREAMJORDANDET.registro_label' | translate }}</p>
     </ion-row>
+    
   </form>
 </ion-content>

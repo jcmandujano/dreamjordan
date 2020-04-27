@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { LogregSelectPage } from './logreg-select.page';
+import { TestDownloadPage } from './test-download.page';
 
-describe('LogregSelectPage', () => {
-  let component: LogregSelectPage;
-  let fixture: ComponentFixture<LogregSelectPage>;
+describe('TestDownloadPage', () => {
+  let component: TestDownloadPage;
+  let fixture: ComponentFixture<TestDownloadPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LogregSelectPage ],
+      declarations: [ TestDownloadPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LogregSelectPage);
+    fixture = TestBed.createComponent(TestDownloadPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

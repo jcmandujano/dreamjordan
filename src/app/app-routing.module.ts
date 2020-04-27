@@ -5,22 +5,6 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
-  },
-  {
-    path: 'lang-selec',
-    loadChildren: () => import('./lang-selec/lang-selec.module').then( m => m.LangSelecPageModule)
-  },
-  {
-    path: 'logreg-select',
-    loadChildren: () => import('./logreg-select/logreg-select.module').then( m => m.LogregSelectPageModule)
-  },
-  {
-    path: 'login',
-    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
-  },
-  {
-    path: 'registro',
-    loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
   }
 ];
 

@@ -14,6 +14,7 @@ export interface Product{
   field_costo:number;
   field_media_audio_file:string;
   amount:number;
+  image:string;
 }
 
 @Injectable({
@@ -81,8 +82,7 @@ export class CartService {
     let today = this.getCurrentDate();
     this.itemsCarrito = this.buildBodyJson();
     let headers = new HttpHeaders({
-      'Content-Type':  'application/json',
-      'X-CSRF-Token': this.US.account.csrf_token
+      'Content-Type':  'application/json'
     });
     let datos =  {
       "type":type,
@@ -96,7 +96,7 @@ export class CartService {
     return this.http.post(
       this.co.API+'user/checkout?_format=json',
       JSON.stringify(datos),
-      { headers: headers, withCredentials: true }).pipe(
+      { headers: headers }).pipe(
         map(
           res => { 
             return res;
@@ -145,8 +145,7 @@ export class CartService {
 
   activateDreamJordanTour(nid){
     let headers = new HttpHeaders({
-      'Content-Type':  'application/json',
-      'X-CSRF-Token': this.US.account.csrf_token
+      'Content-Type':  'application/json'
     });
     let datos = {
       "type": [{
@@ -157,7 +156,7 @@ export class CartService {
     return this.http.patch(
       this.co.API+'node/'+nid+'?_format=json',
       JSON.stringify(datos),
-      { headers: headers, withCredentials: true }).pipe(
+      { headers: headers}).pipe(
         map(
           res => { 
             return res;
@@ -170,7 +169,7 @@ export class CartService {
   }
 
   validateCoupon(coupon:string){
-    return this.http.get<Array<any>>(this.co.API+'api/cupones/'+coupon+'?_format=json',{ withCredentials: true }).pipe(
+    return this.http.get<Array<any>>(this.co.API+'api/cupones/'+coupon+'?_format=json').pipe(
       map(
         res => { 
           return res;
@@ -183,20 +182,19 @@ export class CartService {
   }
 
   canjeaCupon(node){
-    let headers = new HttpHeaders({
-      'Content-Type':  'application/json',
-      'X-CSRF-Token': this.US.account.csrf_token
-    });
+    /* let headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    }); */
     let datos = {
       "type": [{
         "target_id": "cupones_app"}],
         "field_canjeado":[{"value":1}]  
     };
-
+    //console.log("HEADERS",headers);
+    console.log("BODY",datos);
     return this.http.patch(
       this.co.API+'node/'+node+'?_format=json',
-      JSON.stringify(datos),
-      { headers: headers, withCredentials: true }).pipe(
+      JSON.stringify(datos)).pipe(
         map(
           res => { 
             return res;

@@ -4,7 +4,7 @@
       <img class="logo" src="./assets/img/logo.svg"/>
     </ion-buttons>
     <ion-buttons slot="primary">
-      <ion-icon (click)="openCart()" class="toolbar-icons" src="./assets/img/shopping-bag.svg" color="primary"></ion-icon>
+      <ion-icon (click)="openCart()" class="toolbar-icons" name="cart" color="primary"></ion-icon>
         <ion-badge *ngIf="cart.length > 0" class="notifications-badge">{{cartItemCount | async}}</ion-badge>
       <ion-menu-button class="toolbar-icons" color="primary"></ion-menu-button>
     </ion-buttons>
@@ -35,11 +35,9 @@
       <ion-col size="2" class="index-col">
         <span class="index">{{i+1}}</span>
       </ion-col>
-      <ion-col size="7">
-        <span class="file-tour-name">{{audio.name}}</span>
-        <br>
-        <p class="file-tour-desc"> Dolorum inventore nam convallis eveniet hac class adipiscing blanditiis. Praesentium turpis cursus epteur.</p>
-        <ion-range #progressBar *ngIf="audio.comprado===true" [(ngModel)]="audio.audioelement.progress" max="100" color="success" pin="true" (touchend)="seek(audio.audioelement, i)" (mouseup)="seek(audio.audioelement,i)"></ion-range>
+      <ion-col size="7" class="index-col">
+        <p class="file-tour-name">{{audio.name}}</p>
+        
       </ion-col >
       <!--<ion-col size="3" class="centered" *ngIf="audio.comprado!==true">
         <span class="price">{{audio.field_costo| currency:'USD'}}</span>
@@ -64,8 +62,7 @@
         <!--<audio id="{{audio.mid}}" [src]="co.API+audio.field_media_audio_file" controls>
         </audio>-->
         <span class="file-tour-name">{{audio.name}}</span>
-        <br>
-        <p class="file-tour-desc"> Dolorum inventore nam convallis eveniet hac class adipiscing blanditiis. Praesentium turpis cursus epteur.</p>
+        
         <!-- <ion-progress-bar value="0.5"></ion-progress-bar> -->
         <ion-range #progressBar [(ngModel)]="audio.audioelement.progress" max="100" color="success" (touchend)="seek(audio.audioelement, i)" (mouseup)="seek(audio.audioelement,i)"></ion-range>
       </ion-col >
