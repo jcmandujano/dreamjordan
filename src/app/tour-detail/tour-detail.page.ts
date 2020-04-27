@@ -9,6 +9,7 @@ import {Howl, howler} from 'howler';
 import { IonRange } from '@ionic/angular';
 import { UserService} from '../api/user.service'; 
 import { NavController } from '@ionic/angular';
+import { StorageService } from '../storage.service';
 
 export interface Track{
   nid:string;
@@ -36,7 +37,7 @@ export class TourDetailPage{
   nid:any;
   audiosArray:any;
   idPais:any;
-  comprado:boolean = false;  1
+  comprado:boolean = false;
   currentTour:any;
   tipo_tour:string = "1";
   toursComprados:any;
@@ -55,6 +56,7 @@ export class TourDetailPage{
     public co: CommonService,
     private navCtrl: NavController,
     public active : ActivatedRoute,
+    public storage: StorageService,
     public user : UserService,
     private cartserv:CartService) { 
       this.nid = this.active.snapshot.paramMap.get("nid");
@@ -62,18 +64,18 @@ export class TourDetailPage{
   }
 
   addToCart(product){
-    console.log("item",product);
+    //console.log("item",product);
     this.cartserv.addProduct(product);
   }
 
   ionViewDidEnter() {
     this.co.showLoader();
-    this.getTourInfo()
+    this.getTourInfo();
     this.tourService.getAudiosxTour(this.nid).subscribe(
       (res:any) => { 
+        //console.log("data",res);
         this.audiosArray = res;        
         this.getPurchasedItems();
-        
       },
       (err: HttpErrorResponse) => { 
         //console.log(err);
@@ -103,15 +105,17 @@ export class TourDetailPage{
   }
 
   prepareItems(){
+    console.log("AUDIOS",this.audiosArray);
     this.audiosArray.forEach(originales => {
       originales.amount=1;
       originales.audioelement=this.start(originales);
       originales.progress=0;
-      this.toursComprados.forEach(comprados => {
+
+/*       this.toursComprados.forEach(comprados => {
         if(comprados.audio == originales.mid){
           originales.comprado=true;
         }
-      });
+      }); */
     });
     //console.log(this.audiosArray);
   }
@@ -212,6 +216,7 @@ export class TourDetailPage{
     let currentRange = this.ranges.filter((element,index)=> index == i);
     let newValue =+ currentRange[0].value;
     let duration = audio.duration();
+    console.log("que",duration);
     audio.seek(duration * (newValue/100));
   }
 
@@ -223,7 +228,21 @@ export class TourDetailPage{
     }, 1000)
   }
 
+  ionViewWillLeave(){
+
+   /*  this.storage.setObject('mediadata',{
+      id:0,
+      local_file:"",
+      no_plays:0,
+    }); */
+  }
+
+  storageAudioInfo(){
+    let current
+  }
+
   goBack() {
     this.navCtrl.back();
     }
+
 }
