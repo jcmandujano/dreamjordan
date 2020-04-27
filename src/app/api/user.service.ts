@@ -239,4 +239,17 @@ export class UserService {
       )
     );
   }
+
+  getpage(nid){
+    return this.http.get<Array<any>>(this.co.API+'/'+this.translate.currentLang+'/api/pages/'+nid+'?_format=json').pipe(
+      map(
+        res => { 
+          return res;
+        },
+        (err: HttpErrorResponse) => { 
+          console.log(err);
+        }
+      )
+    );
+  }
 }

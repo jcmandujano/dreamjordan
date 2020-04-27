@@ -12,8 +12,7 @@
 </ion-header>
 <ion-content>
   <div class="header">
-    <h3>{{ 'ABOUT.title' | translate }}</h3>
-    <p class="header-text">{{ 'ABOUT.part_1' | translate }} 
-      <br>{{ 'ABOUT.part_2' | translate }} </p>
+    <h3 [innerHTML]="title"></h3>
+    <p class="header-text" [innerHTML]="body"> </p>
   </div>
 </ion-content>

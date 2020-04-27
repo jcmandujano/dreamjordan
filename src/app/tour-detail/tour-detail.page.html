@@ -62,9 +62,12 @@
         <!--<audio id="{{audio.mid}}" [src]="co.API+audio.field_media_audio_file" controls>
         </audio>-->
         <span class="file-tour-name">{{audio.name}}</span>
-        
+
         <!-- <ion-progress-bar value="0.5"></ion-progress-bar> -->
-        <ion-range #progressBar [(ngModel)]="audio.audioelement.progress" max="100" color="success" (touchend)="seek(audio.audioelement, i)" (mouseup)="seek(audio.audioelement,i)"></ion-range>
+        <ion-range #progressBar [(ngModel)]="audio.audioelement.progress" max="{{audio.audioelement._duration * 1000 | date:'mm:ss'}}" color="success" pin="true" step="0.5" (touchend)="seek(audio.audioelement, i)" (mouseup)="seek(audio.audioelement,i)">
+          <ion-label slot="start">00:00</ion-label>
+          <ion-label slot="end">{{audio.audioelement._duration * 1000 | date:'mm:ss'}} </ion-label>
+        </ion-range>
       </ion-col >
       <ion-col size="3" class="play-div">
         <img src="../../assets/img/play.svg" (click)="play(audio.audioelement)" *ngIf="!audio.isPlaying"/>
