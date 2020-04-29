@@ -11,7 +11,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <form [formGroup]="register_data" (ngSubmit)="doLogin(register_data.value)">
+  <form [formGroup]="register_data" (ngSubmit)="register(register_data.value)">
     <ion-row class="container">
       <ion-col size="12">
         <h3>{{ 'DREAMJORDANDET.register' | translate }}</h3>
