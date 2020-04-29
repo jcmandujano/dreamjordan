@@ -160,7 +160,7 @@ export class UserService {
 
   getPurchases(){
     let cartiems=new Array;
-    return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/user/checkout_app?_format=json').pipe(
+    return this.http.get<Array<any>>(this.co.API+'/user/checkout_app?_format=json').pipe(
       map(
         res => { 
           let objeto = new Array;

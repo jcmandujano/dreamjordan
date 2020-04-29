@@ -29,6 +29,7 @@ export class MyPurchasesPage  {
       (res:any) => { 
         this.co.hideLoader();
         this.myPurchases = res;
+        console.table(this.myPurchases);
       },
       (err: HttpErrorResponse) => { 
         //console.log(err);
