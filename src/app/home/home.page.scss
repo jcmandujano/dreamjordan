@@ -23,6 +23,13 @@ ion-grid{
   object-fit: cover;
 }
 
+
+.slide-bg{
+  cursor: pointer;
+  background-size: cover;
+  background-position: center;
+}
+
 .slider-text {
   text-align: center;
   position: absolute;
