@@ -35,7 +35,7 @@ export class TourDetailPage{
 
   ammount : number = 1;
   nid:any;
-  audiosArray:any;
+  //audiosArray:any;
   idPais:any;
   comprado:boolean = false;
   currentTour:any;
@@ -44,12 +44,17 @@ export class TourDetailPage{
   isPurchased:boolean =false;
   /*variables para audio player*/
   activetrack : Track = null;
-  player:Howl = null;
+
   isPlaying:boolean = false;
   playlist = new Array();
   @ViewChildren(IonRange) ranges : QueryList<IonRange>;
   /*variables para audio player*/
   blockByGlobalPurchase:boolean=false;
+
+  get player(){ return this.tourService.player; }
+  set player( val ){ this.tourService.player = val; }
+  get audiosArray(){ return this.tourService.audiosArray; }
+  set audiosArray( val ){ this.tourService.audiosArray = val; }
 
   constructor(private router:Router,
     public tourService:TourService,
@@ -69,6 +74,7 @@ export class TourDetailPage{
   }
 
   ionViewDidEnter() {
+    this.tourService.clearAudios();
     this.co.showLoader();
     this.getTourInfo();
     this.tourService.getAudiosxTour(this.nid).subscribe(
@@ -177,7 +183,8 @@ export class TourDetailPage{
 
   /*METODOS PARA AUDIO PLAYER*/
   start(track:Track){
-      this.player = new Howl({
+     console.log('start',track);
+      let aux_track = new Howl({
         src:[this.co.PRIMARY_DOMAIN+track.field_media_audio_file],
         html5:true,
         onplay:() =>{
@@ -194,16 +201,19 @@ export class TourDetailPage{
           track.isPlaying=false;
         }
       });
-      return this.player;
+      return aux_track;
   }
 
   play(track:Howl){
-    track.play();
+    //track.play();
+    this.tourService.player = track;
+    this.tourService.player.play();
     this.updateProgress(track);
   }
 
   pause(track:Howl){
-    track.pause();
+    this.tourService.player.pause();
+    //track.pause();
   }
 
   //guardamos un play mas, al contador de plays

@@ -88,6 +88,7 @@ export class CouponValidatorPage  {
 
   //Store the validate coupon JCMV
   insert(coupon:string, data:any){
+      this.cartserv.emptyCart();
       this.addToCart(data);
       this.cartserv.insertSinglePurchase("checkout", data.title, coupon, false).subscribe(
         (res:any) => { 
