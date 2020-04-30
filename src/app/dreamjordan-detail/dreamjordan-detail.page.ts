@@ -28,7 +28,9 @@ export class DreamjordanDetailPage {
   id_tour:any;
   transaction_id:string = "prueba";
   current_tour:any;
-  audiosList:any;
+  //audiosList:any;
+  get audiosList(){ console.log(this.tourService.audiosArray); return this.tourService.audiosArray; }
+  set audiosList( val ){ this.tourService.audiosArray = val; }
   cart=[];
   cartItemCount: BehaviorSubject<number>;
   player:Howl = null;
@@ -58,6 +60,7 @@ export class DreamjordanDetailPage {
   }
 
   ionViewWillEnter() {
+    this.tourService.clearAudios();
     this.co.showLoader();
     this.tourService.getDreamJordanTourDetail(this.id_tour).subscribe(
       (res:any) => { 
@@ -282,7 +285,7 @@ export class DreamjordanDetailPage {
 
   /*METODOS PARA AUDIO PLAYER*/
   start(track:Track){
-    this.player = new Howl({
+    let aux_track  = new Howl({
       src:[this.co.PRIMARY_DOMAIN+track.field_media_audio_file],
       html5:true,
       onplay:() =>{
@@ -299,16 +302,17 @@ export class DreamjordanDetailPage {
         track.isPlaying=false;
       }
     });
-    return this.player;
+    return aux_track;
   }
 
     play(track:Howl){
-    track.play();
+      this.tourService.player = track;
+      this.tourService.player.play();
     this.updateProgress(track);
     }
 
     pause(track:Howl){
-    track.pause();
+    this.tourService.player.pause();
     }
 
     //guardamos un play mas, al contador de plays

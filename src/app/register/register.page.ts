@@ -53,7 +53,7 @@ export class RegisterPage implements OnInit {
     this.user.login(data.email,data.password).subscribe(
       (res:any) => { 
         this.co.hideLoader();
-        //this.user.account = res;
+        this.user.account = res;
         this.user.userData={
           user:res.current_user.name,
           pass:data.password
