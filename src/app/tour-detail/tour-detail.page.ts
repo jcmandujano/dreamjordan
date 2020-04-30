@@ -74,6 +74,7 @@ export class TourDetailPage{
   }
 
   ionViewDidEnter() {
+    this.tourService.clearAudios();
     this.co.showLoader();
     this.getTourInfo();
     this.tourService.getAudiosxTour(this.nid).subscribe(
