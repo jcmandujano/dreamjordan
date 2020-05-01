@@ -15,13 +15,14 @@ export class TourService {
   actualaudiosArray:any[] = [];
 
   set audiosArray(val){
+    console.log('setting audiolist');
     this.stopAllAudios();
     this.actualaudiosArray = val;
   }
   get audiosArray(){ return this.actualaudiosArray; }
 
   stopAllAudios(){
-    console.log('stopall');
+    console.log('stopall',this.audiosArray);
     if(this.audiosArray.length > 0)
     this.actualaudiosArray.forEach(element => {     
        element.audioelement.stop();   
@@ -30,6 +31,7 @@ export class TourService {
   }
 
   clearAudios(){
+    this.stopAllAudios();
     this.actualaudiosArray = [];
   }
 
