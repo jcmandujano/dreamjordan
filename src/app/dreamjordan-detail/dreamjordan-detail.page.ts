@@ -33,7 +33,7 @@ export class DreamjordanDetailPage {
   set audiosList( val ){ this.tourService.audiosArray = val; }
   cart=[];
   cartItemCount: BehaviorSubject<number>;
-  player:Howl = null;
+  //player:Howl = null;
 
   isValid : boolean = false;//cupon validado
   isActivated: boolean = false;//validado y activado
