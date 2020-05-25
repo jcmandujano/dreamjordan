@@ -7,6 +7,9 @@ import { IonicModule } from '@ionic/angular';
 import { MyCartPageRoutingModule } from './my-cart-routing.module';
 
 import { MyCartPage } from './my-cart.page';
+import { SharedModuleModule } from '../shared-module/shared-module.module';
+
+
 
 @NgModule({
   imports: [
@@ -15,7 +18,8 @@ import { MyCartPage } from './my-cart.page';
     ReactiveFormsModule,
     IonicModule,
     TranslateModule,
-    MyCartPageRoutingModule
+    MyCartPageRoutingModule,
+    SharedModuleModule
   ],
   declarations: [MyCartPage]
 })

@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { MyPurchasesPageRoutingModule } from './my-purchases-routing.module';
 
 import { MyPurchasesPage } from './my-purchases.page';
+import { SharedModuleModule } from '../shared-module/shared-module.module';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { MyPurchasesPage } from './my-purchases.page';
     FormsModule,
     IonicModule,
     TranslateModule,
-    MyPurchasesPageRoutingModule
+    MyPurchasesPageRoutingModule,
+    SharedModuleModule
   ],
   declarations: [MyPurchasesPage]
 })

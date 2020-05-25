@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { CouponValidatorPageRoutingModule } from './coupon-validator-routing.module';
 
 import { CouponValidatorPage } from './coupon-validator.page';
+import { SharedModuleModule } from '../shared-module/shared-module.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { CouponValidatorPage } from './coupon-validator.page';
     ReactiveFormsModule,
     IonicModule,
     TranslateModule,
-    CouponValidatorPageRoutingModule
+    CouponValidatorPageRoutingModule,
+    SharedModuleModule
   ],
   declarations: [CouponValidatorPage]
 })

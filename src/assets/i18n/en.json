@@ -35,7 +35,8 @@
         "isvalid_lab":"It is valid, if you activate it now you can only use it during the following",
         "days":"days", 
         "activate_now":"Activate Now",
-        "later":"Later"
+        "later":"Later",
+        "have_account":"I have an account"
     },
     "MY_PURCH":{
         "title":"My Purchases",
