@@ -102,7 +102,8 @@
         "confirm":"Confirmar Contraseña",
         "languaje":"Idioma",
         "ing":"Inglés",
-        "span":"Español"
+        "span":"Español",
+        "not_session":"No has iniciado sesión"
     },
     "SIDEMENU":{
         "about":"Sobre Dream Jordan",

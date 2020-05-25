@@ -7,6 +7,7 @@ import { CommonService } from '../api/common.service';
 import { StorageService } from '../storage.service';
 import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +25,7 @@ export class LoginPage {
 
   constructor(private router:Router, 
     public user : UserService, 
+    public alertController: AlertController, 
     private route: ActivatedRoute,
     public storage: StorageService,
     private cartserv : CartService,
@@ -79,5 +81,52 @@ export class LoginPage {
   cancel(){
     this.router.navigate(['/tabs/home']);
   }
+
+  async requestTempPass(){
+      const alert = await this.alertController.create({
+        header: 'Solicitar Cambio de Contraseña',
+        message: "Ingresa tu correo para enviarte las indicaciones para recuperar tu contraseña",
+        inputs: [
+          {
+            name: 'email',
+            placeholder: 'Email'
+          }
+        ],
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: () => {
+              console.log('Confirm Cancel');
+            }
+          }, {
+            text: 'Ok',
+            handler: (resp) => {
+              console.log('Confirm Ok', resp.email);
+              this.requestResetPassword(resp.email);
+            }
+          }
+        ]
+      });
+      await alert.present();
+  }
+
+  requestResetPassword(email:string){
+    this.co.showLoader();
+    this.user.requestResetPassword(email).subscribe((res:any)=>{
+      this.co.hideLoader();
+      console.log("respuesta",res);
+    },
+    (err:HttpErrorResponse) =>{
+      this.co.hideLoader();
+      var message = err.error.message;
+      if(err.status == 40){
+        message = 'Correo electrónico o contraseña no reconocidos.';
+      }
+      console.log("error",err);
+    });
+  }
+
 
 }
