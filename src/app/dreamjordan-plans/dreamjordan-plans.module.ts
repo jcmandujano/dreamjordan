@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { DreamjordanPlansPageRoutingModule } from './dreamjordan-plans-routing.module';
 
 import { DreamjordanPlansPage } from './dreamjordan-plans.page';
+import { SharedModuleModule } from '../shared-module/shared-module.module';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { DreamjordanPlansPage } from './dreamjordan-plans.page';
     FormsModule,
     IonicModule,
     TranslateModule,
-    DreamjordanPlansPageRoutingModule
+    DreamjordanPlansPageRoutingModule,
+    SharedModuleModule
   ],
   declarations: [DreamjordanPlansPage]
 })

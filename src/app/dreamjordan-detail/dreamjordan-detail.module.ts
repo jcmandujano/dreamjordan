@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { DreamjordanDetailPageRoutingModule } from './dreamjordan-detail-routing.module';
 
 import { DreamjordanDetailPage } from './dreamjordan-detail.page';
+import { SharedModuleModule } from '../shared-module/shared-module.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { DreamjordanDetailPage } from './dreamjordan-detail.page';
     ReactiveFormsModule,
     IonicModule,
     TranslateModule,
-    DreamjordanDetailPageRoutingModule
+    DreamjordanDetailPageRoutingModule,
+    SharedModuleModule
   ],
   declarations: [DreamjordanDetailPage]
 })

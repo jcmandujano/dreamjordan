@@ -36,13 +36,17 @@ export class RegisterPage implements OnInit {
         this.doLogin(data);
       },
       (err: HttpErrorResponse) => { 
-        //console.log(err);
+        
         this.co.hideLoader();
         var message = err.error.message;
+        console.log(err);
         if(err.status == 400){
           message = 'Correo electrónico o contraseña no reconocidos.';
         }
-        this.co.presentAlert('Error','¡UPS!, hubo un problema al registrar el usuario.',message);
+        if(err.status == 422){
+          message = 'El correo '+data.email+' ya se encuentra registrado.';
+        }
+        this.co.presentAlert('Error','',message);
       }
     );
     console.log("datos",data);
@@ -80,6 +84,10 @@ export class RegisterPage implements OnInit {
 
   cancel(){
     this.router.navigate(['/tabs/home']);
+  }
+
+  goToLogin(){
+    this.router.navigate(['/tabs/login']);
   }
 
 

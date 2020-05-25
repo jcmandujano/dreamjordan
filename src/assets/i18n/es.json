@@ -35,7 +35,8 @@
         "isvalid_lab":"Es valido, si lo activas ahora solo podrás usarlo durante los siguientes",
         "days":"días", 
         "activate_now":"Activar ahora",
-        "later":"Después"
+        "later":"Después",
+        "have_account":"Tengo una cuenta"
     },
     "MY_PURCH":{
         "title":"Mis Compras",

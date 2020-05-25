@@ -58,12 +58,16 @@ export class LoginPage {
         this.router.navigate(['/tabs/home']);
       },
       (err: HttpErrorResponse) => { 
+        console.log(err);
         this.co.hideLoader();
         var message = err.error.message;
         if(err.status == 400){
           message = 'Correo electrónico o contraseña no reconocidos.';
         }
-        this.co.presentAlert('Error','¡UPS!, hubo un problema al iniciar sesión.',message);
+        if(err.status == 403){
+          message = 'Demasiados intentos fallidos de inicio de sesión desde su dirección IP. Esta dirección IP está bloqueada temporalmente.';
+        }
+        this.co.presentAlert('Error','',message);
       }
     );
   }

@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { MyAccountPageRoutingModule } from './my-account-routing.module';
 
 import { MyAccountPage } from './my-account.page';
+import { SharedModuleModule } from '../shared-module/shared-module.module';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { MyAccountPage } from './my-account.page';
     FormsModule,
     IonicModule,
     TranslateModule,
-    MyAccountPageRoutingModule
+    MyAccountPageRoutingModule,
+    SharedModuleModule
   ],
   declarations: [MyAccountPage]
 })
