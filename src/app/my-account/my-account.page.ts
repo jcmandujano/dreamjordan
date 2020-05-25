@@ -13,6 +13,8 @@ export class MyAccountPage implements OnInit {
 
   lang:string="es";
   email:string="";
+  currentUser:any;
+  sessionState:boolean;
   constructor(
     public user : UserService, 
     public co: CommonService,
@@ -24,24 +26,21 @@ export class MyAccountPage implements OnInit {
   ionViewWillEnter(){
     
     console.log("Account",this.user.account);
-    if(this.user.account === undefined){
-      this.co.showLoader();
-      this.user.getLoginStatus().subscribe(res => { 
-        console.log("SESSION_STATUS",res);
-        this.user.account = res;
-        this.co.hideLoader();
-        if(this.user.account.current_user){
-          this.email = this.user.account.current_user.email;
-          console.log("Ya tenemos a alguieen1 ",res);
+    this.user.customLoginStatus().then(data => {
+      console.log("USUARIO DESDE MY ACCOUNT",data);
+      if(data!= null){
+        this.currentUser=data;
+      }
+      this.user.authenticationState.subscribe(state => {
+        if (state) {
+          this.sessionState=state;
+          console.log("user is logged in ", state);
+        } else {
+          this.sessionState=state;
+          console.log("user is NOT logged in ",state);
         }
-      },
-      (err: HttpErrorResponse) => { 
-        this.co.hideLoader();
-        console.log("error",err);
-      }); 
-    }else{
-      this.email = this.user.account.current_user.email;
-    }
+      });
+    });
 
   }
 

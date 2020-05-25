@@ -252,4 +252,47 @@ export class UserService {
       )
     );
   }
+
+  requestResetPassword(email:string){
+    let headers = new HttpHeaders({
+      'Content-Type':  'application/json'
+    });
+    let datos =  {
+      "mail":email
+    };
+    return this.http.post<any>(this.co.API+'/user/lost-password?_format=json',JSON.stringify(datos), { headers: headers }).pipe(
+      map(
+        res => { 
+          console.log("UPDATED LANG", res);
+          return res;
+        },
+        (err: HttpErrorResponse) => { 
+          console.log(err);
+        }
+      )
+    );
+  }
+
+  saveNewPassword(username:string, tempPass:string, newPass:string){
+    let headers = new HttpHeaders({
+      'Content-Type':  'application/json'
+    });
+    let datos =  {
+      "name": username,
+      "temp_pass":tempPass,
+      "new_pass":newPass
+    };
+    return this.http.post<any>(this.co.API+'/user/lost-password?_format=json',
+      JSON.stringify(datos), { headers: headers }).pipe(
+      map(
+        res => { 
+          console.log("UPDATED LANG", res);
+          return res;
+        },
+        (err: HttpErrorResponse) => { 
+          console.log(err);
+        }
+      )
+    );
+  }
 }

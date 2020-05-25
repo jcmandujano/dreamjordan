@@ -41,6 +41,8 @@ export class CommonService {
     await alert.present();
   }
 
+ 
+
   async showLoader(){
     if(this.loader == null){
       this.loader = await this.loadingCtrl.create({
