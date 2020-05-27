@@ -15,14 +15,14 @@ export class TourService {
   actualaudiosArray:any[] = [];
 
   set audiosArray(val){
-    console.log('setting audiolist');
+   // console.log('setting audiolist');
     this.stopAllAudios();
     this.actualaudiosArray = val;
   }
   get audiosArray(){ return this.actualaudiosArray; }
 
   stopAllAudios(){
-    console.log('stopall',this.audiosArray);
+    //console.log('stopall',this.audiosArray);
     if(this.audiosArray.length > 0)
     this.actualaudiosArray.forEach(element => {     
        element.audioelement.stop();   
@@ -71,6 +71,19 @@ export class TourService {
     }
 
     getAudiosxTour(nid){
+      return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/audiosxtour/'+ nid +'?_format=json').pipe(
+        map(
+          res => { 
+            return res;
+          },
+          (err: HttpErrorResponse) => { 
+            console.log(err);
+          }
+        )
+      );
+    }
+
+    getPurchasedAudios(nid){
       return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/audiosxtour/'+ nid +'?_format=json').pipe(
         map(
           res => { 

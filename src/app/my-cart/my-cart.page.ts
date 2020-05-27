@@ -43,7 +43,7 @@ export class MyCartPage {
     });
     this.cartItemCount = this.cartserv.getCartItemCount();
     this.cart = this.cartserv.getCart();
-    console.log("cart",this.cart);
+    //console.log("cart",this.cart);
   }
 
   //Delete selected item from the cart list JCMV
@@ -64,8 +64,9 @@ export class MyCartPage {
   insertCheckout(){
     //this.paypalWithPaypal();
     this.co.showLoader();
-    this.cartserv.insertSinglePurchase("checkout", "hola mundo", this.transaction_id, false).subscribe(
+    this.cartserv.insertSinglePurchase("checkout", this.currentUser.user+"-", this.transaction_id, false).subscribe(
       (res:any) => { 
+        //console.log("resp comopra",res);
         this.co.hideLoader();
         this.co.presentToast("La compra se relizo correctamente");
         //this.paypalWithPaypal();
@@ -94,7 +95,7 @@ export class MyCartPage {
           //payPalShippingAddressOption: 2 // PayPalShippingAddressOptionPayPal
         })).then(() => {
           //let paymentDetails = new PayPalPaymentDetails(this.cart);
-          let payment = new PayPalPayment(this.getTotal().toString(), 'MXN', 'Description', 'sale');
+          let payment = new PayPalPayment(this.getTotal().toString(), 'USD', 'Description', 'sale');
           this.payPal.renderSinglePaymentUI(payment).then((data) => {
             this.insertCheckout();
             console.log("se logro",data); 
@@ -110,9 +111,9 @@ export class MyCartPage {
           this.co.presentToast("Error en configuracion");
           // Error in configuration
         });
-      }, () => {
-        console.log("Error in initialization, maybe PayPal isn't supported or something else");
-        this.co.presentAlert("Error","","Error in initialization, maybe PayPal isn't supported or something else");
+      }, (err) => {
+        console.log("Error in initialization, maybe PayPal isn't supported or something else", err);
+        this.co.presentAlert("Error","","Error in initialization, maybe PayPal isn't supported or something else " +  JSON.stringify(err));
         // Error in initialization, maybe PayPal isn't supported or something else
       });
     }else{

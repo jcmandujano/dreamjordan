@@ -17,7 +17,7 @@ export class InterceptorService implements HttpInterceptor{
     let encabezados : any = {
       'Content-Type':'application/json'
     }
-    console.log("data",this.user);
+
     if(this.user.userData!=null){
       encabezados = {
         'Content-Type':'application/json',

@@ -44,7 +44,6 @@ export class TourDetailPage{
   isPurchased:boolean =false;
   /*variables para audio player*/
   activetrack : Track = null;
-
   isPlaying:boolean = false;
   playlist = new Array();
   @ViewChildren(IonRange) ranges : QueryList<IonRange>;
@@ -111,7 +110,7 @@ export class TourDetailPage{
   }
 
   prepareItems(){
-    console.log("AUDIOS",this.audiosArray);
+    //console.log("AUDIOS",this.audiosArray);
     this.audiosArray.forEach(originales => {
       originales.amount=1;
       originales.audioelement=this.start(originales);
@@ -130,7 +129,7 @@ export class TourDetailPage{
     this.tourService.getSingleTour(this.idPais,this.nid).subscribe(
       (res:any) => { 
         this.currentTour = res[0];
-        console.log("tour",this.currentTour);
+        //console.log("tour",this.currentTour);
       },
       (err: HttpErrorResponse) => { 
         //console.log(err);
@@ -150,7 +149,7 @@ export class TourDetailPage{
   getPurchasedItems(){
     this.user.getProcessedItems(this.nid, this.tipo_tour).subscribe(res =>{
       this.toursComprados=res;
-      console.log("hey",res);
+      //console.log("purchassed",res);
       if(res.length>0){
         this.isPurchased = true;
       }
@@ -178,12 +177,12 @@ export class TourDetailPage{
       data.mid = this.audiosArray[0].mid;
     }
     this.cartserv.addProduct(data);
-
+    this.cartserv.addAudios(this.audiosArray);
   }
 
   /*METODOS PARA AUDIO PLAYER*/
   start(track:Track){
-     console.log('start',track);
+     //console.log('start',track);
       let aux_track = new Howl({
         src:[this.co.PRIMARY_DOMAIN+track.field_media_audio_file],
         html5:true,
