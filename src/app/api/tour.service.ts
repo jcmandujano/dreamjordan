@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { CommonService } from '../api/common.service';
 import { TranslateService } from '@ngx-translate/core';
-import {Howl} from 'howler';
-import { TouchSequence } from 'selenium-webdriver';
+import { Howl } from 'howler';
+import { Observable } from 'rxjs';
+import { NetworkService, ConnectionStatus } from "./network.service";
 
 
 @Injectable({
@@ -15,14 +16,14 @@ export class TourService {
   actualaudiosArray:any[] = [];
 
   set audiosArray(val){
-    console.log('setting audiolist');
+   // console.log('setting audiolist');
     this.stopAllAudios();
     this.actualaudiosArray = val;
   }
   get audiosArray(){ return this.actualaudiosArray; }
 
   stopAllAudios(){
-    console.log('stopall',this.audiosArray);
+    //console.log('stopall',this.audiosArray);
     if(this.audiosArray.length > 0)
     this.actualaudiosArray.forEach(element => {     
        element.audioelement.stop();   
@@ -37,6 +38,7 @@ export class TourService {
 
   constructor( public http: HttpClient,
     public co: CommonService,
+    private network : NetworkService,
     private translate: TranslateService
     ) { }
 
@@ -83,17 +85,43 @@ export class TourService {
       );
     }
 
-    getPaises(){
-       return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/paises-app/?_format=json').pipe(
-         map(
-           res => { 
-             return res;
-           },
-           (err: HttpErrorResponse) => { 
-             console.log(err);
-           }
-         )
-       );
+    getPurchasedAudios(nid){
+      return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/audiosxtour/'+ nid +'?_format=json').pipe(
+        map(
+          res => { 
+            return res;
+          },
+          (err: HttpErrorResponse) => { 
+            console.log(err);
+          }
+        )
+      );
+    }
+
+    getPaises():Observable<any>{
+      if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Offline){
+        console.log("recuperando local");
+        fetch('../assets/data/localdata.json').then(res => res.json())
+        .then(json => {
+          console.log(json);
+          return json;
+        },
+        (err: HttpErrorResponse) => { 
+          console.log(err);
+        });
+      }else{
+        return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/paises-app/?_format=json').pipe(
+          map(
+            res => { 
+              return res;
+            },
+            (err: HttpErrorResponse) => { 
+              console.log(err);
+            }
+          )
+        );
+      }
+       
      }
 
     getDreamJordanTours(){

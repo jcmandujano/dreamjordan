@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CartService, Product } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
 import { CommonService } from '../api/common.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../api/user.service';
-import { PayPal, PayPalPayment, PayPalConfiguration, PayPalPaymentDetails } from '@ionic-native/paypal/ngx';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Braintree, PaymentUIOptions, PaymentUIResult } from '@ionic-native/braintree/ngx';
 import {Router} from '@angular/router';
+
 
 @Component({
   selector: 'app-my-cart',
@@ -23,8 +23,8 @@ export class MyCartPage {
   constructor( private cartserv : CartService,
     public co: CommonService,
     public user : UserService,
-    private router:Router,
-    private payPal: PayPal) { }
+    private braintree: Braintree,
+    private router:Router) { }
 
   ionViewDidEnter(){
     this.user.customLoginStatus().then(data => {
@@ -43,7 +43,7 @@ export class MyCartPage {
     });
     this.cartItemCount = this.cartserv.getCartItemCount();
     this.cart = this.cartserv.getCart();
-    console.log("cart",this.cart);
+    //console.log("cart",this.cart);
   }
 
   //Delete selected item from the cart list JCMV
@@ -62,10 +62,10 @@ export class MyCartPage {
   }
 
   insertCheckout(){
-    //this.paypalWithPaypal();
     this.co.showLoader();
-    this.cartserv.insertSinglePurchase("checkout", "hola mundo", this.transaction_id, false).subscribe(
+    this.cartserv.insertSinglePurchase("checkout", this.currentUser.user+"-", this.transaction_id, false).subscribe(
       (res:any) => { 
+        //console.log("resp comopra",res);
         this.co.hideLoader();
         this.co.presentToast("La compra se relizo correctamente");
         //this.paypalWithPaypal();
@@ -82,46 +82,29 @@ export class MyCartPage {
     );
   }
 
-  paypalWithPaypal(){
-    if(this.sessionState){
-      this.payPal.init({
-        PayPalEnvironmentProduction: 'ATNskmqDdI_ouR_lIK8vgq2VZWOj3pHdAUz8RNy3CtEVYOiZbrVWohvnZeBqqaFXtsRDc1E36J1E26fx',
-        PayPalEnvironmentSandbox: 'ATNskmqDdI_ouR_lIK8vgq2VZWOj3pHdAUz8RNy3CtEVYOiZbrVWohvnZeBqqaFXtsRDc1E36J1E26fx'
-      }).then(() => {
-        // Environments: PayPalEnvironmentNoNetwork, PayPalEnvironmentSandbox, PayPalEnvironmentProduction
-        this.payPal.prepareToRender('PayPalEnvironmentSandbox', new PayPalConfiguration({
-          // Only needed if you get an "Internal Service Error" after PayPal login!
-          //payPalShippingAddressOption: 2 // PayPalShippingAddressOptionPayPal
-        })).then(() => {
-          //let paymentDetails = new PayPalPaymentDetails(this.cart);
-          let payment = new PayPalPayment(this.getTotal().toString(), 'MXN', 'Description', 'sale');
-          this.payPal.renderSinglePaymentUI(payment).then((data) => {
-            this.insertCheckout();
-            console.log("se logro",data); 
-            this.emptyCurrentCart();
-            this.router.navigate(['/tabs/my-purchases']);
-            // Successfully paid
-          }, () => {
-            console.log("cancelado");
-            // Error or render dialog closed without being successful
-          });
-        }, () => {
-          console.log("error en configuracion");
-          this.co.presentToast("Error en configuracion");
-          // Error in configuration
-        });
-      }, () => {
-        console.log("Error in initialization, maybe PayPal isn't supported or something else");
-        this.co.presentAlert("Error","","Error in initialization, maybe PayPal isn't supported or something else");
-        // Error in initialization, maybe PayPal isn't supported or something else
-      });
-    }else{
-      this.co.presentAlert("Error","","Necesitas acceder para poder comprar contenido.");
-      this.router.navigate(['/tabs/login']);
+  braintreePayment(){
+    const BRAINTREE_TOKEN = 'sandbox_fwz2cyc9_prmgr28yvpr28pqw';
+    const paymentOptions: PaymentUIOptions = {
+      amount: '14.99',
+      primaryDescription: 'Your product or service (per /item, /month, /week, etc)',
     }
-    
-  }
 
+    this.braintree.initialize(BRAINTREE_TOKEN)
+    .then(() => this.braintree.presentDropInPaymentUI(paymentOptions))
+    .then((result: PaymentUIResult) => {
+      console.log("return ",result)
+      if (result.userCancelled) {
+        console.log("User cancelled payment dialog.");
+      } else {
+        console.log("User successfully completed payment!");
+        console.log("Payment Nonce: " + result.nonce);
+        console.log("Payment Result.", result);
+      }
+    })
+    .catch((error: string) => console.error(error));
+    }
+
+  
   goHome(){
     this.router.navigate(['/']);
   }

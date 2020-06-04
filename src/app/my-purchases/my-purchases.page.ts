@@ -30,6 +30,8 @@ export class MyPurchasesPage  {
         this.co.hideLoader();
         this.myPurchases = res;
         console.table(this.myPurchases);
+        //this.myPurchases = this.preparePurchases(res);
+        //console.table(this.myPurchases);
       },
       (err: HttpErrorResponse) => { 
         //console.log(err);
@@ -37,7 +39,23 @@ export class MyPurchasesPage  {
         var message = err.error.message;
         this.co.presentAlert('Error','Hubo un problema al recuperar tus compras realizadas.',message);
       }
-    );
+    );  
+  }
+
+  preparePurchases(purchases){
+    let temp = [];
+    for(let o of purchases){
+      temp.push(o.tour);
+    }
+     return temp.filter(function(item,index) {
+        console.log(
+          item,
+          index,
+          temp.indexOf(item),
+          temp.indexOf(item)===index
+        );
+        return temp.indexOf(item)===index
+    });
   }
 
   validateCoupon(){
