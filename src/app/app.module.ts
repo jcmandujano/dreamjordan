@@ -15,6 +15,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { InterceptorService } from './api/interceptor.service';
+import { ApplePay } from '@ionic-native/apple-pay/ngx';
+
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -41,6 +43,7 @@ export function createTranslateLoader(http: HttpClient) {
     HttpClient,
     NativeStorage,
     SplashScreen,
+    ApplePay,
     File,
     FileTransfer,
     PayPal,

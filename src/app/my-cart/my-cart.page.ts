@@ -7,6 +7,8 @@ import { UserService } from '../api/user.service';
 import { PayPal, PayPalPayment, PayPalConfiguration, PayPalPaymentDetails } from '@ionic-native/paypal/ngx';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {Router} from '@angular/router';
+import { ApplePay } from '@ionic-native/apple-pay/ngx';
+
 
 @Component({
   selector: 'app-my-cart',
@@ -19,10 +21,20 @@ export class MyCartPage {
   currentUser:any;
   sessionState:boolean;
   transaction_id: string = "Test";
-  
+  /*APPLE PAY*/
+  supportedNetworks: any = ['visa', 'amex'];
+  merchantCapabilities: any = ['debit', 'credit'];
+  merchantIdentifier: string = 'merchant.com.dreamjordan.app';
+  currencyCode: string = 'USD';
+  countryCode: string = 'US';
+  billingAddressRequirement: any = ['juan carlos', 'carlosmandujano.v@gmail.com', '5578756266'];
+  shippingAddressRequirement: any = 'none';
+  shippingType: string = "shipping"
+  /*APPLE PAY*/
   constructor( private cartserv : CartService,
     public co: CommonService,
     public user : UserService,
+    public applePay :ApplePay,
     private router:Router,
     private payPal: PayPal) { }
 
@@ -80,6 +92,63 @@ export class MyCartPage {
         this.co.presentAlert('Error','Hubo un problema al iniciar sesión.',message);
       }
     );
+  }
+
+  async checkApplePayValid() {
+    await this.applePay.canMakePayments().then((message) => {
+      console.log(message);
+      this.co.presentAlert("","",message);
+      // Apple Pay is enabled. Expect:
+      // 'This device can make payments.'
+    }).catch((error) => {
+      console.log(error);
+      this.co.presentAlert("","",error);
+      // There is an issue, examine the message to see the details, will be:
+      // 'This device cannot make payments.''
+      // 'This device can make payments but has no supported cards'
+    });
+  }
+
+  async payWithApplePay() {
+    try {
+      let order: any = {
+        items: this.cart,
+        shippingMethods: [],
+        merchantIdentifier: this.merchantIdentifier,
+        currencyCode: this.currencyCode,
+        countryCode: this.countryCode,
+        billingAddressRequirement: this.billingAddressRequirement,
+        shippingAddressRequirement: this.shippingAddressRequirement,
+        shippingType: this.shippingType,
+        merchantCapabilities: this.merchantCapabilities,
+        supportedNetworks: this.supportedNetworks
+      }
+      this.applePay.makePaymentRequest(order).then(message => {
+        console.log(message);
+        this.applePay.completeLastTransaction('success');
+      }).catch((error) => {
+        console.log(error);
+        this.applePay.completeLastTransaction('failure');
+        this.co.presentAlert("","",error);
+      });
+
+      // In real payment, this step should be replaced by an actual payment call to payment provider
+      // Here is an example implementation:
+
+      // MyPaymentProvider.authorizeApplePayToken(token.paymentData)
+      //    .then((captureStatus) => {
+      //        // Displays the 'done' green tick and closes the sheet.
+      //        ApplePay.completeLastTransaction('success');
+      //    })
+      //    .catch((err) => {
+      //        // Displays the 'failed' red cross.
+      //        ApplePay.completeLastTransaction('failure');
+      //    });
+
+    } catch {
+      // handle payment request error
+      // Can also handle stop complete transaction but these should normally not occur
+    }
   }
 
   paypalWithPaypal(){
