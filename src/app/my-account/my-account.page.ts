@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { UserService } from '../api/user.service';
 import { CommonService } from '../api/common.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -9,7 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './my-account.page.html',
   styleUrls: ['./my-account.page.scss'],
 })
-export class MyAccountPage implements OnInit {
+export class MyAccountPage  {
 
   lang:string="es";
   email:string="";
@@ -20,16 +20,13 @@ export class MyAccountPage implements OnInit {
     public co: CommonService,
     private translateService: TranslateService) { }
 
-  ngOnInit() {
-  }
-
   ionViewWillEnter(){
     
-    console.log("Account",this.user.account);
     this.user.customLoginStatus().then(data => {
       console.log("USUARIO DESDE MY ACCOUNT",data);
       if(data!= null){
         this.currentUser=data;
+        console.log("Account",this.currentUser);
       }
       this.user.authenticationState.subscribe(state => {
         if (state) {
@@ -45,12 +42,12 @@ export class MyAccountPage implements OnInit {
   }
 
   choose() {
-    console.log("IDIOMAAA",this.lang);
-    if(this.user.account.current_user!=null){
+  /*   console.log("IDIOMAAA",this.lang);
+    if(this.currentUser !=null){
       this.updateLang();
-    }else{
+    }else{ */
       this.translateService.use(this.lang);
-    }
+    //}
   }
 
   updateLang(){

@@ -15,8 +15,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { InterceptorService } from './api/interceptor.service';
-import { ApplePay } from '@ionic-native/apple-pay/ngx';
-
+import { Network } from "@ionic-native/network/ngx";
+import { Braintree } from '@ionic-native/braintree/ngx'; //ios only
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -27,6 +27,7 @@ export function createTranslateLoader(http: HttpClient) {
   entryComponents: [],
   imports: [ BrowserModule, 
     HttpClientModule, 
+
     IonicStorageModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
@@ -43,10 +44,11 @@ export function createTranslateLoader(http: HttpClient) {
     HttpClient,
     NativeStorage,
     SplashScreen,
-    ApplePay,
+    Braintree, //ios only
+    PayPal,
     File,
     FileTransfer,
-    PayPal,
+    Network,
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

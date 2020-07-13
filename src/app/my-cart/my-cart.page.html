@@ -13,25 +13,28 @@
       <p class="file-tour-name">{{item.name}}  <!-- <span class="file-tour-desc">País completo</span> --></p>
     </ion-col >
     <ion-col size="2" class="centered">
-      <span class="price">{{item.field_costo | currency:'USD'}}</span>
+      <span class="price">{{item.field_costo | currency:'USD'}} USD</span>
     </ion-col>
     <ion-col size="1" class="centered">
         <ion-icon (click)="removeCartItem(item)" class="trashy" src="./assets/img/trash.svg" ></ion-icon>
       </ion-col>
   </ion-row>
     <div class="resume">
-      <p class="resume-total">Total  <span class="price">{{getTotal() | currency:'USD'}}</span></p>
+      <p class="resume-total">Total  <span class="price">{{getTotal() | currency:'USD'}} USD</span></p>
     </div>
     <div class="row">
       <div class="column">
         <ion-button class="cancel-btn" (click)="goHome()">{{ 'CART.keep' | translate }}</ion-button>
       </div>
       <div class="column">
-        <ion-button (click)="payWithApplePay()" [disabled]="cart.length==0" class="primary">{{ 'CART.pay' | translate }}</ion-button>
+        <ion-button (click)="paypalWithPaypal()" [disabled]="cart.length==0" class="primary">{{ 'CART.pay' | translate }}</ion-button>
       </div>
-      <div class="column">
-        <ion-button (click)="checkApplePayValid()" [disabled]="cart.length==0" class="primary">puedo pagar?</ion-button>
-      </div>
+       <div class="column">
+        <ion-button (click)="braintreePayment()" class="primary">BRAINTREE</ion-button>
+      </div> 
+      <!-- <div class="column">
+        <ion-button (click)="paypalWithPaypal()" class="primary">PAYPAL</ion-button>
+      </div> -->
       <!-- <div class="column">
         <ion-button (click)="paypal()" class="primary">testpaypal</ion-button>
       </div> -->

@@ -32,7 +32,7 @@ export class CountriesPage {
     this.tourServ.getPaises().subscribe(res => { 
       this.co.hideLoader();
       this.paises = res;
-      //console.log("paises",res);
+      console.log("paises",res);
     },
     (err: HttpErrorResponse) => { 
       this.co.hideLoader();

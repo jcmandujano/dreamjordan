@@ -56,7 +56,7 @@ export class HomePage  {
       this.cart = this.cartserv.getCart();
      }
      
-  //valida si existe un usuario logeado JCMV 20012020
+  //valida si existe un usuario logeado JCMV 20012020 
   ionViewWillEnter(){
     this.user.customLoginStatus().then(data => {
       //console.log("USUARIO DESDE TABS",data);
@@ -66,17 +66,15 @@ export class HomePage  {
       this.user.authenticationState.subscribe(state => {
         if (state) {
           this.sessionState=state;
-          //console.log("user is logged in ", state);
         } else {
           this.sessionState=state;
-          //console.log("user is NOT logged in ",state);
         }
       });
     });
     this.recuperaPaises();
   }
 
-  recuperaPaises(){
+  recuperaPaises(){//offline check jcmv
     //recuperamos paises
     this.co.showLoader();
     this.tourService.getPaises().pipe(
@@ -93,7 +91,7 @@ export class HomePage  {
     });
   }
 
-  recuperaDreamJordan(){
+  recuperaDreamJordan(){//offline check jcmv
     //this.co.showLoader();
     this.tourService.getDreamJordanTours().pipe(
       finalize(() => {
@@ -102,13 +100,14 @@ export class HomePage  {
       }),
     ).subscribe(res => { 
       this.DreamJordanTours = res
+      console.log("getDreamJordanTours",res);
     },
     (err: HttpErrorResponse) => { 
       console.log("error",err);
     });
   }
 
-  recuperaSliderTours(){
+  recuperaSliderTours(){//offline check jcmv
     this.tourService.getSliderTours().pipe(
       finalize(() => {
         this.sliderEnded = true;
@@ -116,6 +115,7 @@ export class HomePage  {
       }),
     ).subscribe(res => { 
       this.sliderTours = res;
+      console.log("getSliderTours",res);
     },
     (err: HttpErrorResponse) => { 
       console.log("error",err);

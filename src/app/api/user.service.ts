@@ -54,19 +54,6 @@ export class UserService {
     private translate: TranslateService
   ) { }
 
-  getLoginStatus(){
-    return this.http.get<Account>(this.co.API+'user/me/null?_format=json').pipe(
-      map(
-        res => { 
-          return res;
-        },
-        (err: HttpErrorResponse) => { 
-          //console.log("provema",err);
-        }
-      )
-    );
-  }
-
   customLoginStatus(){
     return this.storage.getObject("userdata").then(data => {
      if(data!=null){
@@ -160,7 +147,7 @@ export class UserService {
 
   getPurchases(){
     let cartiems=new Array;
-    return this.http.get<Array<any>>(this.co.API+'/user/checkout_app?_format=json').pipe(
+    return this.http.get<Array<any>>(this.co.API+'user/checkout_app?_format=json').pipe(
       map(
         res => { 
           let objeto = new Array;

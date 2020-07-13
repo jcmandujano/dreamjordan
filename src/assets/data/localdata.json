@@ -1,0 +1,26 @@
+{
+    "countries":[
+        {
+            "id":"0",
+            "name":"Jordania",
+            "img":"../assets/img/local/dummy.jpg"
+        },
+        {
+            "id":"0",
+            "name":"Israel",
+            "img":"../assets/img/local/dummy.jpg"
+        }
+    ],
+    "banner_home":[
+        {
+            "id":"0",
+            "name":"Jordania",
+            "img":"../assets/img/local/dummy.jpg"
+        },
+        {
+            "id":"0",
+            "name":"Israel",
+            "img":"../assets/img/local/dummy.jpg"
+        }
+    ]
+}
