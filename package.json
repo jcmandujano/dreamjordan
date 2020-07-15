@@ -35,8 +35,7 @@
     "@ngx-translate/http-loader": "^4.0.0",
     "card.io.cordova.mobilesdk": "^2.1.0",
     "com.paypal.cordova.mobilesdk": "^3.5.0",
-    "cordova-android": "^9.0.0",
-    "cordova-ios": "^5.1.1",
+    "cordova-android": "^8.1.0",
     "cordova-plugin-androidx": "^2.0.0",
     "cordova-plugin-androidx-adapter": "^1.1.1",
     "cordova-plugin-braintree": "git+https://github.com/engineerapart/cordova-plugin-braintree.git",
@@ -99,11 +98,9 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-braintree": {},
       "cordova-plugin-androidx": {},
-      "cordova-plugin-androidx-adapter": {},
-      "cordova-plugin-crosswalk-webview": {}
+      "cordova-plugin-androidx-adapter": {}
     },
     "platforms": [
-      "ios",
       "android"
     ]
   }

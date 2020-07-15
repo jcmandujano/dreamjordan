@@ -74,29 +74,32 @@ export class HomePage  {
     this.recuperaPaises();
   }
 
-  recuperaPaises(){//offline check jcmv
+  async recuperaPaises(){//offline check jcmv
     //recuperamos paises
-    this.co.showLoader();
+    console.log('recuperando paises');
+    await this.co.showLoader();
     this.tourService.getPaises().pipe(
       finalize(() => {
         this.countriesEnded = true;
       }),
-    ).subscribe(res => { 
+    ).subscribe(async res => { 
         this.paises = res;
-        this.recuperaDreamJordan();
-        this.recuperaSliderTours();
+        await this.recuperaDreamJordan();
+        await this.recuperaSliderTours();
+        this.co.hideLoader();
     },
     (err: HttpErrorResponse) => { 
       console.log("error",err);
+      this.co.hideLoader();
     });
   }
 
-  recuperaDreamJordan(){//offline check jcmv
+  async recuperaDreamJordan(){//offline check jcmv
     //this.co.showLoader();
-    this.tourService.getDreamJordanTours().pipe(
+    await this.tourService.getDreamJordanTours().pipe(
       finalize(() => {
         this.jdtoursEnded = true;
-        this.co.hideLoader();
+     
       }),
     ).subscribe(res => { 
       this.DreamJordanTours = res
@@ -104,21 +107,25 @@ export class HomePage  {
     },
     (err: HttpErrorResponse) => { 
       console.log("error",err);
+    
     });
   }
 
-  recuperaSliderTours(){//offline check jcmv
-    this.tourService.getSliderTours().pipe(
+  async recuperaSliderTours(){//offline check jcmv
+    console.log('recupera slidersTours');
+    await this.tourService.getSliderTours().pipe(
       finalize(() => {
+        console.log('llamando finalize sliderstours');
         this.sliderEnded = true;
-        this.co.hideLoader();
+      
       }),
     ).subscribe(res => { 
+      console.log('res de slidertours', res);
       this.sliderTours = res;
-      console.log("getSliderTours",res);
     },
     (err: HttpErrorResponse) => { 
       console.log("error",err);
+     
     });
   }
 
