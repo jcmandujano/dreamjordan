@@ -40,7 +40,7 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
       this.user.customLoginStatus().then(data => {
-        console.log("USUARIO DESDE APP.COMPONENT",data);
+        //console.log("USUARIO DESDE APP.COMPONENT",data);
         if(data!= null){
           this.user.userData={
             user:data.user,
@@ -53,10 +53,10 @@ export class AppComponent {
         this.user.authenticationState.subscribe(state => {
           if (state) {
             this.sessionState=state;
-            console.log("user is logged in ", state);
+            //console.log("user is logged in ", state);
           } else {
             this.sessionState=state;
-            console.log("user is NOT logged in ",state);
+            //console.log("user is NOT logged in ",state);
           }
         });
       });

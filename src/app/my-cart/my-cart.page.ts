@@ -4,9 +4,14 @@ import { BehaviorSubject } from 'rxjs';
 import { CommonService } from '../api/common.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../api/user.service';
+<<<<<<< HEAD
+=======
+import { Braintree, PaymentUIOptions, PaymentUIResult } from '@ionic-native/braintree/ngx';
+>>>>>>> master
 import {Router} from '@angular/router';
 import { Braintree, ApplePayOptions, PaymentUIOptions, PaymentUIResult } from '@ionic-native/braintree/ngx'; //braintree ios only
 import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';//paypal ios only
+
 
 
 @Component({
@@ -30,6 +35,10 @@ export class MyCartPage {
     private payPal: PayPal,//Paypal ios only
     private braintree: Braintree,//Braintree ios only
     public user : UserService,
+<<<<<<< HEAD
+=======
+    private braintree: Braintree,
+>>>>>>> master
     private router:Router) { }
 
   ionViewDidEnter(){
@@ -49,7 +58,7 @@ export class MyCartPage {
     });
     this.cartItemCount = this.cartserv.getCartItemCount();
     this.cart = this.cartserv.getCart();
-    console.log("cart",this.cart);
+    //console.log("cart",this.cart);
   }
 
   //Delete selected item from the cart list JCMV
@@ -68,10 +77,14 @@ export class MyCartPage {
   }
 
   insertCheckout(){
-    //this.paypalWithPaypal();
     this.co.showLoader();
+<<<<<<< HEAD
     this.cartserv.insertSinglePurchase("checkout", "Dream Jordan", this.transaction_id, false).subscribe(
+=======
+    this.cartserv.insertSinglePurchase("checkout", this.currentUser.user+"-", this.transaction_id, false).subscribe(
+>>>>>>> master
       (res:any) => { 
+        //console.log("resp comopra",res);
         this.co.hideLoader();
         this.co.presentToast("La compra se relizo correctamente");
         //this.paypalWithPaypal();
@@ -88,6 +101,7 @@ export class MyCartPage {
     );
   }
 
+<<<<<<< HEAD
   braintreePayment(){//braintree ios only
     if(this.sessionState){
       let totalAmount = this.getTotal();
@@ -159,6 +173,31 @@ export class MyCartPage {
     
   }
  
+=======
+  braintreePayment(){
+    const BRAINTREE_TOKEN = 'sandbox_fwz2cyc9_prmgr28yvpr28pqw';
+    const paymentOptions: PaymentUIOptions = {
+      amount: '14.99',
+      primaryDescription: 'Your product or service (per /item, /month, /week, etc)',
+    }
+
+    this.braintree.initialize(BRAINTREE_TOKEN)
+    .then(() => this.braintree.presentDropInPaymentUI(paymentOptions))
+    .then((result: PaymentUIResult) => {
+      console.log("return ",result)
+      if (result.userCancelled) {
+        console.log("User cancelled payment dialog.");
+      } else {
+        console.log("User successfully completed payment!");
+        console.log("Payment Nonce: " + result.nonce);
+        console.log("Payment Result.", result);
+      }
+    })
+    .catch((error: string) => console.error(error));
+    }
+
+  
+>>>>>>> master
   goHome(){
     this.router.navigate(['/']);
   }

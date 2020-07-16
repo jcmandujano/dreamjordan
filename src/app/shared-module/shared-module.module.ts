@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ToolbarComponent } from '../componets/toolbar/toolbar.component';
+import { ToolbarComponent } from '../components/toolbar/toolbar.component';
 import { IonicModule } from '@ionic/angular';
 
 

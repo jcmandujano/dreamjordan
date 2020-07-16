@@ -4,7 +4,9 @@ import { map } from 'rxjs/operators';
 import { CommonService } from '../api/common.service';
 import { TranslateService } from '@ngx-translate/core';
 import {StorageService} from '../storage.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { NetworkService, ConnectionStatus } from "./network.service";
+
 
 export interface Account{
   csrf_token: string;
@@ -50,11 +52,17 @@ export class UserService {
   constructor(
     public http: HttpClient,
     public co: CommonService,
+    private network : NetworkService,
     public storage : StorageService,
     private translate: TranslateService
   ) { }
 
   customLoginStatus(){
+    if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Offline){
+      console.log("Estamos offline");
+    }else{
+      console.log("estamos online");
+    }
     return this.storage.getObject("userdata").then(data => {
      if(data!=null){
       this.authenticationState.next(true);
@@ -132,7 +140,12 @@ export class UserService {
       );
   }
 
-  getPaisById(idPais){
+  getPaisById(idPais):Observable<any>{
+    if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Offline){
+      console.log("Estamos offline");
+    }else{
+      console.log("estamos online");
+    }
     return this.http.get<Array<any>>(this.co.API+'/'+this.translate.currentLang+'/api/paises-app/'+idPais+'?_format=json').pipe(
       map(
         res => { 

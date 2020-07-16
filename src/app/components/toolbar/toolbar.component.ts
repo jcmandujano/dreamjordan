@@ -21,7 +21,6 @@ export class ToolbarComponent implements OnInit {
     private cartserv : CartService) {
       this.cartItemCount = this.cartserv.getCartItemCount();
       this.cart = this.cartserv.getCart();
-      console.log("Hola mama esto es angular");
      }
      
   

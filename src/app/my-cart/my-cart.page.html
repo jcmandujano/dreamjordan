@@ -27,7 +27,7 @@
         <ion-button class="cancel-btn" (click)="goHome()">{{ 'CART.keep' | translate }}</ion-button>
       </div>
       <div class="column">
-        <ion-button (click)="paypalWithPaypal()" [disabled]="cart.length==0" class="primary">{{ 'CART.pay' | translate }}</ion-button>
+        <ion-button (click)="braintreePayment()" [disabled]="cart.length==0" class="primary">{{ 'CART.pay' | translate }}</ion-button>
       </div>
        <div class="column">
         <ion-button (click)="braintreePayment()" class="primary">BRAINTREE</ion-button>

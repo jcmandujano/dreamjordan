@@ -6,7 +6,7 @@ import { UserService } from '../api/user.service';
 import { map } from 'rxjs/operators';
 import { CommonService } from '../api/common.service';
 import {StorageService, Item} from '../api/storage.service';
-
+import { TourService } from './tour.service';
 export interface Product{
   nid:number;
   mid:number;
@@ -23,6 +23,7 @@ export interface Product{
 export class CartService {
   data : Product[]; 
   itemsCarrito :any;
+  private audioNodes = [];
   private cart = [];
   private cartItemCount = new BehaviorSubject(0);
   
@@ -46,6 +47,16 @@ export class CartService {
 
   setCartItemCount(value){
     this.cartItemCount.next(value);
+  }
+
+  addAudios(audios){
+    let isFounded = this.audioNodes.some( ai => audios.includes(ai) );
+    if (!isFounded){
+      for(let i of audios){
+        this.audioNodes.push(i);
+      }
+    }
+    console.log("audios al momento",this.audioNodes);
   }
 
   addProduct(product){
@@ -81,6 +92,7 @@ export class CartService {
   insertSinglePurchase(type:string, title:string, trans_id:string, status:boolean){
     let today = this.getCurrentDate();
     this.itemsCarrito = this.buildBodyJson();
+    console.log("que se va", this.itemsCarrito);
     let headers = new HttpHeaders({
       'Content-Type':  'application/json'
     });
@@ -112,7 +124,7 @@ export class CartService {
   buildBodyJson(){
     let item :any;
     let itemsCarrito = [];
-    this.cart.forEach( function(obj) {
+    this.audioNodes.forEach( function(obj) {
       item = {
         "type": "carrito_compra",
         "title":obj.name,
