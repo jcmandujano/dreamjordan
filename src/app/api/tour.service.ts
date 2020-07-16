@@ -101,18 +101,22 @@ export class TourService {
     getPaises():Observable<any>{
       if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Offline){
         console.log("recuperando local");
-        fetch('../assets/data/localdata.json').then(res => res.json())
-        .then(json => {
-          console.log(json);
-          return json;
-        },
-        (err: HttpErrorResponse) => { 
-          console.log(err);
-        });
-      }else{
-        return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/paises-app/?_format=json').pipe(
+        return this.http.get('../assets/data/paises.json').pipe(
           map(
             res => { 
+              console.log("local json",res["countries"]);
+              return res;
+            },
+            (err: HttpErrorResponse) => { 
+              console.log(err);
+            }
+          )
+        );
+      }else{
+        return this.http.get(this.co.API+this.translate.currentLang+'/api/paises-app/?_format=json').pipe(
+          map(
+            res => { 
+              console.log("paises");
               return res;
             },
             (err: HttpErrorResponse) => { 
@@ -125,29 +129,61 @@ export class TourService {
      }
 
     getDreamJordanTours(){
-      return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/djtours-app/1/?_format=json').pipe(
-        map(
-          res => { 
-            return res;
-          },
-          (err: HttpErrorResponse) => { 
-            console.log(err);
-          }
-        )
-      );
+      if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Offline){
+        //console.log("recuperando local");
+        return this.http.get('../assets/data/djtours.json').pipe(
+          map(
+            res => { 
+              console.log("local json",res["countries"]);
+              return res;
+            },
+            (err: HttpErrorResponse) => { 
+              console.log(err);
+            }
+          )
+        );
+      }else{
+        return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/djtours-app/1/?_format=json').pipe(
+          map(
+            res => { 
+              return res;
+            },
+            (err: HttpErrorResponse) => { 
+              console.log(err);
+            }
+          )
+        );
+      }
+      
     }
 
     getSliderTours(){
-      return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/home-tours/?_format=json').pipe(
-        map(
-          res => { 
-            return res;
-          },
-          (err: HttpErrorResponse) => { 
-            console.log(err);
-          }
-        )
-      );
+      if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Offline){
+        //console.log("recuperando local");
+        return this.http.get('../assets/data/slider.json').pipe(
+          map(
+            res => { 
+              console.log("local json",res["countries"]);
+              return res;
+            },
+            (err: HttpErrorResponse) => { 
+              console.log(err);
+            }
+          )
+        );
+      }else{
+        return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/home-tours/?_format=json').pipe(
+          map(
+            res => { 
+              return res;
+            },
+            (err: HttpErrorResponse) => { 
+              console.log(err);
+            }
+          )
+        );
+      }
+      
     }
     getDreamJordanTourDetail(nid){
       return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/djtours-app/1/'+nid+'?_format=json').pipe(
