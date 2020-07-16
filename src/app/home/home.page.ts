@@ -11,6 +11,7 @@ import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
 import { TranslateService } from '@ngx-translate/core';
 import { finalize } from 'rxjs/operators';
 import { StorageService } from '../storage.service';
+import { NetworkService, ConnectionStatus } from "../../app/api/network.service";
 
 @Component({
   selector: 'app-home',
@@ -99,7 +100,6 @@ export class HomePage  {
     await this.tourService.getDreamJordanTours().pipe(
       finalize(() => {
         this.jdtoursEnded = true;
-     
       }),
     ).subscribe(res => { 
       this.DreamJordanTours = res
@@ -148,6 +148,7 @@ export class HomePage  {
   }
 
   tourDetail(nid, tid, djtour){
+
     if(djtour == 1){
       this.router.navigate(['/tabs/dreamjordan-detail/'+nid]);
     }else{

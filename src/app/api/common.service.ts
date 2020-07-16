@@ -44,7 +44,6 @@ export class CommonService {
  
 
   async showLoader(){
-    console.log('calling showloader',this.loader);
     if(this.loader == null){
       this.loader = await this.loadingCtrl.create({
         spinner: 'crescent'
@@ -54,9 +53,7 @@ export class CommonService {
   }
 
   hideLoader(){
-    console.log('calling hide loader',this.loader);
     if(this.loader != null){
-      console.log('liader is not null');
       this.loader.dismiss();
       this.loader = null;
     }

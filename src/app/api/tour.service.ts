@@ -126,7 +126,7 @@ export class TourService {
         );
       }
        
-     }
+     }l
 
     getDreamJordanTours(){
       if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Offline){
