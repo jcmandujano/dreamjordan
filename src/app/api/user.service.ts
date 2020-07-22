@@ -244,7 +244,7 @@ export class UserService {
   }
 
   getpage(nid){
-    return this.http.get<Array<any>>(this.co.API+'/'+this.translate.currentLang+'/api/pages/'+nid+'?_format=json').pipe(
+    return this.http.get<Array<any>>(this.co.API+''+this.translate.currentLang+'/api/pages/'+nid+'?_format=json').pipe(
       map(
         res => { 
           return res;
@@ -263,7 +263,7 @@ export class UserService {
     let datos =  {
       "mail":email
     };
-    return this.http.post<any>(this.co.API+'/user/lost-password?_format=json',JSON.stringify(datos), { headers: headers }).pipe(
+    return this.http.post<any>(this.co.API+'user/lost-password?_format=json',JSON.stringify(datos), { headers: headers }).pipe(
       map(
         res => { 
           console.log("UPDATED LANG", res);
@@ -285,7 +285,7 @@ export class UserService {
       "temp_pass":tempPass,
       "new_pass":newPass
     };
-    return this.http.post<any>(this.co.API+'/user/lost-password?_format=json',
+    return this.http.post<any>(this.co.API+'user/lost-password?_format=json',
       JSON.stringify(datos), { headers: headers }).pipe(
       map(
         res => { 
