@@ -10,7 +10,7 @@
     <ion-col size="7" >
       <div class="header-text">
         <h4>{{paisSelecc?.nombrePais}}</h4>
-        <span class="price" *ngIf="tours?.length>0">{{paisSelecc?.field_costo_pais| currency:'USD'}}</span>
+        <span class="price" *ngIf="tours?.length>0">{{paisSelecc?.field_costo_pais| currency:'USD'}} USD</span>
         <br>
         <ion-button (click)="addToCart()">{{ 'GRAL.buy_all' | translate }}</ion-button>
       </div>

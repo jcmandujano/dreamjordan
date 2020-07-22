@@ -5,6 +5,8 @@ import { BehaviorSubject } from 'rxjs';
 import {UserService} from '../api/user.service';
 import {CommonService} from '../api/common.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { TranslateService } from '@ngx-translate/core';
+import { ConnectionStatus } from "../../app/api/network.service";
 
 @Component({
   selector: 'app-my-purchases',
@@ -18,28 +20,29 @@ export class MyPurchasesPage  {
   constructor(private router:Router,
     private cartserv:CartService,
     private user : UserService,
+    private translateService: TranslateService,
     public co : CommonService) { 
       this.cart = this.cartserv.getCart();
       this.cartItemCount = this.cartserv.getCartItemCount();
     }
 
   ionViewWillEnter() {
-    this.co.showLoader();
-    this.user.getPurchases().subscribe(
-      (res:any) => { 
-        this.co.hideLoader();
-        this.myPurchases = res;
-        console.table(this.myPurchases);
-        //this.myPurchases = this.preparePurchases(res);
-        //console.table(this.myPurchases);
-      },
-      (err: HttpErrorResponse) => { 
-        //console.log(err);
-        this.co.hideLoader();
-        var message = err.error.message;
-        this.co.presentAlert('Error','Hubo un problema al recuperar tus compras realizadas.',message);
-      }
-    );  
+
+      this.co.showLoader();
+      this.user.getPurchases().subscribe(
+        (res:any) => { 
+          this.co.hideLoader();
+          this.myPurchases = res;
+          console.table(this.myPurchases);
+        },
+        (err: HttpErrorResponse) => { 
+          //console.log(err);
+          this.co.hideLoader();
+          var message = err.error.message;
+          this.co.presentAlert('Error','Hubo un problema al recuperar tus compras realizadas.',message);
+        }
+      ); 
+    
   }
 
   preparePurchases(purchases){

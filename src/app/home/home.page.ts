@@ -8,9 +8,10 @@ import { BehaviorSubject } from 'rxjs';
 import {TourService} from '../api/tour.service';
 import { Platform, } from '@ionic/angular';
 import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
-import { TranslateService } from '@ngx-translate/core';
 import { finalize } from 'rxjs/operators';
 import { StorageService } from '../storage.service';
+import { TranslateService } from '@ngx-translate/core';
+import { ConnectionStatus } from "../../app/api/network.service";
 
 @Component({
   selector: 'app-home',
@@ -56,7 +57,7 @@ export class HomePage  {
       this.cart = this.cartserv.getCart();
      }
      
-  //valida si existe un usuario logeado JCMV 20012020
+  //valida si existe un usuario logeado JCMV 20012020 
   ionViewWillEnter(){
     this.user.customLoginStatus().then(data => {
       //console.log("USUARIO DESDE TABS",data);
@@ -66,59 +67,65 @@ export class HomePage  {
       this.user.authenticationState.subscribe(state => {
         if (state) {
           this.sessionState=state;
-          //console.log("user is logged in ", state);
         } else {
           this.sessionState=state;
-          //console.log("user is NOT logged in ",state);
         }
       });
     });
     this.recuperaPaises();
   }
 
-  recuperaPaises(){
+  async recuperaPaises(){//offline check jcmv
     //recuperamos paises
-    this.co.showLoader();
+    console.log('recuperando paises');
+    await this.co.showLoader();
     this.tourService.getPaises().pipe(
       finalize(() => {
         this.countriesEnded = true;
       }),
-    ).subscribe(res => { 
+    ).subscribe(async res => { 
         this.paises = res;
-        this.recuperaDreamJordan();
-        this.recuperaSliderTours();
+        await this.recuperaDreamJordan();
+        await this.recuperaSliderTours();
+        this.co.hideLoader();
     },
     (err: HttpErrorResponse) => { 
       console.log("error",err);
+      this.co.hideLoader();
     });
   }
 
-  recuperaDreamJordan(){
+  async recuperaDreamJordan(){//offline check jcmv
     //this.co.showLoader();
-    this.tourService.getDreamJordanTours().pipe(
+    await this.tourService.getDreamJordanTours().pipe(
       finalize(() => {
         this.jdtoursEnded = true;
-        this.co.hideLoader();
       }),
     ).subscribe(res => { 
       this.DreamJordanTours = res
+      console.log("getDreamJordanTours",res);
     },
     (err: HttpErrorResponse) => { 
       console.log("error",err);
+    
     });
   }
 
-  recuperaSliderTours(){
-    this.tourService.getSliderTours().pipe(
+  async recuperaSliderTours(){//offline check jcmv
+    console.log('recupera slidersTours');
+    await this.tourService.getSliderTours().pipe(
       finalize(() => {
+        console.log('llamando finalize sliderstours');
         this.sliderEnded = true;
-        this.co.hideLoader();
+      
       }),
     ).subscribe(res => { 
+      console.log('res de slidertours', res);
       this.sliderTours = res;
     },
     (err: HttpErrorResponse) => { 
       console.log("error",err);
+     
     });
   }
 
@@ -137,15 +144,37 @@ export class HomePage  {
   }
 
   countryDetail(idPais){
-    this.router.navigateByUrl('/tabs/country-detail/'+idPais);
+    let lang =  this.translateService.currentLang;
+    let msg="";
+    if(lang == "es") {
+      msg = "No estas conectado a internet.";
+    }else{
+        msg = "You are disconnected.";
+    }
+    if(ConnectionStatus.Online){
+      this.router.navigateByUrl('/tabs/country-detail/'+idPais);
+    }else{
+      this.co.presentToast(msg);
+    }
+    
   }
 
   tourDetail(nid, tid, djtour){
-    if(djtour == 1){
-      this.router.navigate(['/tabs/dreamjordan-detail/'+nid]);
+    let lang =  this.translateService.currentLang;
+    let msg="";
+    if(lang == "es") {
+      msg = "No estas conectado a internet.";
     }else{
-      this.router.navigate(['/tabs/tour-detail/'+tid+'/'+nid]);
+        msg = "You are disconnected.";
     }
-    
+    if(ConnectionStatus.Online){
+      if(djtour == 1){
+        this.router.navigate(['/tabs/dreamjordan-detail/'+nid]);
+      }else{
+        this.router.navigate(['/tabs/tour-detail/'+tid+'/'+nid]);
+      }
+    }else{
+      this.co.presentToast(msg);
+    }
   }
 }

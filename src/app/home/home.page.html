@@ -7,7 +7,8 @@
       <ion-slides class="home-slide" pager="true" *ngIf="sliderEnded">
           <ion-slide  *ngFor="let slide of sliderTours">
             <div class="warp-solid"></div>
-            <img [src]="co.API+slide.field_imagen_tour_app"/>
+            <img *ngIf="slide.field_imagen_tour_app == ''" src="./assets/img/local/500x375.png"  />
+            <img *ngIf="slide.field_imagen_tour_app" [src]="co.API+slide.field_imagen_tour_app"/>
             <div class="slider-text" (click)="tourDetail(slide.nid, slide.tid, slide.field_dream_jordan)">
               <span class="title-slider" > {{slide.title}} </span>
               <br>
@@ -42,7 +43,7 @@
     <ion-slides class="bottom-slider" [options]="slideOpts" *ngIf="countriesEnded === true">
       <ion-slide *ngFor="let pais of paises" class="slide-bg" [ngStyle]="{ 'background-image': 'url(' + co.API+pais.field_imagen + ')'}">
          <!--<div class="warp-solid"></div>-->
-         <!--<img [src]="co.API+pais.field_imagen" />-->
+         <img *ngIf="pais.field_imagen == '' " src="./assets/img/local/250x250.png" />
         <div class="bottom-slider-text">
           <span class="title-slider"(click)="countryDetail(pais.tid)">{{pais.nombrePais}}</span>
         </div>
@@ -58,6 +59,7 @@
         <ion-slide *ngFor="let tour of DreamJordanTours" class="slide-bg" [ngStyle]="{ 'background-image': 'url(' + co.API+tour.field_imagen_tour_app + ')'}">
           <!--<div class="warp-solid"></div>-->
           <!--<img [src]="co.API+tour.field_imagen_tour_app"/>-->
+          <img *ngIf="tour.field_imagen_tour_app == '' " src="./assets/img/local/500x375.png" />
           <div class="bottom-slider-text">
             <span class="title-slider" (click)="tourDetail(tour.nid, 0, tour.field_dream_jordan)" > {{tour.title}} </span>
           </div>

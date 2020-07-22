@@ -11,7 +11,7 @@
     <ion-row *ngIf="paises">
       <ion-col size="6" *ngFor="let pais of paises">
         <div class="warp-solid"></div>
-        <img class="portait-img" *ngIf="pais.field_imagen == ''" src="./assets/img/exampleImage.png" (click)="countryDetail(pais.tid)"/>
+        <img class="portait-img" *ngIf="pais.field_imagen == ''" src="./assets/img/local/250x250.png" (click)="countryDetail(pais.tid)"/>
         <img class="portait-img" *ngIf="pais.field_imagen" [src]="co.API+pais.field_imagen" (click)="countryDetail(pais.tid)"/>
         <div class="bottom-slider-text" (click)="countryDetail(pais.tid)">
           <span class="title-slider">{{pais.nombrePais}}</span>

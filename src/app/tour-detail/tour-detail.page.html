@@ -9,7 +9,7 @@
     <ion-col size="7">
       <div class="header-text">
         <h4>{{currentTour?.title}}</h4>
-        <span class="price">{{currentTour?.field_costo| currency:'USD'}}</span>
+        <span class="price">{{currentTour?.field_costo| currency:'USD'}} USD</span>
         <br>
        <!--  <ion-button (click)="buy(true)" *ngIf="comprado == false">Comprar Todo</ion-button>
         <ion-button (click)="buy(false)" *ngIf="comprado">Comprar Todo</ion-button> -->
@@ -47,13 +47,13 @@
   <ion-grid class="content-list" *ngIf="isPurchased == true">  
     <ion-row *ngFor="let audio of audiosArray; let i = index">
       <ion-col size="2" class="index-col">
-        <span class="index">{{i+1}}</span>
+        <span class="index" (click)="TestLocal(audio)">{{i+1}}</span>
+        <ion-icon name="cloud-download" class="download-btn" (click)="downloadContent(audio)"></ion-icon>
       </ion-col>
       <ion-col size="7">
         <!--<audio id="{{audio.mid}}" [src]="co.API+audio.field_media_audio_file" controls>
         </audio>-->
-        <span class="file-tour-name">{{audio.name}}</span>
-
+        <span class="file-tour-name" (click)="eliminaLocal(audio)">{{audio.name}}</span>
         <!-- <ion-progress-bar value="0.5"></ion-progress-bar> -->
         <ion-range #progressBar [(ngModel)]="audio.audioelement.progress" max="{{audio.audioelement._duration * 1000 | date:'mm:ss'}}" color="success" pin="true" step="0.5" (touchend)="seek(audio.audioelement, i)" (mouseup)="seek(audio.audioelement,i)">
           <ion-label slot="start">00:00</ion-label>
