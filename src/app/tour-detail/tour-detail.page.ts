@@ -7,9 +7,11 @@ import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
 import {Howl, howler} from 'howler';
 import { IonRange } from '@ionic/angular';
-import { UserService} from '../api/user.service'; 
+import { UserService} from '../api/user.service';
+import { DownloadService } from '../api/download.service'; 
 import { NavController } from '@ionic/angular';
 import { StorageService } from '../storage.service';
+
 
 export interface Track{
   nid:string;
@@ -35,19 +37,20 @@ export class TourDetailPage{
 
   ammount : number = 1;
   nid:any;
-  //audiosArray:any;
   idPais:any;
   comprado:boolean = false;
   currentTour:any;
   tipo_tour:string = "1";
   toursComprados:any;
   isPurchased:boolean =false;
+
   /*variables para audio player*/
   activetrack : Track = null;
   isPlaying:boolean = false;
   playlist = new Array();
   @ViewChildren(IonRange) ranges : QueryList<IonRange>;
   /*variables para audio player*/
+  
   blockByGlobalPurchase:boolean=false;
 
   get player(){ return this.tourService.player; }
@@ -62,6 +65,7 @@ export class TourDetailPage{
     public active : ActivatedRoute,
     public storage: StorageService,
     public user : UserService,
+    public download : DownloadService,
     private cartserv:CartService) { 
       this.nid = this.active.snapshot.paramMap.get("nid");
       this.idPais = this.active.snapshot.paramMap.get("idpais");
@@ -122,14 +126,14 @@ export class TourDetailPage{
         }
       }); */
     });
-    //console.log(this.audiosArray);
+    console.log(this.audiosArray);
   }
 
   getTourInfo(){
     this.tourService.getSingleTour(this.idPais,this.nid).subscribe(
       (res:any) => { 
         this.currentTour = res[0];
-        //console.log("tour",this.currentTour);
+        console.log("tour",this.currentTour);
       },
       (err: HttpErrorResponse) => { 
         //console.log(err);
@@ -237,6 +241,11 @@ export class TourDetailPage{
     }, 1000)
   }
 
+  downloadContent(param){
+    console.log("descargando", param);
+    this.download.downloadAudio(param);
+  }
+
   ionViewWillLeave(){
 
    /*  this.storage.setObject('mediadata',{
@@ -246,10 +255,22 @@ export class TourDetailPage{
     }); */
   }
 
-  storageAudioInfo(){
-    let current
+
+  TestLocal(param){
+    let name = String(param.nid);
+    console.log("name",name);
+    console.log("hola probando");
+    return this.storage.getObject(name).then(data => {
+      console.log("Datos en local", data);
+      }
+     );
   }
 
+  eliminaLocal(param){
+    let name = String(param.nid);
+    this.storage.remove(name);
+  }
+  
   goBack() {
     this.navCtrl.back();
     }

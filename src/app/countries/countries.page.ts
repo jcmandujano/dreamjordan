@@ -6,6 +6,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
 import {TourService} from '../api/tour.service';
+import { TranslateService } from '@ngx-translate/core';
+import { ConnectionStatus } from "../../app/api/network.service";
 
 @Component({
   selector: 'app-countries',
@@ -19,6 +21,7 @@ export class CountriesPage {
   cart=[];
   constructor(private router:Router,
     public user : UserService, 
+    private translateService: TranslateService,
     public co: CommonService,
     private cartserv:CartService,
     public tourServ:TourService) { }
@@ -42,7 +45,18 @@ export class CountriesPage {
   }
 
   countryDetail(idPais){
-    this.router.navigateByUrl('/tabs/country-detail/'+idPais);
+    let lang =  this.translateService.currentLang;
+    let msg="";
+    if(lang == "es") {
+      msg = "No estas conectado a internet.";
+    }else{
+        msg = "You are disconnected.";
+    }
+    if(ConnectionStatus.Online){
+      this.router.navigateByUrl('/tabs/country-detail/'+idPais);
+    }else{
+      this.co.presentToast(msg);
+    }
   }
   
   openCart(){

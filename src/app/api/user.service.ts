@@ -159,24 +159,27 @@ export class UserService {
   }
 
   getPurchases(){
-    let cartiems=new Array;
-    return this.http.get<Array<any>>(this.co.API+'user/checkout_app?_format=json').pipe(
-      map(
-        res => { 
-          let objeto = new Array;
-          for(let i in res){
-            objeto = JSON.parse(res[i].checkout_elements);
-            for(let j in objeto){
-                cartiems.push(objeto[j]);
+    if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Online){
+      let cartiems=new Array;
+      return this.http.get<Array<any>>(this.co.API+'user/checkout_app?_format=json').pipe(
+        map(
+          res => { 
+            let objeto = new Array;
+            for(let i in res){
+              objeto = JSON.parse(res[i].checkout_elements);
+              for(let j in objeto){
+                  cartiems.push(objeto[j]);
+              }
             }
+            return cartiems;
+          },
+          (err: HttpErrorResponse) => { 
+            console.log(err);
           }
-          return cartiems;
-        },
-        (err: HttpErrorResponse) => { 
-          console.log(err);
-        }
-      )
-    );
+        )
+      );
+    }
+    
   }
 
   getPurchaseInfo(){

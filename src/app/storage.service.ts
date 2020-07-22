@@ -1,17 +1,25 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { BehaviorSubject } from 'rxjs';
+
+export interface Item {
+    id:number,
+    element:any
+  }
 
 @Injectable({
     providedIn: 'root'
 })
+
 export class StorageService {
 
     public sessionData = new BehaviorSubject<any[]>([]);
     constructor(
-        public storage: Storage
+        public storage: Storage,
+        private native_storage: NativeStorage
     ) {}
-
+    //USED FOR STORE SESSION INFO
     async set(key: string, value: any): Promise < any > {
         try {
             const result = await this.storage.set(key, value);
@@ -21,7 +29,7 @@ export class StorageService {
             return false;
         }
     }
-
+    //USED FOR STORE SESSION INFO
     async get(key: string): Promise < any > {
         try {
             const result = await this.storage.get(key);
@@ -55,6 +63,17 @@ export class StorageService {
             return null;
         }
     }
+
+    async addItem(item:Item, key:string): Promise<any>{
+        return this.native_storage.getItem(key).then(( items: Item[]) => {
+          if(items){
+            items.push(item);
+            return this.native_storage.setItem(key,[item]);
+          }else{
+            return this.native_storage.setItem(key,[item]);
+          }
+        });
+      }
 
     remove(key: string) {
         this.storage.remove(key);

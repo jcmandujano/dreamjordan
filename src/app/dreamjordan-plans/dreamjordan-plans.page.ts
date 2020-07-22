@@ -5,6 +5,8 @@ import { CommonService } from '../api/common.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+import { ConnectionStatus } from "../../app/api/network.service";
 
 @Component({
   selector: 'app-dreamjordan-plans',
@@ -18,6 +20,7 @@ export class DreamjordanPlansPage {
   constructor(private router:Router,
     public tourService:TourService,
     public co: CommonService,
+    private translateService: TranslateService,
     private cartserv:CartService) { }
 
   ionViewDidEnter() {
@@ -37,7 +40,19 @@ export class DreamjordanPlansPage {
   }
 
   tourDetail(nid){
-    this.router.navigate(['/tabs/dreamjordan-detail/'+nid]);
+    let lang =  this.translateService.currentLang;
+    let msg="";
+    if(lang == "es") {
+      msg = "No estas conectado a internet.";
+    }else{
+        msg = "You are disconnected.";
+    }
+    if(ConnectionStatus.Online){
+      this.router.navigate(['/tabs/dreamjordan-detail/'+nid]);
+    }else{
+      this.co.presentToast(msg);
+    }
+    
   }
 
   buy(){

@@ -8,10 +8,10 @@ import { BehaviorSubject } from 'rxjs';
 import {TourService} from '../api/tour.service';
 import { Platform, } from '@ionic/angular';
 import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
-import { TranslateService } from '@ngx-translate/core';
 import { finalize } from 'rxjs/operators';
 import { StorageService } from '../storage.service';
-import { NetworkService, ConnectionStatus } from "../../app/api/network.service";
+import { TranslateService } from '@ngx-translate/core';
+import { ConnectionStatus } from "../../app/api/network.service";
 
 @Component({
   selector: 'app-home',
@@ -144,16 +144,37 @@ export class HomePage  {
   }
 
   countryDetail(idPais){
-    this.router.navigateByUrl('/tabs/country-detail/'+idPais);
+    let lang =  this.translateService.currentLang;
+    let msg="";
+    if(lang == "es") {
+      msg = "No estas conectado a internet.";
+    }else{
+        msg = "You are disconnected.";
+    }
+    if(ConnectionStatus.Online){
+      this.router.navigateByUrl('/tabs/country-detail/'+idPais);
+    }else{
+      this.co.presentToast(msg);
+    }
+    
   }
 
   tourDetail(nid, tid, djtour){
-
-    if(djtour == 1){
-      this.router.navigate(['/tabs/dreamjordan-detail/'+nid]);
+    let lang =  this.translateService.currentLang;
+    let msg="";
+    if(lang == "es") {
+      msg = "No estas conectado a internet.";
     }else{
-      this.router.navigate(['/tabs/tour-detail/'+tid+'/'+nid]);
+        msg = "You are disconnected.";
     }
-    
+    if(ConnectionStatus.Online){
+      if(djtour == 1){
+        this.router.navigate(['/tabs/dreamjordan-detail/'+nid]);
+      }else{
+        this.router.navigate(['/tabs/tour-detail/'+tid+'/'+nid]);
+      }
+    }else{
+      this.co.presentToast(msg);
+    }
   }
 }
