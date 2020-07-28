@@ -1,12 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
-import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { BehaviorSubject } from 'rxjs';
+import { JsonPipe } from '@angular/common';
+import { promise } from 'protractor';
 
-export interface Item {
-    id:number,
-    element:any
-  }
+const TOUR_KEY = "tours";
+const AUDIO_KEY = "audios";
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +16,6 @@ export class StorageService {
     public sessionData = new BehaviorSubject<any[]>([]);
     constructor(
         public storage: Storage,
-        private native_storage: NativeStorage
     ) {}
     //USED FOR STORE SESSION INFO
     async set(key: string, value: any): Promise < any > {
@@ -64,19 +62,52 @@ export class StorageService {
         }
     }
 
-    async addItem(item:Item, key:string): Promise<any>{
-        return this.native_storage.getItem(key).then(( items: Item[]) => {
-          if(items){
-            items.push(item);
-            return this.native_storage.setItem(key,[item]);
-          }else{
-            return this.native_storage.setItem(key,[item]);
-          }
-        });
-      }
 
     remove(key: string) {
         this.storage.remove(key);
+    }
+
+    async getLocalAudios(): Promise < any >{
+        let localAudios= [];
+        try {
+            const result = await this.storage.forEach( (value, key, index) => {
+                let json = JSON.parse(value);
+                //console.log("vuelta "+index,json.type)
+                if(json.type == "audio"){
+                    console.log("en audio");
+                    localAudios.push(json);
+                }
+            });
+            return localAudios;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    async getlocalTours(): Promise < any > {
+        let localTours = [];
+        try {
+            const result = await this.storage.forEach( (value, key, index) => {
+                let json = JSON.parse(value);
+                //console.log("vuelta "+index,json.type)
+                if(json.type == "tour"){
+                    console.log("en tour");
+                    localTours.push(json);
+                }
+            });
+            return localTours;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    getAllObjects(){
+        console.log("obteniendo locales");
+        this.storage.forEach( (value, key, index) => {
+            console.log("value", JSON.parse(value));
+            console.log("key", key);
+            console.log("Index",index);
+        });
     }
 
     clear() {

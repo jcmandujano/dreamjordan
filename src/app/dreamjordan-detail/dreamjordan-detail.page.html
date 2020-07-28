@@ -4,7 +4,9 @@
 <ion-content>
     <ion-row class="header-row">
       <ion-col size="5">
-        <img class="portait-img" [src]="co.API+current_tour?.field_imagen_tour_app"/>
+        <img *ngIf="online==true" class="portait-img" [src]="co.API+current_tour?.field_imagen_tour_app"/>
+        <img *ngIf="online==false"  class="portait-img" src="./assets/img/local/250x250.png"/>
+        
       </ion-col>
       <ion-col size="7">
         <div class="header-text">
@@ -51,7 +53,10 @@
     <ion-grid class="content-list">  
         <ion-row *ngFor="let audio of audiosList; let i = index">
           <ion-col size="2" class="index-col">
-            <span class="index">{{i+1}}</span>
+            <ion-icon *ngIf="audio.descargado == 0" name="cloud-download" class="download-btn" (click)="downloadContent(audio,1)"></ion-icon>
+            <ion-icon *ngIf="audio.descargado == 1" name="cloud-download" class="download-btn-sel" (click)="downloadContent(audio,0)"></ion-icon>
+            <span *ngIf="audio.descargado == 0">Descargar</span>
+            <span *ngIf="audio.descargado == 1">eliminar</span>
           </ion-col>
           <ion-col size="7">
             <span class="file-tour-name">{{audio.name}}</span>
@@ -67,6 +72,11 @@
             <img src="../../assets/img/play.svg" (click)="play(audio.audioelement)" *ngIf="!audio.isPlaying"/>
             <img src="../../assets/img/pause.svg" (click)="pause(audio.audioelement)" *ngIf="audio.isPlaying"/>
           </ion-col>
+          <!-- <ion-button (click)="getKey(current_tour)">Obtener un key</ion-button>
+          <ion-button (click)="getAllKeys()">Obtener todos keys</ion-button>
+          <ion-button (click)="eliminaLocal(audio,current_tour)">eliminar key</ion-button>
+          <ion-button (click)="getLocalTours()">obtener tours</ion-button>
+          <ion-button (click)="getLocalAudios()">obtener audios</ion-button>   -->
         </ion-row>
       </ion-grid>
       <ion-fab horizontal="end" vertical="bottom" slot="fixed">

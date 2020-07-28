@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { CommonService } from '../api/common.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -61,6 +61,27 @@ export class TourService {
 
     getSingleTour(id_pais, nid){
       return this.http.get<Array<any>>(this.co.API+'api/tours-app/'+ id_pais +'/'+ nid+'?_format=json').pipe(
+        map(
+          res => { 
+            return res;
+          },
+          (err: HttpErrorResponse) => { 
+            console.log(err);
+          }
+        )
+      );
+    }
+
+    updateDownloadFlag(nid, status){
+      let datos =  {
+        "type": [{
+          "target_id": "carrito_compra"
+        }],
+      "field_descargado":[{"value":status}]
+      };
+      console.log("datos",datos);
+       return this.http.patch<any>(this.co.API+'node/'+ nid+'?_format=json',
+       JSON.stringify(datos)).pipe(
         map(
           res => { 
             return res;

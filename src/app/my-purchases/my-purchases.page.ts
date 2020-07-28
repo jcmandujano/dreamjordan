@@ -5,8 +5,8 @@ import { BehaviorSubject } from 'rxjs';
 import {UserService} from '../api/user.service';
 import {CommonService} from '../api/common.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { TranslateService } from '@ngx-translate/core';
-import { ConnectionStatus } from "../../app/api/network.service";
+import { NetworkService,ConnectionStatus } from "../../app/api/network.service";
+import { StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-my-purchases',
@@ -15,25 +15,28 @@ import { ConnectionStatus } from "../../app/api/network.service";
 })
 export class MyPurchasesPage  {
   myPurchases:any;
+  localPurchases:any;
   cart=[];
   cartItemCount: BehaviorSubject<number>;
   constructor(private router:Router,
     private cartserv:CartService,
     private user : UserService,
-    private translateService: TranslateService,
+    private network : NetworkService,
+    public storage: StorageService,
     public co : CommonService) { 
       this.cart = this.cartserv.getCart();
       this.cartItemCount = this.cartserv.getCartItemCount();
     }
 
   ionViewWillEnter() {
-
+    if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Online){
       this.co.showLoader();
       this.user.getPurchases().subscribe(
         (res:any) => { 
           this.co.hideLoader();
           this.myPurchases = res;
-          console.table(this.myPurchases);
+          console.log(this.myPurchases);
+          this.localPurchases=null;
         },
         (err: HttpErrorResponse) => { 
           //console.log(err);
@@ -42,7 +45,13 @@ export class MyPurchasesPage  {
           this.co.presentAlert('Error','Hubo un problema al recuperar tus compras realizadas.',message);
         }
       ); 
-    
+    }else{
+        return this.storage.getlocalTours().then(data => {
+          console.log("tours local",data);
+          this.localPurchases=data;
+          this.myPurchases=null;
+         });
+    }
   }
 
   preparePurchases(purchases){
@@ -73,10 +82,10 @@ export class MyPurchasesPage  {
   goToDetail(item:any){
     console.log("elemento seleccionado",item);
     if(item.field_dream_jordan == 1){
-      //se manda a dream-jordan-detail
+      console.log("se manda a dream-jordan-detail");
       this.router.navigate(['/tabs/dreamjordan-detail/'+item.tour]);
     }else{
-      //se envia a country-detail
+      console.log("se envia a tour-detail");
       this.router.navigate(['/tabs/tour-detail/'+item.tid+'/'+item.tour]);
     }
   }

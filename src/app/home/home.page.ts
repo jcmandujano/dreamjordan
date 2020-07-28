@@ -11,7 +11,7 @@ import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
 import { finalize } from 'rxjs/operators';
 import { StorageService } from '../storage.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ConnectionStatus } from "../../app/api/network.service";
+import { NetworkService, ConnectionStatus } from "../api/network.service";
 
 @Component({
   selector: 'app-home',
@@ -50,6 +50,7 @@ export class HomePage  {
     public co: CommonService,
     public tourService:TourService,
     private storage : StorageService,
+    private network : NetworkService,
     private cartserv : CartService,
     private translateService: TranslateService,
     public platform: Platform) {
@@ -151,7 +152,7 @@ export class HomePage  {
     }else{
         msg = "You are disconnected.";
     }
-    if(ConnectionStatus.Online){
+    if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Online){
       this.router.navigateByUrl('/tabs/country-detail/'+idPais);
     }else{
       this.co.presentToast(msg);
@@ -167,7 +168,7 @@ export class HomePage  {
     }else{
         msg = "You are disconnected.";
     }
-    if(ConnectionStatus.Online){
+    if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Online){
       if(djtour == 1){
         this.router.navigate(['/tabs/dreamjordan-detail/'+nid]);
       }else{
