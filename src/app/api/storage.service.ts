@@ -19,7 +19,7 @@ export class StorageService {
     return this.storage.getItem(KEY).then(( items: Item[]) => {
       if(items){
         items.push(item);
-        return this.storage.setItem(KEY,[item]);
+        return this.storage.setItem(KEY,[items]);
       }else{
         return this.storage.setItem(KEY,[item]);
       }
@@ -60,7 +60,6 @@ export class StorageService {
       }
       return this.storage.setItem(KEY,toKeep);
     });
-
   }
 
 }

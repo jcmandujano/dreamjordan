@@ -8,6 +8,9 @@ import {Router, ActivatedRoute, } from '@angular/router';
 import { UserService} from '../api/user.service'; 
 import {Howl, howler} from 'howler';
 import { IonRange, NavController } from '@ionic/angular';
+import { DownloadService } from '../api/download.service'; 
+import { StorageService } from '../storage.service';
+import { NetworkService, ConnectionStatus } from "../api/network.service";
 
 export interface Track{
   nid:string;
@@ -29,7 +32,8 @@ export class DreamjordanDetailPage {
   transaction_id:string = "prueba";
   current_tour:any;
   //audiosList:any;
-  get audiosList(){ console.log(this.tourService.audiosArray); return this.tourService.audiosArray; }
+   itemsComprados:any;
+  get audiosList(){  return this.tourService.audiosArray; }
   set audiosList( val ){ this.tourService.audiosArray = val; }
   cart=[];
   cartItemCount: BehaviorSubject<number>;
@@ -44,13 +48,17 @@ export class DreamjordanDetailPage {
   idcheckout:any;
   tipo_tour:string = "2";
   nodeid:any;
+  online:boolean=false;
   idTourCoupon:any;
   @ViewChildren(IonRange) ranges : QueryList<IonRange>;
   
   constructor(public active :ActivatedRoute,
     public tourService:TourService,
     public co: CommonService,
+    private network : NetworkService,
     private router:Router,
+    public download : DownloadService,
+    public storage: StorageService,
     private navCtrl: NavController,
     public user : UserService,
     private cartserv:CartService) { 
@@ -61,29 +69,40 @@ export class DreamjordanDetailPage {
 
   ionViewWillEnter() {
     this.tourService.clearAudios();
-    this.co.showLoader();
-    this.tourService.getDreamJordanTourDetail(this.id_tour).subscribe(
-      (res:any) => { 
-        this.co.hideLoader();
-        this.current_tour = res[0];
-        this.isTourPurchased();
-        //console.log("current",this.current_tour);
-      },
-      (err: HttpErrorResponse) => { 
-        console.log(err);
-        this.co.hideLoader();
-        let message = err.error.message;
-        if(err.status == 400){
-          message = '.';
+    
+    if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Online){
+      this.online=true;
+      this.co.showLoader();
+      this.tourService.getDreamJordanTourDetail(this.id_tour).subscribe(
+        (res:any) => { 
+          this.co.hideLoader();
+          this.current_tour = res[0];
+          this.isTourPurchased();
+          //console.log("current",this.current_tour);
+        },
+        (err: HttpErrorResponse) => { 
+          console.log(err);
+          this.co.hideLoader();
+          let message = err.error.message;
+          if(err.status == 400){
+            message = '.';
+          }
+          this.co.presentAlert('Error','Hubo un problema al recuperar la información.',message);
         }
-        this.co.presentAlert('Error','Hubo un problema al recuperar la información.',message);
-      }
-    );
+      );
+    }else{
+      console.log("recuperando los locales");
+      this.getLocalTours();
+      this.getLocalAudios();
+      this.online=false;
+      this.isValid=true;
+      this.isActivated=true;
+    }
+    
   }
 
   isTourPurchased(){
     this.user.getPurchaseInfo().subscribe(res =>{
-      let itemsComprados:any;
       //console.log("fecha", res[0].field_fecha_comprado );
       if(res.length>0){
         this.fechaComprado = new Date(res[0].field_fecha_comprado);
@@ -91,8 +110,8 @@ export class DreamjordanDetailPage {
         this.getDaysLeft();
       }
       res.forEach(element => {
-        itemsComprados=JSON.parse(element.checkout_elements);
-        itemsComprados.forEach(checkout_item => {
+        this.itemsComprados=JSON.parse(element.checkout_elements);
+        this.itemsComprados.forEach(checkout_item => {
           if(Object.values(checkout_item).indexOf(this.id_tour)>-1){
             this.nodeid = element.nid;
             this.isActivated = (element.field_status === "Activado" ? true : false);
@@ -108,7 +127,6 @@ export class DreamjordanDetailPage {
       
     },
       (err: HttpErrorResponse) => { 
-        this.co.hideLoader();
         console.log("error",err);
       }); 
   } 
@@ -138,20 +156,25 @@ export class DreamjordanDetailPage {
 
   //once a tour was purchased or validated retrieve all the audios by tour JCMV
   getAudiosByTour(){
-    this.co.showLoader();
+    //this.co.showLoader();
     this.tourService.getAudiosxTour(this.id_tour).subscribe(
       (res:any) => { 
-        this.co.hideLoader();
+       // this.co.hideLoader();
         this.audiosList = res;
+        console.log("audios originales", this.itemsComprados);
         this.audiosList.forEach(originales => {
           originales.audioelement=this.start(originales);
           originales.progress=0;
+          this.itemsComprados.forEach(comprado => {
+            originales.carrito_id = comprado.nid;
+            originales.descargado = comprado.field_descargado;
+          });
         });        
         console.log("audios",this.audiosList);
       },
       (err: HttpErrorResponse) => { 
         //console.log(err);
-        this.co.hideLoader();
+        //this.co.hideLoader();
         let message = err.error.message;
         if(err.status == 400){
           message = '.';
@@ -285,23 +308,47 @@ export class DreamjordanDetailPage {
 
   /*METODOS PARA AUDIO PLAYER*/
   start(track:Track){
-    let aux_track  = new Howl({
-      src:[this.co.PRIMARY_DOMAIN+track.field_media_audio_file],
-      html5:true,
-      onplay:() =>{
-        console.log("playing");
-        track.isPlaying=true;
-      },
-      onend:()=>{
-        console.log("onend");
-        track.isPlaying=false;
-        this.updateFinished(track);
-      },
-      onpause:()=>{
-        console.log("paused");
-        track.isPlaying=false;
-      }
-    });
+    let aux_track : any;
+    if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Online){
+      aux_track  = new Howl({
+        src:[this.co.PRIMARY_DOMAIN+track.field_media_audio_file],
+        html5:true,
+        onplay:() =>{
+          console.log("playing");
+          track.isPlaying=true;
+        },
+        onend:()=>{
+          console.log("onend");
+          track.isPlaying=false;
+          this.updateFinished(track);
+        },
+        onpause:()=>{
+          console.log("paused");
+          track.isPlaying=false;
+        }
+      });
+    }else{
+      let win: any = window;
+      let path = win.Ionic.WebView.convertFileSrc(track.field_media_audio_file);
+      aux_track = new Howl({
+        src:[path],
+        html5:true,
+        onplay:() =>{
+          console.log("playing");
+          track.isPlaying=true;
+        },
+        onend:()=>{
+          console.log("onend");
+          track.isPlaying=false;
+          this.updateFinished(track);
+        },
+        onpause:()=>{
+          console.log("paused");
+          track.isPlaying=false;
+        }
+      });
+    }
+      
     return aux_track;
   }
 
@@ -341,6 +388,76 @@ export class DreamjordanDetailPage {
 
   goBack() {
     this.navCtrl.back();
+  }
+
+
+  downloadContent(audio, status){
+    //console.log("audio",audio);
+    //console.log("status",status);
+    //this.download.downloadAudio(audio,this.current_tour, 0);
+    console.log("descargando", status);
+    //this.co.showLoader();
+    if(status== 1){
+      //this.co.showLoader();
+      this.tourService.updateDownloadFlag(audio.carrito_id,status).subscribe((res) => {
+        console.log("respuesta",res);
+        this.isTourPurchased();
+        //his.co.hideLoader();
+        this.download.downloadAudio(audio,this.current_tour, 0);
+      },(err: HttpErrorResponse) => { 
+        console.log(err);
+        this.co.hideLoader();
+      }); 
+    }else{
+      this.co.showLoader();
+      this.tourService.updateDownloadFlag(audio.carrito_id,status).subscribe((res) => {
+        console.log("respuesta",res);
+        this.eliminaLocal(audio,this.current_tour);
+        this.isTourPurchased();
+        this.co.hideLoader();
+      },(err: HttpErrorResponse) => { 
+        console.log(err);
+        this.co.hideLoader();
+      });
     }
+  }
+
+  getKey(param){
+    let name = String(param.nid);
+    console.log("name",name);
+    return this.storage.getObject(name).then(data => {
+      console.log("Datos en local", data);
+      }
+      );
+  }
+
+  getAllKeys(){
+    this.storage.getAllObjects();
+  }
+
+  eliminaLocal(audio,tour){
+    let tourkey = String(tour.nid);
+    let audiokey = String(audio.mid);
+    this.storage.remove(tourkey);
+    this.storage.remove(audiokey);
+  }
+
+  getLocalTours(){
+    return this.storage.getlocalTours().then(data => {
+      console.log("tours local",data[0]);
+      this.current_tour = data[0];
+      });
+  }
+
+  getLocalAudios(){
+    return this.storage.getLocalAudios().then(data => {
+      console.log("audios local",data);
+      if(data.length>0){
+        this.isPurchased=true;
+      }
+      this.audiosList = data;
+      this.prepareItems();
+      });
+  }
 
 }

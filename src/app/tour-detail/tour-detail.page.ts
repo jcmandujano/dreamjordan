@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { Component, ViewChildren, QueryList } from '@angular/core';
 import {Router, ActivatedRoute, } from '@angular/router';
 import {TourService} from '../api/tour.service';
 import { CommonService } from '../api/common.service';
@@ -11,6 +11,7 @@ import { UserService} from '../api/user.service';
 import { DownloadService } from '../api/download.service'; 
 import { NavController } from '@ionic/angular';
 import { StorageService } from '../storage.service';
+import { NetworkService, ConnectionStatus } from "../api/network.service";
 
 
 export interface Track{
@@ -43,6 +44,7 @@ export class TourDetailPage{
   tipo_tour:string = "1";
   toursComprados:any;
   isPurchased:boolean =false;
+  online:boolean=false;
 
   /*variables para audio player*/
   activetrack : Track = null;
@@ -61,6 +63,7 @@ export class TourDetailPage{
   constructor(private router:Router,
     public tourService:TourService,
     public co: CommonService,
+    private network : NetworkService,
     private navCtrl: NavController,
     public active : ActivatedRoute,
     public storage: StorageService,
@@ -78,24 +81,34 @@ export class TourDetailPage{
 
   ionViewDidEnter() {
     this.tourService.clearAudios();
-    this.co.showLoader();
-    this.getTourInfo();
-    this.tourService.getAudiosxTour(this.nid).subscribe(
-      (res:any) => { 
-        //console.log("data",res);
-        this.audiosArray = res;        
-        this.getPurchasedItems();
-      },
-      (err: HttpErrorResponse) => { 
-        //console.log(err);
-        this.co.hideLoader();
-        let message = err.error.message;
-        if(err.status == 400){
-          message = '.';
+    if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Online){
+      this.co.showLoader();
+      this.online=true;
+      this.getTourInfo();
+      this.tourService.getAudiosxTour(this.nid).subscribe(
+        (res:any) => { 
+          //console.log("data",res);
+          this.audiosArray = res;    
+          this.co.hideLoader();    
+          this.getPurchasedItems();
+        },
+        (err: HttpErrorResponse) => { 
+          //console.log(err);
+          this.co.hideLoader();
+          let message = err.error.message;
+          if(err.status == 400){
+            message = '.';
+          }
+          this.co.presentAlert('Error','Hubo un problema al recuperar la información.',message);
         }
-        this.co.presentAlert('Error','Hubo un problema al recuperar la información.',message);
-      }
-    ); 
+      ); 
+    }else{
+      console.log("recuperando los locales");
+      this.online=false;
+      this.getLocalTours();
+      this.getLocalAudios();
+    }
+    
     this.products = this.cartserv.getProducts();
     this.cart = this.cartserv.getCart();
     //console.log("carrito",this.cart);
@@ -106,7 +119,7 @@ export class TourDetailPage{
   checkIfIsPurchased(){
     for(let i in this.cart ){
       if(this.cart[i].nid==this.idPais){
-        console.log("bloqueado");
+        //console.log("bloqueado");
         this.blockByGlobalPurchase=true;
       }
     }
@@ -114,17 +127,16 @@ export class TourDetailPage{
   }
 
   prepareItems(){
-    //console.log("AUDIOS",this.audiosArray);
+    //console.log("AUDIOS en prepare",this.audiosArray);
+    console.log("comprados",this.toursComprados);
     this.audiosArray.forEach(originales => {
       originales.amount=1;
       originales.audioelement=this.start(originales);
       originales.progress=0;
-
-/*       this.toursComprados.forEach(comprados => {
-        if(comprados.audio == originales.mid){
-          originales.comprado=true;
-        }
-      }); */
+       this.toursComprados.forEach(comprados => {
+          originales.descargado = comprados.field_descargado;
+          originales.carrito_id = comprados.nid
+      }); 
     });
     console.log(this.audiosArray);
   }
@@ -133,7 +145,7 @@ export class TourDetailPage{
     this.tourService.getSingleTour(this.idPais,this.nid).subscribe(
       (res:any) => { 
         this.currentTour = res[0];
-        console.log("tour",this.currentTour);
+        console.log("currnt tour",this.currentTour);
       },
       (err: HttpErrorResponse) => { 
         //console.log(err);
@@ -157,11 +169,12 @@ export class TourDetailPage{
       if(res.length>0){
         this.isPurchased = true;
       }
-      this.co.hideLoader();
+      //this.co.hideLoader();
       this.prepareItems();      
     },
       (err: HttpErrorResponse) => { 
         console.log("error",err);
+        //this.co.hideLoader();
       }); 
   } 
 
@@ -186,9 +199,31 @@ export class TourDetailPage{
 
   /*METODOS PARA AUDIO PLAYER*/
   start(track:Track){
-     //console.log('start',track);
-      let aux_track = new Howl({
-        src:[this.co.PRIMARY_DOMAIN+track.field_media_audio_file],
+     //console.log('start',track);,
+     let aux_track : any;
+     if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Online){
+        aux_track = new Howl({
+          src:[this.co.PRIMARY_DOMAIN+track.field_media_audio_file],
+          html5:true,
+          onplay:() =>{
+            console.log("playing");
+            track.isPlaying=true;
+          },
+          onend:()=>{
+            console.log("onend");
+            track.isPlaying=false;
+            this.updateFinished(track);
+          },
+          onpause:()=>{
+            console.log("paused");
+            track.isPlaying=false;
+          }
+        });
+     }else{
+      let win: any = window;
+      let path = win.Ionic.WebView.convertFileSrc(track.field_media_audio_file);
+      aux_track = new Howl({
+        src:[path],
         html5:true,
         onplay:() =>{
           console.log("playing");
@@ -204,6 +239,8 @@ export class TourDetailPage{
           track.isPlaying=false;
         }
       });
+     }
+      
       return aux_track;
   }
 
@@ -241,9 +278,30 @@ export class TourDetailPage{
     }, 1000)
   }
 
-  downloadContent(param){
-    console.log("descargando", param);
-    this.download.downloadAudio(param);
+  downloadContent(audio, status){
+    this.co.showLoader();
+    console.log("descargando", status);
+    if(status== 1){
+      this.tourService.updateDownloadFlag(audio.carrito_id,status).subscribe((res) => {
+        console.log("respuesta",res);
+        this.getPurchasedItems();
+        this.co.hideLoader();
+        this.download.downloadAudio(audio,this.currentTour, this.idPais);
+      },(err: HttpErrorResponse) => { 
+        console.log(err);
+        this.co.hideLoader();
+      }); 
+    }else{
+      this.tourService.updateDownloadFlag(audio.carrito_id,status).subscribe((res) => {
+        console.log("respuesta",res);
+        this.eliminaLocal(audio,this.currentTour);
+        this.getPurchasedItems();
+        this.co.hideLoader();
+      },(err: HttpErrorResponse) => { 
+        console.log(err);
+        this.co.hideLoader();
+      }); 
+    }
   }
 
   ionViewWillLeave(){
@@ -256,19 +314,42 @@ export class TourDetailPage{
   }
 
 
-  TestLocal(param){
+  getKey(param){
     let name = String(param.nid);
     console.log("name",name);
-    console.log("hola probando");
     return this.storage.getObject(name).then(data => {
       console.log("Datos en local", data);
       }
      );
   }
 
-  eliminaLocal(param){
-    let name = String(param.nid);
-    this.storage.remove(name);
+  getAllKeys(){
+    this.storage.getAllObjects();
+  }
+
+  eliminaLocal(audio,tour){
+    let tourkey = String(tour.nid);
+    let audiokey = String(audio.mid);
+    this.storage.remove(tourkey);
+    this.storage.remove(audiokey);
+  }
+
+  getLocalTours(){
+    return this.storage.getlocalTours().then(data => {
+      console.log("tours local",data[0]);
+      this.currentTour = data[0];
+     });
+  }
+
+  getLocalAudios(){
+    return this.storage.getLocalAudios().then(data => {
+      console.log("audios local",data);
+      if(data.length>0){
+        this.isPurchased=true;
+      }
+      this.audiosArray = data;
+      this.prepareItems();
+     });
   }
   
   goBack() {
