@@ -82,34 +82,8 @@ export class LoginPage {
     this.router.navigate(['/tabs/home']);
   }
 
-  async requestTempPass(){
-      const alert = await this.alertController.create({
-        header: 'Solicitar Cambio de Contraseña',
-        message: "Ingresa tu correo para enviarte las indicaciones para recuperar tu contraseña",
-        inputs: [
-          {
-            name: 'email',
-            placeholder: 'Email'
-          }
-        ],
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel',
-            cssClass: 'secondary',
-            handler: () => {
-              console.log('Confirm Cancel');
-            }
-          }, {
-            text: 'Ok',
-            handler: (resp) => {
-              console.log('Confirm Ok', resp.email);
-              this.requestResetPassword(resp.email);
-            }
-          }
-        ]
-      });
-      await alert.present();
+   requestTempPass(){
+      this.co.go("reset-password");
   }
 
   requestResetPassword(email:string){

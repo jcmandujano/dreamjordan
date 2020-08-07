@@ -5,7 +5,7 @@ import { File } from '@ionic-native/file/ngx';
 import { Platform } from '@ionic/angular';
 import { StorageService } from '../storage.service';
 
-
+const pid = "com.dreamjordan.testme";
 
 @Component({
   selector: 'app-test-download',
@@ -25,6 +25,11 @@ export class TestDownloadPage implements OnInit {
     fileTransfer: FileTransferObject = this.transfer.create();
   ngOnInit() {
   }
+
+
+
+
+
 
 
   saveAudio(){

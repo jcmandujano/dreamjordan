@@ -15,8 +15,9 @@ import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { InterceptorService } from './api/interceptor.service';
 import { Network } from "@ionic-native/network/ngx";
-import { Braintree } from '@ionic-native/braintree/ngx'; //ios only
-import { PayPal } from '@ionic-native/paypal/ngx';//paypal ios only
+//import { Braintree } from '@ionic-native/braintree/ngx'; //ios only
+//import { PayPal } from '@ionic-native/paypal/ngx';//paypal ios only
+import {InAppPurchase} from '@ionic-native/in-app-purchase';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -27,7 +28,6 @@ export function createTranslateLoader(http: HttpClient) {
   entryComponents: [],
   imports: [ BrowserModule, 
     HttpClientModule, 
-
     IonicStorageModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
@@ -44,8 +44,9 @@ export function createTranslateLoader(http: HttpClient) {
     HttpClient,
     NativeStorage,
     SplashScreen,
-    Braintree, //ios only
-    PayPal,
+    InAppPurchase,
+    //Braintree, //ios only
+   // PayPal,
     File,
     FileTransfer,
     Network,

@@ -93,9 +93,6 @@ export class CartService {
     let today = this.getCurrentDate();
     this.itemsCarrito = this.buildBodyJson();
     console.log("que se va", this.itemsCarrito);
-    let headers = new HttpHeaders({
-      'Content-Type':  'application/json'
-    });
     let datos =  {
       "type":type,
       "title":title,
@@ -107,8 +104,7 @@ export class CartService {
     console.log("checkout",datos);
     return this.http.post(
       this.co.API+'user/checkout?_format=json',
-      JSON.stringify(datos),
-      { headers: headers }).pipe(
+      JSON.stringify(datos)).pipe(
         map(
           res => { 
             return res;

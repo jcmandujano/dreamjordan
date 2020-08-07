@@ -12,16 +12,7 @@
     font-weight: 600;
 }
 
-.download-btn{
-    font-size: 22px;
-    color: black;
-    
-}
 
-.download-btn-sel{
-     font-size: 22px;
-    color: var(--naranja);
-}
 
 ion-button{
     --background: var(--aqua2);
@@ -95,11 +86,24 @@ h4{
 .index-col{
     padding: 2rem 0rem;
     text-align: center;
-    span{
-        font-size: .7rem;
-        font-family: var(--font-alt);
-    }
 }
+
+.download-label{
+    color:black;
+    font-size: 1rem;
+}
+
+.download-btn{
+    font-size: 22px;
+    color: black;
+    
+}
+
+.download-btn-sel{
+     font-size: 22px;
+    color: var(--naranja);
+}
+
 
 .counter{
     font-size: .9rem;
