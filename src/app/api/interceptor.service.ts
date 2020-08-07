@@ -17,8 +17,9 @@ export class InterceptorService implements HttpInterceptor{
     let encabezados : any = {
       'Content-Type':'application/json'
     }
-    //console.log("data",this.user);
+    
     if(this.user.userData!=null){
+      console.log("data",this.user.userData.user+':'+this.user.userData.pass);
       encabezados = {
         'Content-Type':'application/json',
         "Authorization":"Basic "+btoa(this.user.userData.user+':'+this.user.userData.pass)
@@ -30,7 +31,7 @@ export class InterceptorService implements HttpInterceptor{
       setHeaders:encabezados
     });
     return next.handle(auth).pipe(finalize( () => {
-      //console.log("Termina el interceptor",auth);
+      console.log("Termina el interceptor",auth);
     }));
   }
 }

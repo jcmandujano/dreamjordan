@@ -5,10 +5,10 @@ import { CommonService } from '../api/common.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../api/user.service';
 import {Router} from '@angular/router';
-import { Braintree, ApplePayOptions, PaymentUIOptions, PaymentUIResult } from '@ionic-native/braintree/ngx'; //braintree ios only
-import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';//paypal ios only
+//import { Braintree, ApplePayOptions, PaymentUIOptions, PaymentUIResult } from '@ionic-native/braintree/ngx'; //braintree ios only
+//import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';//paypal ios only
 
-
+ 
 
 @Component({
   selector: 'app-my-cart',
@@ -23,13 +23,13 @@ export class MyCartPage {
   transaction_id: string = "Test";
   //for braintree in ios only
   braintree_token = 'sandbox_fwz2cyc9_prmgr28yvpr28pqw';
-  paymentOptions: PaymentUIOptions ;
+  //paymentOptions: PaymentUIOptions ;
 
 
   constructor( private cartserv : CartService,
     public co: CommonService,
-    private payPal: PayPal,//Paypal ios only
-    private braintree: Braintree,//Braintree ios only
+    //private payPal: PayPal,//Paypal ios only
+    //private braintree: Braintree,//Braintree ios only
     public user : UserService,
     private router:Router) { }
 
@@ -84,12 +84,12 @@ export class MyCartPage {
         if(err.status == 400){
           message = 'Correo electrónico o contraseña no reconocidos.';
         }
-        this.co.presentAlert('Error','Hubo un problema al iniciar sesión.',message);
+        this.co.presentAlert('Error','Hubo un problema al insertar la compra.',message);
       }
     );
   }
 
-  braintreePayment(){//braintree ios only
+ /* braintreePayment(){//braintree ios only
     if(this.sessionState){
       let totalAmount = this.getTotal();
       this.paymentOptions   = {
@@ -102,6 +102,7 @@ export class MyCartPage {
         .then((result: PaymentUIResult) => {
           if (result.userCancelled) {
             console.log("User cancelled payment dialog.");
+            
             this.co.presentAlert("Error","","Ocurrio un error con la forma de pago");
           } else {
             console.log("User successfully completed payment!");
@@ -118,9 +119,9 @@ export class MyCartPage {
       this.router.navigate(['/tabs/login']);
     }
     
-  }
+  }*/
 
-   paypalWithPaypal(){
+   /*paypalWithPaypal(){
     if(this.sessionState){
       this.payPal.init({
         PayPalEnvironmentProduction: 'ATNskmqDdI_ouR_lIK8vgq2VZWOj3pHdAUz8RNy3CtEVYOiZbrVWohvnZeBqqaFXtsRDc1E36J1E26fx',
@@ -158,6 +159,10 @@ export class MyCartPage {
       this.router.navigate(['/tabs/login']);
     }
     
+  }*/
+
+  ionViewWillLeave(){
+    //this.braintree.reset
   }
  
   goHome(){

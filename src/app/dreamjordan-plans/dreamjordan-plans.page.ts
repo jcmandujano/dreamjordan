@@ -6,7 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { ConnectionStatus } from "../../app/api/network.service";
+import { NetworkService, ConnectionStatus } from "../api/network.service";
 
 @Component({
   selector: 'app-dreamjordan-plans',
@@ -19,6 +19,7 @@ export class DreamjordanPlansPage {
   cartItemCount: BehaviorSubject<number>;
   constructor(private router:Router,
     public tourService:TourService,
+    private network : NetworkService,
     public co: CommonService,
     private translateService: TranslateService,
     private cartserv:CartService) { }
@@ -47,7 +48,7 @@ export class DreamjordanPlansPage {
     }else{
         msg = "You are disconnected.";
     }
-    if(ConnectionStatus.Online){
+    if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Online){
       this.router.navigate(['/tabs/dreamjordan-detail/'+nid]);
     }else{
       this.co.presentToast(msg);
