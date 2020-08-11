@@ -21,6 +21,7 @@ export class ResetPasswordPage implements OnInit {
   });
 
   variableEmail = "" ;
+  hideMe = true;
 
   constructor(
     public alertController: AlertController, 
@@ -32,6 +33,18 @@ export class ResetPasswordPage implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  ionViewWillEnter() {
+    this.storage.getObject("tempData").then(data => {
+      if(data!=null){
+        this.variableEmail = data.email;
+        this.hideMe = true;
+       }else{         
+        this.hideMe = false;
+       }
+      
+    });
   }
 
   doLogin(data){
@@ -90,9 +103,11 @@ export class ResetPasswordPage implements OnInit {
           text: 'Ok',
           handler: (resp) => {
             console.log('Confirm Ok', resp.email);
-            this.variableEmail= resp.email;
-            /*this.storage.set('tempData',{ email:resp.email});
-            console.log(this.storage.sessionData);*/
+            ///this.variableEmail= resp.email;            
+            this.storage.setObject('tempData',{
+              email:resp.email
+            });
+            this.hideMe = true;
             this.requestResetPassword(resp.email);
           }
         }
