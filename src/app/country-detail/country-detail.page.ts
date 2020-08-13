@@ -42,13 +42,13 @@ export class CountryDetailPage {
       this.idPais = this.active.snapshot.paramMap.get("id");
   }
 
-
   ionViewDidEnter() {
     this.co.showLoader();
     this.tourService.getToursByCountry(this.idPais).subscribe(
       (res:any) => { 
         this.co.hideLoader();
         this.tours = res;
+        console.log("TOURS", this.tours);
         this.getPurchasedItems();
       },
       (err: HttpErrorResponse) => { 
@@ -96,10 +96,9 @@ export class CountryDetailPage {
     this.router.navigate(['/tabs/my-cart']);
   }
 
-
   addToCart(){
     let data = {}
-    console.log("comprados",this.toursComprados);
+    console.log("normale",this.tours);
     if(this.toursComprados.length > 0){
       this.tours.forEach(element => {
         //console.log("elementos",element);
@@ -112,7 +111,8 @@ export class CountryDetailPage {
               field_costo:element.field_costo,
               field_media_audio_file:"",
               amount:1,
-              image:element.field_imagen_tour_app
+              image:element.field_imagen_tour_app, 
+              field_id_prod_apple:element.field_id_prod_apple
             }
            this.cartserv.addProduct(data);
           }
@@ -128,7 +128,8 @@ export class CountryDetailPage {
           field_costo:element.field_costo,
           field_media_audio_file:"",
           amount:1,
-          image:element.field_imagen_tour_app
+          image:element.field_imagen_tour_app,
+          field_id_prod_apple:element.field_id_prod_apple
         }
        this.cartserv.addProduct(data);
       }); 

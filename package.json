@@ -35,9 +35,9 @@
     "braintree-web": "^3.64.1",
     "card.io.cordova.mobilesdk": "^2.1.0",
     "cordova-android": "^8.1.0",
+    "cordova-ios": "5.1.1",
     "cordova-plugin-androidx": "^2.0.0",
     "cordova-plugin-androidx-adapter": "^1.1.1",
-    "cordova-plugin-braintree": "git+https://github.com/engineerapart/cordova-plugin-braintree.git",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-file-transfer": "^1.7.1",
@@ -98,11 +98,11 @@
       "cordova-sqlite-storage": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
-      "cordova-plugin-braintree": {},
       "cordova-plugin-inapppurchase": {}
     },
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   }
 }

@@ -58,8 +58,9 @@
         </audio>-->
         <span class="file-tour-name" (click)="eliminaLocal(audio)">{{audio.name}}  </span>
         <!-- <ion-progress-bar value="0.5"></ion-progress-bar> -->
-        <ion-range #progressBar [(ngModel)]="audio.audioelement.progress" max="{{audio.audioelement._duration * 1000 | date:'mm:ss'}}" color="success" pin="true" step="0.5" (touchend)="seek(audio.audioelement, i)" (mouseup)="seek(audio.audioelement,i)">
-          <ion-label slot="start">00:00</ion-label>
+        <ion-range #progressBar [(ngModel)]="audio.audioelement.progress" max="{{audio.audioelement._duration}}" color="success"  step="0.5" (touchend)="seek(audio.audioelement, i)" (mouseup)="seek(audio.audioelement,i)">
+          <ion-label *ngIf="isNumber(audio.audioelement.progress)" slot="start">{{(audio.audioelement.progress * 1000 | date:'mm:ss')}}</ion-label>
+          <ion-label *ngIf="!isNumber(audio.audioelement.progress)" slot="start">00:00</ion-label>
           <ion-label slot="end">{{audio.audioelement._duration * 1000 | date:'mm:ss'}} </ion-label>
         </ion-range>
       </ion-col >
@@ -67,7 +68,7 @@
         <img src="../../assets/img/play.svg" (click)="play(audio.audioelement)" *ngIf="!audio.isPlaying"/>
         <img src="../../assets/img/pause.svg" (click)="pause(audio.audioelement)" *ngIf="audio.isPlaying"/>
         <br>
-        <span class="counter"> 1 de 3</span>
+        <span class="counter"> {{audio.plays}} de 3</span>
       </ion-col>
      <!--  <ion-button (click)="getKey(currentTour)">Obtener un key</ion-button>
       <ion-button (click)="getAllKeys()">Obtener todos keys</ion-button>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ɵConsole } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
@@ -15,6 +15,7 @@ export interface Product{
   field_media_audio_file:string;
   amount:number;
   image:string;
+  field_id_prod_apple:string;
 }
 
 @Injectable({
@@ -22,6 +23,7 @@ export interface Product{
 })
 export class CartService {
   data : Product[]; 
+  appleData =  []; 
   itemsCarrito :any;
   private audioNodes = [];
   private cart = [];
@@ -35,6 +37,10 @@ export class CartService {
 
   getProducts(){
     return this.data;
+  }
+
+  getAppleProducts(){
+    return this.appleData;
   }
 
   getCart(){
@@ -75,6 +81,10 @@ export class CartService {
     }
   }
 
+  addAppleProduct(product){
+    this.appleData.push(product);
+  }
+
   removeProduct(product){
     for(let [index, p] of this.cart.entries()){
       if(p.nid === product.nid){
@@ -87,9 +97,10 @@ export class CartService {
   emptyCart(){
     this.cart = [];
     this.cartItemCount.next(0);
+    this.audioNodes = [];
   }
 
-  insertSinglePurchase(type:string, title:string, trans_id:string, status:boolean){
+  insertPurchase(type:string, title:string, trans_id:string, status:boolean){
     let today = this.getCurrentDate();
     this.itemsCarrito = this.buildBodyJson();
     console.log("que se va", this.itemsCarrito);
@@ -100,6 +111,45 @@ export class CartService {
       "field_status":[{"value":status}],
       "field_fecha_comprado":[{"value":today}],
       "field_elementos":this.itemsCarrito
+    };
+    console.log("checkout",datos);
+    return this.http.post(
+      this.co.API+'user/checkout?_format=json',
+      JSON.stringify(datos)).pipe(
+        map(
+          res => { 
+            return res;
+          },
+          (err: HttpErrorResponse) => { 
+            console.log(err);
+          }
+        )
+      );
+  }
+
+  insertSinglePurchase(type:string, title:string, trans_id:string, status:boolean, element:any){
+    let today = this.getCurrentDate();
+    console.log("Que nos llega",element[0]);
+    let itemsCarrito = [];
+    //this.itemsCarrito = this.buildBodyJson();
+    let item = {
+      "type": "carrito_compra",
+      "title":element[0].name,
+      "field_cantidad_articulo":[{"value":element[0].amount}],
+      "field_costo_articulo":[{"value":element[0].field_costo}],
+      "field_costo_total":[{"value":(element[0].field_costo*element[0].amount)}],
+      "field_nombre_articulo":[{"value":element[0].name}],
+      "field_tour":[{"target_id":element[0].nid}],
+      "field_audio":[{"target_id":element[0].mid}]
+    };
+    itemsCarrito.push(item);
+    let datos =  {
+      "type":type,
+      "title":title,
+      "field_transactionid":[{"value":trans_id}],
+      "field_status":[{"value":status}],
+      "field_fecha_comprado":[{"value":today}],
+      "field_elementos":itemsCarrito
     };
     console.log("checkout",datos);
     return this.http.post(

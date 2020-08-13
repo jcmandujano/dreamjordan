@@ -58,11 +58,6 @@ export class UserService {
   ) { }
 
   customLoginStatus(){
-    if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Offline){
-      console.log("Estamos offline");
-    }else{
-      console.log("estamos online");
-    }
     return this.storage.getObject("userdata").then(data => {
      if(data!=null){
       this.authenticationState.next(true);
