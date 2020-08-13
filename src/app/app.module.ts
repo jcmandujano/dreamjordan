@@ -17,7 +17,8 @@ import { InterceptorService } from './api/interceptor.service';
 import { Network } from "@ionic-native/network/ngx";
 //import { Braintree } from '@ionic-native/braintree/ngx'; //ios only
 //import { PayPal } from '@ionic-native/paypal/ngx';//paypal ios only
-import {InAppPurchase} from '@ionic-native/in-app-purchase';
+//import {InAppPurchase} from '@ionic-native/in-app-purchase';
+import {InAppPurchase} from '@ionic-native/in-app-purchase/ngx';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');

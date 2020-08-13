@@ -20,6 +20,9 @@ export class ResetPasswordPage implements OnInit {
     password: new FormControl(null,Validators.required),
   });
 
+  variableEmail = "" ;
+  hideMe = true;
+
   constructor(
     public alertController: AlertController, 
     private route: ActivatedRoute,
@@ -30,6 +33,18 @@ export class ResetPasswordPage implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  ionViewWillEnter() {
+    this.storage.getObject("tempData").then(data => {
+      if(data!=null){
+        this.variableEmail = data.email;
+        this.hideMe = true;
+       }else{         
+        this.hideMe = false;
+       }
+      
+    });
   }
 
   doLogin(data){
@@ -68,7 +83,8 @@ export class ResetPasswordPage implements OnInit {
   async requestTempPass(){
     const alert = await this.alertController.create({
       header: 'Solicitar Cambio de Contraseña',
-      message: "Ingresa tu correo para enviarte las indicaciones para recuperar tu contraseña",
+      /*message: "Ingresa tu correo para que las indicaciones para recuperar tu contraseña",*/
+      message: "Ingresa tu correo para obtener tu token temporal",
       inputs: [
         {
           name: 'email',
@@ -87,6 +103,11 @@ export class ResetPasswordPage implements OnInit {
           text: 'Ok',
           handler: (resp) => {
             console.log('Confirm Ok', resp.email);
+            ///this.variableEmail= resp.email;            
+            this.storage.setObject('tempData',{
+              email:resp.email
+            });
+            this.hideMe = true;
             this.requestResetPassword(resp.email);
           }
         }
