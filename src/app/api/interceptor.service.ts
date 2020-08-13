@@ -17,8 +17,9 @@ export class InterceptorService implements HttpInterceptor{
     let encabezados : any = {
       'Content-Type':'application/json'
     }
-    //console.log("data",this.user);
+    
     if(this.user.userData!=null){
+      //console.log("data",this.user.userData.user+':'+this.user.userData.pass);
       encabezados = {
         'Content-Type':'application/json',
         "Authorization":"Basic "+btoa(this.user.userData.user+':'+this.user.userData.pass)

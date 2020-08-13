@@ -93,6 +93,48 @@ export class TourService {
       );
     }
 
+    updatePlays(nid, value){
+      let datos =  {
+        "type": [{
+          "target_id": "carrito_compra"
+        }],
+      "field_plays":[{"value":value}]
+      };
+      console.log("datos",datos);
+       return this.http.patch<any>(this.co.API+'node/'+ nid+'?_format=json',
+       JSON.stringify(datos)).pipe(
+        map(
+          res => { 
+            return res;
+          },
+          (err: HttpErrorResponse) => { 
+            console.log(err);
+          }
+        )
+      );
+    }
+
+    updatePositon(nid, value){
+      let datos =  {
+        "type": [{
+          "target_id": "carrito_compra"
+        }],
+      "field_posicion":[{"value":value}]
+      };
+      console.log("datos",datos);
+       return this.http.patch<any>(this.co.API+'node/'+ nid+'?_format=json',
+       JSON.stringify(datos)).pipe(
+        map(
+          res => { 
+            return res;
+          },
+          (err: HttpErrorResponse) => { 
+            console.log(err);
+          }
+        )
+      );
+    }
+
     getAudiosxTour(nid){
       return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/audiosxtour/'+ nid +'?_format=json').pipe(
         map(

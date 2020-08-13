@@ -58,11 +58,6 @@ export class UserService {
   ) { }
 
   customLoginStatus(){
-    if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Offline){
-      console.log("Estamos offline");
-    }else{
-      console.log("estamos online");
-    }
     return this.storage.getObject("userdata").then(data => {
      if(data!=null){
       this.authenticationState.next(true);
@@ -268,7 +263,7 @@ export class UserService {
     return this.http.post<any>(this.co.API+'user/lost-password?_format=json',JSON.stringify(datos), { headers: headers }).pipe(
       map(
         res => { 
-          console.log("UPDATED LANG", res);
+          console.log("UPDATED PASS", res);
           return res;
         },
         (err: HttpErrorResponse) => { 
@@ -287,11 +282,11 @@ export class UserService {
       "temp_pass":tempPass,
       "new_pass":newPass
     };
-    return this.http.post<any>(this.co.API+'user/lost-password?_format=json',
+    return this.http.post<any>(this.co.API+'user/lost-password-reset?_format=json',
       JSON.stringify(datos), { headers: headers }).pipe(
       map(
         res => { 
-          console.log("UPDATED LANG", res);
+          console.log("UPDATED PASS", res);
           return res;
         },
         (err: HttpErrorResponse) => { 

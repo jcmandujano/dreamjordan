@@ -33,6 +33,7 @@ export class DreamjordanDetailPage {
   current_tour:any;
   //audiosList:any;
    itemsComprados:any;
+   comprado : any;
   get audiosList(){  return this.tourService.audiosArray; }
   set audiosList( val ){ this.tourService.audiosArray = val; }
   cart=[];
@@ -107,20 +108,25 @@ export class DreamjordanDetailPage {
       if(res.length>0){
         this.fechaComprado = new Date(res[0].field_fecha_comprado);
         console.log("fecha", this.fechaComprado );
+        
         this.getDaysLeft();
       }
       res.forEach(element => {
         this.itemsComprados=JSON.parse(element.checkout_elements);
+        //console.log("comprados" , this.itemsComprados);
         this.itemsComprados.forEach(checkout_item => {
           if(Object.values(checkout_item).indexOf(this.id_tour)>-1){
             this.nodeid = element.nid;
             this.isActivated = (element.field_status === "Activado" ? true : false);
-            if(this.isActivated==true){
-              this.getAudiosByTour();
-            }
             this.couponCode = element.transactionid;
             this.showTours=false;
             this.isValid =true;
+            if(this.isActivated==true){
+              //this.comprado = checkout_item
+              this.comprado = this.itemsComprados;
+              console.log("isActivatedr");
+              this.getAudiosByTour();
+            }
           }
         });
       });
@@ -156,16 +162,17 @@ export class DreamjordanDetailPage {
 
   //once a tour was purchased or validated retrieve all the audios by tour JCMV
   getAudiosByTour(){
+    console.log("GetAudioxTour");
     //this.co.showLoader();
     this.tourService.getAudiosxTour(this.id_tour).subscribe(
       (res:any) => { 
        // this.co.hideLoader();
         this.audiosList = res;
-        console.log("audios originales", this.itemsComprados);
+        console.log("audios originales", this.comprado);
         this.audiosList.forEach(originales => {
           originales.audioelement=this.start(originales);
           originales.progress=0;
-          this.itemsComprados.forEach(comprado => {
+          this.comprado.forEach(comprado => {
             originales.carrito_id = comprado.nid;
             originales.descargado = comprado.field_descargado;
           });
@@ -238,7 +245,7 @@ export class DreamjordanDetailPage {
   //Store the validate coupon JCMV
   insert(coupon:string, data:any){
     this.addToCart();
-    this.cartserv.insertSinglePurchase("checkout", data.title, coupon, false).subscribe(
+    this.cartserv.insertPurchase("checkout", data.title, coupon, false).subscribe(
       (res:any) => { 
         console.log("insert response ",res);
         this.nodeid = res.checkout;
@@ -320,7 +327,6 @@ export class DreamjordanDetailPage {
         onend:()=>{
           console.log("onend");
           track.isPlaying=false;
-          this.updateFinished(track);
         },
         onpause:()=>{
           console.log("paused");
@@ -340,7 +346,6 @@ export class DreamjordanDetailPage {
         onend:()=>{
           console.log("onend");
           track.isPlaying=false;
-          this.updateFinished(track);
         },
         onpause:()=>{
           console.log("paused");
@@ -352,36 +357,45 @@ export class DreamjordanDetailPage {
     return aux_track;
   }
 
-    play(track:Howl){
+  play(track:Howl){
+    //track.play();
+    console.log("this.tourService.player",this.tourService.player);
+    if(this.tourService.player== null){
       this.tourService.player = track;
       this.tourService.player.play();
-    this.updateProgress(track);
+    }else{
+      this.tourService.player.play();
     }
+    this.updateProgress(track);
+  }
+
+  isNumber(value) {
+    if(typeof(value) == "number"){
+      return true;
+    }else{
+      return false;
+    }
+  }
 
     pause(track:Howl){
     this.tourService.player.pause();
     }
 
-    //guardamos un play mas, al contador de plays
-    updateFinished(track){
-    console.log("NID",track);
-
-    }
-
     seek(audio:Howl, i:number){
-    let currentRange = this.ranges.filter((element,index)=> index == i);
-    let newValue =+ currentRange[0].value;
-    let duration = audio.duration();
-    audio.seek(duration * (newValue/100));
+      let currentRange = this.ranges.filter((element,index)=> index == i);
+      let newValue =+ currentRange[0].value;
+      audio.seek(newValue);
     }
 
     updateProgress(track:Howl){
-    let seek =  track.seek();
-    track.progress = (seek/track.duration()) * 100;
-    setTimeout(()=>{
-      this.updateProgress(track);
-    }, 1000)
-  }
+      let seek =  track.seek();
+      track.progress = seek;
+      console.log("progress",track.progress);
+      setTimeout(()=>{
+        this.updateProgress(track);
+      }, 1000)
+    }
+
   goHome(){
     this.router.navigate(['/tabs/dreamjordan-plans']);
   }

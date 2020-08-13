@@ -5,10 +5,13 @@ import { CommonService } from '../api/common.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../api/user.service';
 import {Router} from '@angular/router';
-import { Braintree, ApplePayOptions, PaymentUIOptions, PaymentUIResult } from '@ionic-native/braintree/ngx'; //braintree ios only
-import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';//paypal ios only
+import { InAppPurchase } from '@ionic-native/in-app-purchase/ngx';
+import { timingSafeEqual } from 'crypto';
+import { runInThisContext } from 'vm';
+//import { Braintree, ApplePayOptions, PaymentUIOptions, PaymentUIResult } from '@ionic-native/braintree/ngx'; //braintree ios only
+//import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';//paypal ios only
 
-
+ 
 
 @Component({
   selector: 'app-my-cart',
@@ -20,16 +23,18 @@ export class MyCartPage {
   cartItemCount: BehaviorSubject<number>;
   currentUser:any;
   sessionState:boolean;
+  applePIDs:any;
   transaction_id: string = "Test";
   //for braintree in ios only
   braintree_token = 'sandbox_fwz2cyc9_prmgr28yvpr28pqw';
-  paymentOptions: PaymentUIOptions ;
+  //paymentOptions: PaymentUIOptions ;
 
 
   constructor( private cartserv : CartService,
+    private iap: InAppPurchase,
     public co: CommonService,
-    private payPal: PayPal,//Paypal ios only
-    private braintree: Braintree,//Braintree ios only
+    //private payPal: PayPal,//Paypal ios only
+    //private braintree: Braintree,//Braintree ios only
     public user : UserService,
     private router:Router) { }
 
@@ -41,16 +46,81 @@ export class MyCartPage {
       this.user.authenticationState.subscribe(state => {
         if (state) {
           this.sessionState=state;
-          //console.log("user is logged in ", state);
         } else {
           this.sessionState=state;
-          //console.log("user is NOT logged in ",state);
         }
       });
     });
     this.cartItemCount = this.cartserv.getCartItemCount();
     this.cart = this.cartserv.getCart();
-    //console.log("cart",this.cart);
+    this.applePIDs = this.getTourAppleIds();
+  }
+
+  getTourAppleIds(){
+    return this.cart.map((i)=>{
+      return i.field_id_prod_apple;
+    })
+  }
+
+  getCurrentItem(item:string){
+    let tempitems = this.cart;
+    return tempitems.filter((i)=>{
+      return i.field_id_prod_apple == item;
+    })
+  }
+
+  buyitems(){
+    if(this.sessionState){
+      console.log("Que jay en el carro",this.cart);
+      let items = this.getTourAppleIds();
+      let products : any;
+      let currentItem : any;
+      this.co.showLoader();
+      this.iap.getProducts([items.join()]).then((_product) => {
+        this.co.hideLoader();
+        products = _product
+        let rowLen = products.length;
+        products.map((element,i)  =>{
+          this.iap.buy(element.productId).then((data)=> {
+            console.log("elemento iterado",element.productId);
+            currentItem =this.getCurrentItem(element.productId); 
+           // console.log("Que resulto de la compra",data);
+              console.log("item actual el ulimo",currentItem);
+              this.co.showLoader();
+              this.cartserv.insertSinglePurchase("checkout", this.currentUser.user+"-", data.transactionId, false, currentItem).subscribe(
+                (res:any) => { 
+                  console.log("resp comopra",res);
+                  this.co.presentToast("La compra se relizo correctamente");
+                  if (rowLen === i + 1) {
+                    this.emptyCurrentCart();
+                    this.co.go('/tabs/my-purchases');
+                  }
+                },
+                (err: HttpErrorResponse) => { 
+                  //console.log(err);
+                  var message = err.error.message;
+                  if(err.status == 400){
+                    message = 'Correo electrónico o contraseña no reconocidos.';
+                  }
+                  this.co.presentAlert('Error','Hubo un problema al insertar la compra.',message);
+                }
+              );
+          }).catch((err)=> {
+              this.co.hideLoader();
+              console.log(err);
+              this.co.presentAlert("ERROR","",JSON.stringify(err) );
+          });
+        });
+      }).catch((err) => {
+        this.co.hideLoader();
+       console.log(err);
+       this.co.presentAlert("ERROR","",JSON.stringify(err) );
+     });
+    }else{
+      this.co.presentAlert("Error","","Necesitas acceder para poder comprar contenido.");
+      this.router.navigate(['/tabs/login']);
+    }
+    
   }
 
   //Delete selected item from the cart list JCMV
@@ -70,49 +140,47 @@ export class MyCartPage {
 
   insertCheckout(){
     this.co.showLoader();
-    this.cartserv.insertSinglePurchase("checkout", this.currentUser.user+"-", this.transaction_id, false).subscribe(
+    this.cartserv.insertPurchase("checkout", this.currentUser.user+"-", this.transaction_id, false).subscribe(
       (res:any) => { 
-        //console.log("resp comopra",res);
         this.co.hideLoader();
         this.co.presentToast("La compra se relizo correctamente");
         //this.paypalWithPaypal();
       },
       (err: HttpErrorResponse) => { 
-        //console.log(err);
         this.co.hideLoader();
         var message = err.error.message;
         if(err.status == 400){
           message = 'Correo electrónico o contraseña no reconocidos.';
         }
-        this.co.presentAlert('Error','Hubo un problema al iniciar sesión.',message);
+        this.co.presentAlert('Error','Hubo un problema al insertar la compra.',message);
       }
     );
   }
 
-  braintreePayment(){//braintree ios only
+ braintreePayment(){//braintree ios only
     if(this.sessionState){
       let totalAmount = this.getTotal();
-      this.paymentOptions   = {
+      this.insertCheckout();
+      this.emptyCurrentCart();
+      this.co.go('/tabs/my-purchases');
+      /*this.paymentOptions   = {
         amount: totalAmount.toString(),
         primaryDescription: 'Dream jordan Services',
-      } ;
-      console.log("paymentOptions",this.paymentOptions);
-      this.braintree.initialize(this.braintree_token)
+      } ;*/
+      /*this.braintree.initialize(this.braintree_token)
         .then(() => this.braintree.presentDropInPaymentUI(this.paymentOptions))
         .then((result: PaymentUIResult) => {
           if (result.userCancelled) {
-            console.log("User cancelled payment dialog.");
+            
             this.co.presentAlert("Error","","Ocurrio un error con la forma de pago");
           } else {
-            console.log("User successfully completed payment!");
             console.log("Payment Result.", result);//nonce
             this.insertCheckout();
-            console.log("se logro",result); 
             this.emptyCurrentCart();
             this.co.go('/tabs/my-purchases');
           }
         })
-        .catch((error: string) => console.error(error));
+        .catch((error: string) => console.error(error));*/
     } else{
       this.co.presentAlert("Error","","Necesitas acceder para poder comprar contenido.");
       this.router.navigate(['/tabs/login']);
@@ -120,44 +188,8 @@ export class MyCartPage {
     
   }
 
-   paypalWithPaypal(){
-    if(this.sessionState){
-      this.payPal.init({
-        PayPalEnvironmentProduction: 'ATNskmqDdI_ouR_lIK8vgq2VZWOj3pHdAUz8RNy3CtEVYOiZbrVWohvnZeBqqaFXtsRDc1E36J1E26fx',
-        PayPalEnvironmentSandbox: 'ATNskmqDdI_ouR_lIK8vgq2VZWOj3pHdAUz8RNy3CtEVYOiZbrVWohvnZeBqqaFXtsRDc1E36J1E26fx'
-      }).then(() => {
-        // Environments: PayPalEnvironmentNoNetwork, PayPalEnvironmentSandbox, PayPalEnvironmentProduction
-        this.payPal.prepareToRender('PayPalEnvironmentSandbox', new PayPalConfiguration({
-          // Only needed if you get an "Internal Service Error" after PayPal login!
-          //payPalShippingAddressOption: 2 // PayPalShippingAddressOptionPayPal
-        })).then(() => {
-          //let paymentDetails = new PayPalPaymentDetails(this.cart);
-          let payment = new PayPalPayment(this.getTotal().toString(), 'USD', 'Description', 'sale');
-          this.payPal.renderSinglePaymentUI(payment).then((data) => {
-            // Successfully paid
-            this.insertCheckout();
-            console.log("se logro",data); 
-            this.emptyCurrentCart();
-            this.co.go('/tabs/my-purchases');
-          }, () => {
-            console.log("cancelado");
-            // Error or render dialog closed without being successful
-          });
-        }, () => {
-          console.log("error en configuracion");
-          this.co.presentToast("Error en configuracion");
-          // Error in configuration
-        });
-      }, () => {
-        console.log("Error in initialization, maybe PayPal isn't supported or something else");
-        this.co.presentAlert("Error","","Error in initialization, maybe PayPal isn't supported or something else");
-        // Error in initialization, maybe PayPal isn't supported or something else
-      });
-    }else{
-      this.co.presentAlert("Error","","Necesitas acceder para poder comprar contenido.");
-      this.router.navigate(['/tabs/login']);
-    }
-    
+  ionViewWillLeave(){
+    //this.braintree.reset
   }
  
   goHome(){

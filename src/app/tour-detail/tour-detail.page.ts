@@ -73,6 +73,7 @@ export class TourDetailPage{
       this.nid = this.active.snapshot.paramMap.get("nid");
       this.idPais = this.active.snapshot.paramMap.get("idpais");
   }
+  
 
   addToCart(product){
     //console.log("item",product);
@@ -87,7 +88,7 @@ export class TourDetailPage{
       this.getTourInfo();
       this.tourService.getAudiosxTour(this.nid).subscribe(
         (res:any) => { 
-          //console.log("data",res);
+          console.log("data",res);
           this.audiosArray = res;    
           this.co.hideLoader();    
           this.getPurchasedItems();
@@ -136,9 +137,18 @@ export class TourDetailPage{
        this.toursComprados.forEach(comprados => {
           originales.descargado = comprados.field_descargado;
           originales.carrito_id = comprados.nid
+          originales.plays = comprados.field_plays
       }); 
     });
     console.log(this.audiosArray);
+  }
+
+  isNumber(value) {
+    if(typeof(value) == "number"){
+      return true;
+    }else{
+      return false;
+    }
   }
 
   getTourInfo(){
@@ -186,7 +196,8 @@ export class TourDetailPage{
       field_costo:this.currentTour.field_costo,
       field_media_audio_file:"",
       amount:1,
-      image:this.currentTour.field_imagen_tour_app
+      image:this.currentTour.field_imagen_tour_app,
+      field_id_prod_apple:this.currentTour.field_id_prod_apple
     }
     if(this.audiosArray.length==1){
       console.log("NO ES un paquete");
@@ -246,8 +257,13 @@ export class TourDetailPage{
 
   play(track:Howl){
     //track.play();
-    this.tourService.player = track;
-    this.tourService.player.play();
+    console.log("this.tourService.player",this.tourService.player);
+    if(this.tourService.player== null){
+      this.tourService.player = track;
+      this.tourService.player.play();
+    }else{
+      this.tourService.player.play();
+    }
     this.updateProgress(track);
   }
 
@@ -258,21 +274,42 @@ export class TourDetailPage{
 
   //guardamos un play mas, al contador de plays
   updateFinished(track){
-    console.log("NID",track);
-    
+    this.co.showLoader();
+    console.log("ONENDTRACK",track);//track.carrito_id
+    let intplays : number  = +track.plays; 
+    intplays = (intplays+1);
+   this.tourService.updatePlays(track.carrito_id, intplays).subscribe((res)=>{
+      this.co.hideLoader();
+      //console.log("respuesta ", res);
+      track.plays = res.field_plays;
+    },(err: HttpErrorResponse)=>{
+      this.co.hideLoader();
+      console.log("error ", err.message);
+    });
   }
 
   seek(audio:Howl, i:number){
     let currentRange = this.ranges.filter((element,index)=> index == i);
     let newValue =+ currentRange[0].value;
-    let duration = audio.duration();
-    console.log("que",duration);
-    audio.seek(duration * (newValue/100));
+    audio.seek(newValue);
   }
+
+  ionViewWillLeave(){
+    console.log("im leaving");
+    this.audiosArray.map((element)=>{
+      console.log("item mapeado",element);
+    })
+    /*  this.storage.setObject('mediadata',{
+       id:0,
+       local_file:"",
+       no_plays:0,
+     }); */
+   }
 
   updateProgress(track:Howl){
     let seek =  track.seek();
-    track.progress = (seek/track.duration()) * 100;
+    track.progress = seek;
+    //console.log("progress",track.progress);
     setTimeout(()=>{
       this.updateProgress(track);
     }, 1000)
@@ -303,16 +340,6 @@ export class TourDetailPage{
       }); 
     }
   }
-
-  ionViewWillLeave(){
-
-   /*  this.storage.setObject('mediadata',{
-      id:0,
-      local_file:"",
-      no_plays:0,
-    }); */
-  }
-
 
   getKey(param){
     let name = String(param.nid);

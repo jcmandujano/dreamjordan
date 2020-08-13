@@ -24,6 +24,9 @@ export class CouponValidatorPage  {
   idTourCoupon:any;
   currentUser:any;
 
+  get audiosArray(){ return this.tourService.audiosArray; }
+  set audiosArray( val ){ this.tourService.audiosArray = val; }
+
   constructor(public user : UserService,
     public co: CommonService,
     public tourService:TourService,
@@ -33,7 +36,6 @@ export class CouponValidatorPage  {
 
   ionViewDidEnter(){
     this.storage.getObject("userdata").then(data => {
-      console.log("USUARIO DESDE HOME",data);
       this.currentUser=data;
       if(data){
         this.showValidator = true;
@@ -63,6 +65,7 @@ export class CouponValidatorPage  {
           this.idTourCoupon = res[0].nid
           //obtenemos primero el tour asignado al cupon
           this.getTourInfo(res[0].field_tour);
+          this.getAudios(res[0].field_tour);
         }
       },
       (err: HttpErrorResponse) => { 
@@ -74,7 +77,7 @@ export class CouponValidatorPage  {
 
   //Una vez realizado el proceso se desactiva el cupon
   canjeaCupon(){
-    console.log("QUEPASA",this.idTourCoupon);
+    //console.log("QUEPASA",this.idTourCoupon);
     this.cartserv.canjeaCupon(this.idTourCoupon).subscribe((res) =>{
       console.log("canjeado",res);
     },
@@ -90,7 +93,8 @@ export class CouponValidatorPage  {
   insert(coupon:string, data:any){
       this.cartserv.emptyCart();
       this.addToCart(data);
-      this.cartserv.insertSinglePurchase("checkout", data.title, coupon, false).subscribe(
+      this.cartserv.addAudios(this.audiosArray);
+      this.cartserv.insertPurchase("checkout", data.title, coupon, false).subscribe(
         (res:any) => { 
           //console.log("insert response ",res);
           this.idcheckout = res.checkout;
@@ -124,13 +128,32 @@ export class CouponValidatorPage  {
     this.cartserv.addProduct(object);
   }
 
+  getAudios(nid:number){
+    this.tourService.getAudiosxTour(nid).subscribe(
+      (res:any) => { 
+        console.log("data",res);
+        this.audiosArray = res;    
+        this.co.hideLoader(); 
+        this.insert(this.couponCode, this.tourInfo);   
+      },
+      (err: HttpErrorResponse) => { 
+        //console.log(err);
+        this.co.hideLoader();
+        let message = err.error.message;
+        if(err.status == 400){
+          message = '.';
+        }
+        this.co.presentAlert('Error','Hubo un problema al recuperar la información.',message);
+      }
+    ); 
+  }
+
   getTourInfo(nid){
     this.tourService.getDreamJordanTourDetail(nid).subscribe(
       (res:any) => { 
         this.tourInfo = res[0];
         //console.log("INFO TOUR",this.tourInfo);
         //Una vez obtenida la informacion
-        this.insert(this.couponCode, this.tourInfo);
       },
       (err: HttpErrorResponse) => { 
         console.log(err);
