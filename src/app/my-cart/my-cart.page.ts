@@ -9,7 +9,7 @@ import { InAppPurchase } from '@ionic-native/in-app-purchase/ngx';
 import { timingSafeEqual } from 'crypto';
 import { runInThisContext } from 'vm';
 //import { Braintree, ApplePayOptions, PaymentUIOptions, PaymentUIResult } from '@ionic-native/braintree/ngx'; //braintree ios only
-//import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';//paypal ios only
+import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';//paypal ios only
 
  
 
@@ -33,7 +33,7 @@ export class MyCartPage {
   constructor( private cartserv : CartService,
     private iap: InAppPurchase,
     public co: CommonService,
-    //private payPal: PayPal,//Paypal ios only
+    private payPal: PayPal,//Paypal ios only
     //private braintree: Braintree,//Braintree ios only
     public user : UserService,
     private router:Router) { }
@@ -157,35 +157,40 @@ export class MyCartPage {
     );
   }
 
- braintreePayment(){//braintree ios only
+  paypalPayment(){//braintree ios only
     if(this.sessionState){
       let totalAmount = this.getTotal();
-      this.insertCheckout();
-      this.emptyCurrentCart();
-      this.co.go('/tabs/my-purchases');
-      /*this.paymentOptions   = {
-        amount: totalAmount.toString(),
-        primaryDescription: 'Dream jordan Services',
-      } ;*/
-      /*this.braintree.initialize(this.braintree_token)
-        .then(() => this.braintree.presentDropInPaymentUI(this.paymentOptions))
-        .then((result: PaymentUIResult) => {
-          if (result.userCancelled) {
-            
-            this.co.presentAlert("Error","","Ocurrio un error con la forma de pago");
-          } else {
-            console.log("Payment Result.", result);//nonce
+      this.payPal.init({
+        PayPalEnvironmentProduction: 'ATNskmqDdI_ouR_lIK8vgq2VZWOj3pHdAUz8RNy3CtEVYOiZbrVWohvnZeBqqaFXtsRDc1E36J1E26fx',
+        PayPalEnvironmentSandbox: 'ATNskmqDdI_ouR_lIK8vgq2VZWOj3pHdAUz8RNy3CtEVYOiZbrVWohvnZeBqqaFXtsRDc1E36J1E26fx'
+      }).then(() => {
+        // Environments: PayPalEnvironmentNoNetwork, PayPalEnvironmentSandbox, PayPalEnvironmentProduction
+        this.payPal.prepareToRender('PayPalEnvironmentSandbox', new PayPalConfiguration({
+        })).then(() => {
+          let payment = new PayPalPayment(totalAmount.toString(), 'USD', 'Description', 'sale');
+          this.payPal.renderSinglePaymentUI(payment).then(() => {
+            // Successfully paid
             this.insertCheckout();
             this.emptyCurrentCart();
             this.co.go('/tabs/my-purchases');
-          }
-        })
-        .catch((error: string) => console.error(error));*/
+            this.co.presentToast("La compra se realizo correctamente");
+          }, (err) => {
+            console.log("Error or render dialog closed",err);
+            //this.co.presentAlert("Error","","Error en configuracion");
+          });
+        }, (err) => {
+          console.log("Error in configuration",err);
+          this.co.presentAlert("Error","","Error en configuracion");
+        });
+      }, (err) => {
+        // Error in initialization, maybe PayPal isn't supported or something else
+          console.log("Error in configuration","Error in initialization, maybe PayPal isn't supported or something else");
+          this.co.presentAlert("Error","","maybe PayPal isn't supported");
+      });
     } else{
       this.co.presentAlert("Error","","Necesitas acceder para poder comprar contenido.");
       this.router.navigate(['/tabs/login']);
     }
-    
   }
 
   ionViewWillLeave(){

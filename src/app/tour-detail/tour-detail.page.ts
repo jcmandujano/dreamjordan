@@ -295,6 +295,7 @@ export class TourDetailPage{
   }
 
   ionViewWillLeave(){
+    this.tourService.player == null;
     console.log("im leaving");
     this.audiosArray.map((element)=>{
       console.log("item mapeado",element);

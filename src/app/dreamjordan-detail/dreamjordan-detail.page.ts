@@ -34,6 +34,8 @@ export class DreamjordanDetailPage {
   //audiosList:any;
    itemsComprados:any;
    comprado : any;
+   get player(){ return this.tourService.player; }
+   set player( val ){ this.tourService.player = val; }
   get audiosList(){  return this.tourService.audiosArray; }
   set audiosList( val ){ this.tourService.audiosArray = val; }
   cart=[];
@@ -312,6 +314,10 @@ export class DreamjordanDetailPage {
     });
     console.log(this.audiosList);
   }
+
+  ionViewWillLeave(){
+    this.tourService.player == null;
+   }
 
   /*METODOS PARA AUDIO PLAYER*/
   start(track:Track){

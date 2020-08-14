@@ -26,8 +26,13 @@
       <div class="column">
         <ion-button class="cancel-btn" (click)="goHome()">{{ 'CART.keep' | translate }}</ion-button>
       </div>
-      <div class="column">
+      <!-- Boton ocupado para pagar en IOS -->
+      <!-- <div class="column">
         <ion-button (click)="buyitems()" [disabled]="cart.length==0" class="primary">{{ 'CART.pay' | translate }}</ion-button>
+      </div> -->
+      <!-- Boton ocupado para pagar en Android -->
+      <div class="column">
+        <ion-button (click)="paypalPayment()" [disabled]="cart.length==0" class="primary">{{ 'CART.pay' | translate }}</ion-button>
       </div>
        <!--  <div class="column">
         <ion-button (click)="braintreePayment()" class="primary">BRAINTREE</ion-button>
