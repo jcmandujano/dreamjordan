@@ -26,8 +26,10 @@ export class TourService {
     //console.log('stopall',this.audiosArray);
     if(this.audiosArray.length > 0)
     this.actualaudiosArray.forEach(element => {     
+      if(element.hasOwnProperty('audioelement')){
        element.audioelement.stop();   
        element.isPlaying=false;
+      }
       });
   }
 
