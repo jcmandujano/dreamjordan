@@ -23,10 +23,13 @@ export class TourService {
   get audiosArray(){ return this.actualaudiosArray; }
 
   stopAllAudios(){
-    //console.log('stopall',this.audiosArray);
+    console.log('stopall',this.audiosArray);
     if(this.audiosArray.length > 0)
-    this.actualaudiosArray.forEach(element => {     
+    console.log('stopall 2');
+    this.actualaudiosArray.forEach(element => {
+      console.log('element stop',element);     
       if(element.hasOwnProperty('audioelement')){
+        console.log('hasauduoelement');
        element.audioelement.stop();   
        element.isPlaying=false;
       }
