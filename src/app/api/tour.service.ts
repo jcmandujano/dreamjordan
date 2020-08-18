@@ -52,6 +52,7 @@ export class TourService {
 
 
     getToursByCountry(id_pais){
+      console.log('getToursByCountry',this.co.API+this.translate.currentLang+'/api/tours-app/'+ id_pais +'?_format=json');
       return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/tours-app/'+ id_pais +'?_format=json').pipe(
         map(
           res => { 
@@ -65,7 +66,8 @@ export class TourService {
     }
 
     getSingleTour(id_pais, nid){
-      return this.http.get<Array<any>>(this.co.API+'api/tours-app/'+ id_pais +'/'+ nid+'?_format=json').pipe(
+      console.log('getSingleTour',this.co.API+this.translate.currentLang+'/api/tours-app/'+ id_pais +'/'+ nid+'?_format=json');
+      return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/tours-app/'+ id_pais +'/'+ nid+'?_format=json').pipe(
         map(
           res => { 
             return res;
@@ -181,6 +183,7 @@ export class TourService {
           )
         );
       }else{
+        console.log('paises online',this.co.API+this.translate.currentLang+'/api/paises-app/?_format=json');
         return this.http.get(this.co.API+this.translate.currentLang+'/api/paises-app/?_format=json').pipe(
           map(
             res => { 
@@ -254,6 +257,7 @@ export class TourService {
       
     }
     getDreamJordanTourDetail(nid){
+      console.log('getDJTD', this.translate.currentLang);
       return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/djtours-app/1/'+nid+'?_format=json').pipe(
         map(
           res => { 
