@@ -70,7 +70,8 @@ export class DreamjordanDetailPage {
     this.cartItemCount = this.cartserv.getCartItemCount();
   }
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
+    await this.getAudiosByTour();
     this.tourService.clearAudios();
     
     if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Online){
@@ -104,8 +105,8 @@ export class DreamjordanDetailPage {
     
   }
 
-  isTourPurchased(){
-    this.user.getPurchaseInfo().subscribe(res =>{
+  async isTourPurchased(){
+    await this.user.getPurchaseInfo().subscribe(res =>{
       //console.log("fecha", res[0].field_fecha_comprado );
       if(res.length>0){
         this.fechaComprado = new Date(res[0].field_fecha_comprado);

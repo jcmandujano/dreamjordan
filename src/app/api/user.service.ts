@@ -141,7 +141,7 @@ export class UserService {
     }else{
       console.log("estamos online");
     }
-    return this.http.get<Array<any>>(this.co.API+'/'+this.translate.currentLang+'/api/paises-app/'+idPais+'?_format=json').pipe(
+    return this.http.get<Array<any>>(this.co.API+this.translate.currentLang+'/api/paises-app/'+idPais+'?_format=json').pipe(
       map(
         res => { 
           return res;
