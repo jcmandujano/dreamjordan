@@ -71,7 +71,7 @@ export class DreamjordanDetailPage {
   }
 
   async ionViewWillEnter() {
-    await this.getAudiosByTour();
+    //await this.getAudiosByTour();
     this.tourService.clearAudios();
     
     if(this.network.getCurrentNetworkStatus() == ConnectionStatus.Online){
