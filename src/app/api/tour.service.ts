@@ -273,4 +273,25 @@ export class TourService {
         )
       );
     }
+
+    unpublishContent(nid){
+      let datos =  {
+        "type": [{
+          "target_id": "carrito_compra"
+        }],
+        "status":[{"value":false}]
+      };
+      console.log("datos",datos);
+       return this.http.patch<any>(this.co.API+'node/'+ nid+'?_format=json',
+       JSON.stringify(datos)).pipe(
+        map(
+          res => { 
+            return res;
+          },
+          (err: HttpErrorResponse) => { 
+            console.log(err);
+          }
+        )
+      );
+    }
 }

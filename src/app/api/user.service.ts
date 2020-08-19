@@ -159,11 +159,12 @@ export class UserService {
       return this.http.get<Array<any>>(this.co.API+'user/checkout_app?_format=json').pipe(
         map(
           res => { 
-            let objeto = new Array;
+            let objeto :any;
             for(let i in res){
               objeto = JSON.parse(res[i].checkout_elements);
               for(let j in objeto){
-                  cartiems.push(objeto[j]);
+                objeto[j].checkout =res[i].nid;
+                cartiems.push(objeto[j]);
               }
             }
             return cartiems;
@@ -176,8 +177,8 @@ export class UserService {
     }else{
       return null;
     }
-    
   }
+
 
   getPurchaseInfo(){
     return this.http.get<Array<any>>(this.co.API+'user/checkout_app?_format=json').pipe(
@@ -202,6 +203,7 @@ export class UserService {
             objeto = JSON.parse(res[i].checkout_elements);
             for(let j in objeto){
               if(objeto[j].tour == idtour){
+                objeto[j].checkout =res[i].nid;
                 objeto[j].status=res[i].field_status;
                 cartiems.push(objeto[j]);
               }

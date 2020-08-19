@@ -88,7 +88,7 @@ export class TourDetailPage{
       this.getTourInfo();
       this.tourService.getAudiosxTour(this.nid).subscribe(
         (res:any) => { 
-          console.log("data",res);
+          //console.log("data",res);
           this.audiosArray = res;    
           this.co.hideLoader();    
           this.getPurchasedItems();
@@ -128,16 +128,16 @@ export class TourDetailPage{
   }
 
   prepareItems(){
-    //console.log("AUDIOS en prepare",this.audiosArray);
-    console.log("comprados",this.toursComprados);
+    console.log("AUDIOS en prepare",this.audiosArray);
     this.audiosArray.forEach(originales => {
       originales.amount=1;
       originales.audioelement=this.start(originales);
       originales.progress=0;
        this.toursComprados.forEach(comprados => {
-          originales.descargado = comprados.field_descargado;
-          originales.carrito_id = comprados.nid
-          originales.plays = comprados.field_plays
+        originales.chekout = comprados.checkout;
+        originales.descargado = comprados.field_descargado;
+        originales.carrito_id = comprados.nid
+        originales.plays = comprados.field_plays
       }); 
     });
     console.log(this.audiosArray);
@@ -278,14 +278,35 @@ export class TourDetailPage{
     console.log("ONENDTRACK",track);//track.carrito_id
     let intplays : number  = +track.plays; 
     intplays = (intplays+1);
-   this.tourService.updatePlays(track.carrito_id, intplays).subscribe((res)=>{
+    this.tourService.updatePlays(track.carrito_id, intplays).subscribe((res)=>{
       this.co.hideLoader();
-      //console.log("respuesta ", res);
-      track.plays = res.field_plays;
+      console.log("respuesta ", res);
+      track.plays = res.field_plays[0].value;
+      if(intplays == 3){
+        this.co.showLoader();
+        let elements = new Array();
+        elements.push(track.chekout);
+        elements.push(track.carrito_id);
+        elements.map((element,index)=>{
+          this.tourService.unpublishContent(element).subscribe((res)=>{
+            this.co.hideLoader();
+            if (elements.length === index + 1) {
+              this.co.hideLoader();
+              console.log("Se despublico correctamente");
+              this.co.presentToast("Haz terminado tus reproducciones disponibles");
+              this.co.go('/tabs/my-purchases');
+            }
+          },(err:HttpErrorResponse)=>{
+            this.co.hideLoader();
+            console.log("error ", err.message);
+          });
+        });
+      }
     },(err: HttpErrorResponse)=>{
       this.co.hideLoader();
       console.log("error ", err.message);
-    });
+    }); 
+   
   }
 
   seek(audio:Howl, i:number){
