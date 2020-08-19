@@ -35,7 +35,7 @@ export class MyPurchasesPage  {
         (res:any) => { 
           this.co.hideLoader();
           this.myPurchases = res;
-          console.log(this.myPurchases);
+          console.log("mis compras",this.myPurchases);
           this.localPurchases=null;
         },
         (err: HttpErrorResponse) => { 
