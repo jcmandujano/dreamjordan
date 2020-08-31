@@ -57,6 +57,7 @@ export class LoginPage {
           lang:res.current_user.lang,
           token:res.csrf_token
         });
+        this.login_data.reset();
         this.router.navigate(['/tabs/home']);
       },
       (err: HttpErrorResponse) => { 

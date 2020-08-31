@@ -15,13 +15,14 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ResetPasswordPage implements OnInit {
 
   login_data = new FormGroup({
-    email: new FormControl(null,Validators.required),
+    email: new FormControl(),
     temp_password: new FormControl(null,Validators.required),
     password: new FormControl(null,Validators.required),
   });
 
   variableEmail = "" ;
   hideMe = true;
+  tokenSended:boolean = false;
 
   constructor(
     public alertController: AlertController, 
@@ -36,14 +37,19 @@ export class ResetPasswordPage implements OnInit {
   }
 
   ionViewWillEnter() {
+    console.log("viewWillEnter");
+    this.getTempData();
+  }
+
+  getTempData(){
     this.storage.getObject("tempData").then(data => {
+      console.log("Datos en local", data);
       if(data!=null){
         this.variableEmail = data.email;
-        this.hideMe = true;
+        this.tokenSended = true;
        }else{         
-        this.hideMe = false;
+        this.tokenSended = false;
        }
-      
     });
   }
 
@@ -80,10 +86,10 @@ export class ResetPasswordPage implements OnInit {
     );
   }
 
-  async requestTempPass(){
+  /*async requestTempPass(){
     const alert = await this.alertController.create({
       header: 'Solicitar Cambio de Contraseña',
-      /*message: "Ingresa tu correo para que las indicaciones para recuperar tu contraseña",*/
+      //message: "Ingresa tu correo para que las indicaciones para recuperar tu contraseña",
       message: "Ingresa tu correo para obtener tu token temporal",
       inputs: [
         {
@@ -107,48 +113,65 @@ export class ResetPasswordPage implements OnInit {
             this.storage.setObject('tempData',{
               email:resp.email
             });
-            this.hideMe = true;
+            this.getTempData();
+            //this.hideMe = true;
             this.requestResetPassword(resp.email);
           }
         }
       ]
     });
     await alert.present();
-}
+}*/
 
-requestResetPassword(email:string){
-  this.co.showLoader();
-  this.user.requestResetPassword(email).subscribe((res:any)=>{
-    this.co.hideLoader();
-    console.log("respuesta",res);
-  },
-  (err:HttpErrorResponse) =>{
-    this.co.hideLoader();
-    var message = err.error.message;
-    if(err.status == 40){
-      message = 'Correo electrónico o contraseña no reconocidos.';
-    }
-    console.log("error",err);
-  });
-}
+  requestResetPassword(){ 
+    this.co.showLoader();
+    this.user.requestResetPassword(this.variableEmail).subscribe((res:any)=>{
+      this.co.hideLoader();
+      this.storage.setObject('tempData',{
+        email:this.variableEmail
+      });
+      this.getTempData();
+      //console.log("respuesta",res);
+    },
+    (err:HttpErrorResponse) =>{
+      this.co.hideLoader();
+      var message = err.error.message;
+      if(err.status == 40){
+        message = 'Correo electrónico o contraseña no reconocidos.';
+      }
+      console.log("error",err);
+    });
+  }
 
-saveNewPassword(){
-  this.co.showLoader();
-  let datos= this.login_data.value;
-  this.user.saveNewPassword(datos.email, datos.temp_password, datos.password).subscribe((res:any)=>{
-    this.co.hideLoader();
-    console.log("respuesta",res);
-    this.co.presentAlert("Correcto","","Se ha actualizado su información");
-    this.doLogin(datos);
-  },
-  (err:HttpErrorResponse) =>{
-    this.co.hideLoader();
-    var message = err.error.message;
-    if(err.status == 40){
-      message = 'Correo electrónico o contraseña no reconocidos.';
-    }
-    console.log("error",err);
-  });
-}
+  saveNewPassword(){
 
+    this.co.showLoader();
+    let datos= this.login_data.value;
+    this.user.saveNewPassword(datos.email, datos.temp_password, datos.password).subscribe((res:any)=>{
+      this.co.hideLoader();
+      console.log("respuesta",res);
+      this.storage.remove('tempData');
+      this.co.presentAlert("Correcto","","Se ha actualizado su información");
+      this.variableEmail="";
+      this.doLogin(datos);
+    },
+    (err:HttpErrorResponse) =>{
+      this.co.hideLoader();
+      var message = err.error.message;
+      if(err.status == 400){
+        message = 'Correo electrónico o contraseña no reconocidos.';
+      }
+      console.log("error",err);
+    });
+  }
+
+  clearAttemp(){
+    this.storage.remove("tempData");
+    this.getTempData();
+    this.variableEmail="";
+  }
+
+  cancel(){
+    this.router.navigate(['/tabs/home']);
+  }
 }

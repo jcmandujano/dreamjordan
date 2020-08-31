@@ -6,10 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../api/user.service';
 import {Router} from '@angular/router';
 import { InAppPurchase } from '@ionic-native/in-app-purchase/ngx';
-import { timingSafeEqual } from 'crypto';
-import { runInThisContext } from 'vm';
-//import { Braintree, ApplePayOptions, PaymentUIOptions, PaymentUIResult } from '@ionic-native/braintree/ngx'; //braintree ios only
-import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';//paypal ios only
+//import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';//paypal ios only
 
  
 
@@ -33,8 +30,7 @@ export class MyCartPage {
   constructor( private cartserv : CartService,
     private iap: InAppPurchase,
     public co: CommonService,
-    private payPal: PayPal,//Paypal ios only
-    //private braintree: Braintree,//Braintree ios only
+    //private payPal: PayPal,//Paypal ios only
     public user : UserService,
     private router:Router) { }
 
@@ -78,39 +74,44 @@ export class MyCartPage {
       this.co.showLoader();
       this.iap.getProducts([items.join()]).then((_product) => {
         this.co.hideLoader();
+        console.log("respuesta",_product);
         products = _product
-        let rowLen = products.length;
-        products.map((element,i)  =>{
-          this.iap.buy(element.productId).then((data)=> {
-            console.log("elemento iterado",element.productId);
-            currentItem =this.getCurrentItem(element.productId); 
-           // console.log("Que resulto de la compra",data);
-              console.log("item actual el ulimo",currentItem);
-              this.co.showLoader();
-              this.cartserv.insertSinglePurchase("checkout", this.currentUser.user+"-", data.transactionId, false, currentItem).subscribe(
-                (res:any) => { 
-                  console.log("resp comopra",res);
-                  this.co.presentToast("La compra se relizo correctamente");
-                  if (rowLen === i + 1) {
-                    this.emptyCurrentCart();
-                    this.co.go('/tabs/my-purchases');
+        if(products.length == 0){
+          this.co.presentAlert("Error","","No se encontró este producto en Apple");
+        }else{
+          let rowLen = products.length;
+          products.map((element,i)  =>{
+            this.iap.buy(element.productId).then((data)=> {
+              console.log("elemento iterado",element.productId);
+              currentItem =this.getCurrentItem(element.productId); 
+            // console.log("Que resulto de la compra",data);
+                console.log("item actual el ulimo",currentItem);
+                this.co.showLoader();
+                this.cartserv.insertSinglePurchase("checkout", this.currentUser.user+"-", data.transactionId, false, currentItem).subscribe(
+                  (res:any) => { 
+                    console.log("resp comopra",res);
+                    this.co.presentToast("La compra se relizo correctamente");
+                    if (rowLen === i + 1) {
+                      this.emptyCurrentCart();
+                      this.co.go('/tabs/my-purchases');
+                    }
+                  },
+                  (err: HttpErrorResponse) => { 
+                    //console.log(err);
+                    var message = err.error.message;
+                    if(err.status == 400){
+                      message = 'Correo electrónico o contraseña no reconocidos.';
+                    }
+                    this.co.presentAlert('Error','Hubo un problema al insertar la compra.',message);
                   }
-                },
-                (err: HttpErrorResponse) => { 
-                  //console.log(err);
-                  var message = err.error.message;
-                  if(err.status == 400){
-                    message = 'Correo electrónico o contraseña no reconocidos.';
-                  }
-                  this.co.presentAlert('Error','Hubo un problema al insertar la compra.',message);
-                }
-              );
-          }).catch((err)=> {
-              this.co.hideLoader();
-              console.log(err);
-              this.co.presentAlert("ERROR","",JSON.stringify(err) );
+                );
+            }).catch((err)=> {
+                this.co.hideLoader();
+                console.log(err);
+                this.co.presentAlert("ERROR","",JSON.stringify(err) );
+            });
           });
-        });
+        }
       }).catch((err) => {
         this.co.hideLoader();
        console.log(err);
@@ -157,7 +158,7 @@ export class MyCartPage {
     );
   }
 
-  paypalPayment(){//braintree ios only
+  /*paypalPayment(){//braintree ios only
     if(this.sessionState){
       let totalAmount = this.getTotal();
       this.payPal.init({
@@ -191,7 +192,7 @@ export class MyCartPage {
       this.co.presentAlert("Error","","Necesitas acceder para poder comprar contenido.");
       this.router.navigate(['/tabs/login']);
     }
-  }
+  }*/
 
   ionViewWillLeave(){
     //this.braintree.reset

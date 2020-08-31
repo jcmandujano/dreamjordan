@@ -171,14 +171,16 @@ export class DreamjordanDetailPage {
       (res:any) => { 
        // this.co.hideLoader();
         this.audiosList = res;
-        console.log("audios originales", this.comprado);
         this.audiosList.forEach(originales => {
           originales.audioelement=this.start(originales);
           originales.progress=0;
-          this.comprado.forEach(comprado => {
-            originales.carrito_id = comprado.nid;
-            originales.descargado = comprado.field_descargado;
-          });
+          if(this.comprado!=undefined){
+            this.comprado.forEach(comprado => {
+              originales.carrito_id = comprado.nid;
+              originales.descargado = comprado.field_descargado;
+            });
+          }
+          
         });        
         console.log("audios",this.audiosList);
       },
