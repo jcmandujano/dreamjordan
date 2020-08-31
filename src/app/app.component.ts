@@ -69,6 +69,11 @@ export class AppComponent {
   doLogout(){
     this.storage.remove("userdata");
     this.user.userData= null;
+    this.user.customLoginStatus().then(data => {
+      this.user.authenticationState.subscribe(state => {
+          this.sessionState=state;
+      });
+    });
     this.co.presentAlert("Correcto","","Su sesión se ha cerrado correctamente"); 
     this.router.navigate(['/tabs/home']);
   }

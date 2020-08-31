@@ -50,7 +50,7 @@
       </ion-col>
     </ion-row>
     <!--When is activated-->
-    <ion-grid class="content-list">  
+    <ion-grid class="content-list" *ngIf="isValid && isActivated">  
         <ion-row *ngFor="let audio of audiosList; let i = index">
           <ion-col size="2" class="index-col">
             <ion-icon *ngIf="audio.descargado == 0" name="cloud-download" class="download-btn" (click)="downloadContent(audio,1)"></ion-icon>
