@@ -6,7 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../api/user.service';
 import {Router} from '@angular/router';
 import { InAppPurchase } from '@ionic-native/in-app-purchase/ngx';
-//import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';//paypal ios only
+import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';//paypal ios only
 
  
 
@@ -30,7 +30,7 @@ export class MyCartPage {
   constructor( private cartserv : CartService,
     private iap: InAppPurchase,
     public co: CommonService,
-    //private payPal: PayPal,//Paypal ios only
+    private payPal: PayPal,//Paypal ios only
     public user : UserService,
     private router:Router) { }
 
@@ -65,7 +65,7 @@ export class MyCartPage {
     })
   }
 
-  buyitems(){
+  /* buyitems(){
     if(this.sessionState){
       console.log("Que jay en el carro",this.cart);
       let items = this.getTourAppleIds();
@@ -122,7 +122,7 @@ export class MyCartPage {
       this.router.navigate(['/tabs/login']);
     }
     
-  }
+  } */
 
   //Delete selected item from the cart list JCMV
   removeCartItem(product){
@@ -158,15 +158,15 @@ export class MyCartPage {
     );
   }
 
-  /*paypalPayment(){//braintree ios only
+  paypalPayment(){//braintree ios only
     if(this.sessionState){
       let totalAmount = this.getTotal();
       this.payPal.init({
-        PayPalEnvironmentProduction: 'ATNskmqDdI_ouR_lIK8vgq2VZWOj3pHdAUz8RNy3CtEVYOiZbrVWohvnZeBqqaFXtsRDc1E36J1E26fx',
-        PayPalEnvironmentSandbox: 'ATNskmqDdI_ouR_lIK8vgq2VZWOj3pHdAUz8RNy3CtEVYOiZbrVWohvnZeBqqaFXtsRDc1E36J1E26fx'
+        PayPalEnvironmentProduction: 'AVxNm7rigbHzmf02mzz1TLhDJZuJqYOXavlecCP2cMQMEL1nG4gxChDa-mr5_d8vCOLit8IruMhZGgoo',
+        PayPalEnvironmentSandbox: 'AdZC_ONPv1oNHUaoxVxTK2xi_u2jv91CKGC1RU9bqluhk7q94EwdcUOQNis8mc0vcQBdbFrv98sGEyi4'
       }).then(() => {
         // Environments: PayPalEnvironmentNoNetwork, PayPalEnvironmentSandbox, PayPalEnvironmentProduction
-        this.payPal.prepareToRender('PayPalEnvironmentSandbox', new PayPalConfiguration({
+        this.payPal.prepareToRender('PayPalEnvironmentProduction', new PayPalConfiguration({
         })).then(() => {
           let payment = new PayPalPayment(totalAmount.toString(), 'USD', 'Description', 'sale');
           this.payPal.renderSinglePaymentUI(payment).then(() => {
@@ -192,7 +192,7 @@ export class MyCartPage {
       this.co.presentAlert("Error","","Necesitas acceder para poder comprar contenido.");
       this.router.navigate(['/tabs/login']);
     }
-  }*/
+  }
 
   ionViewWillLeave(){
     //this.braintree.reset
