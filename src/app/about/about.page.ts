@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../api/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonService } from '../api/common.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-about',
@@ -11,8 +12,10 @@ import { CommonService } from '../api/common.service';
 export class AboutPage implements OnInit {
   body:any;
   title:any;
+  lang:string="es";
   constructor(public user : UserService,
-    public co : CommonService) { }
+    public co : CommonService,
+    private translateService: TranslateService) { }
 
   ngOnInit() {
     this.co.showLoader();
@@ -26,6 +29,25 @@ export class AboutPage implements OnInit {
       this.co.presentAlert("Error","","Ocurrio un error al recuperar la información");
       console.log("error",err);
     });
+  }
+
+  choose() {
+    
+    this.translateService.use(this.lang);
+    
+  }
+
+  updateLang(){
+    this.co.showLoader();
+    this.user.updateLang(this.lang).subscribe(res => { 
+      console.log("UPDATED",res);
+      this.translateService.use(this.lang);
+      this.co.hideLoader();
+    },
+    (err: HttpErrorResponse) => { 
+      this.co.hideLoader();
+      console.log("error",err);
+    }); 
   }
 
 }

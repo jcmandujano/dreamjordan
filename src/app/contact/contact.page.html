@@ -3,7 +3,20 @@
 </ion-header>
 <ion-content>
   <div class="header">
-    <h3 [innerHTML]="title"></h3>
-    <div [innerHTML]="body"></div>
+    <h3 >{{ 'CONTACT.title' | translate }}</h3>
+
+    <div>
+
+      <p>{{ 'CONTACT.text1' | translate }}</p>
+
+      <p>{{ 'CONTACT.text2' | translate }}: <strong><span>+962792534124</span></strong></p>
+
+      <p>{{ 'CONTACT.text3' | translate }} <strong><span><a href="https://api.whatsapp.com/send?phone=+5215554094418">+5215554094418</a></span></strong></p>
+
+      <p>{{ 'CONTACT.text3' | translate }} <strong><span><a href="mailto:contacto@dream-jordan.com">contacto@dream-jordan.com</a></span></strong></p>
+
+    </div>
+    
+    <!-- <div [innerHTML]="body"></div> -->
   </div>
 </ion-content>

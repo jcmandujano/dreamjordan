@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../api/user.service';
+import { HttpErrorResponse } from '@angular/common/http';
 import { CommonService } from '../api/common.service';
+import { TranslateService } from '@ngx-translate/core';
 import { FormControl, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {Router,ActivatedRoute} from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { UserService } from '../api/user.service';
 import { StorageService } from '../storage.service';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-reset-password',
@@ -23,17 +24,39 @@ export class ResetPasswordPage implements OnInit {
   variableEmail = "" ;
   hideMe = true;
   tokenSended:boolean = false;
+  lang:string="es";
 
   constructor(
+    public user : UserService, 
+    public co: CommonService,
+    private translateService: TranslateService,
     public alertController: AlertController, 
     private route: ActivatedRoute,
-    public user : UserService, 
     public storage: StorageService,
     private router:Router, 
-    public co: CommonService
   ) { }
 
   ngOnInit() {
+  }
+
+
+  choose() {
+    
+    this.translateService.use(this.lang);
+    
+  }
+
+  updateLang(){
+    this.co.showLoader();
+    this.user.updateLang(this.lang).subscribe(res => { 
+      console.log("UPDATED",res);
+      this.translateService.use(this.lang);
+      this.co.hideLoader();
+    },
+    (err: HttpErrorResponse) => { 
+      this.co.hideLoader();
+      console.log("error",err);
+    }); 
   }
 
   ionViewWillEnter() {
@@ -174,4 +197,5 @@ export class ResetPasswordPage implements OnInit {
   cancel(){
     this.router.navigate(['/tabs/home']);
   }
+
 }

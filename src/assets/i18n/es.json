@@ -61,7 +61,21 @@
         "email":"Correo",
         "password":"Contraseña",
         "register":"Registro",
-        "cancel":"Cancelar"
+        "cancel":"Cancelar",
+        "forgot_password":"¿Olvidaste tu contraseña?"
+    },
+    "RECOVERY_PASS":{
+        "title":"Recuperar Password",
+        "text1":"Ingresa el Password que se envió a tu correo electronico, a continuación ingresa tu nuevo Password",
+        "text2":"Te enviaremos a tu correo tu contraseña temporal.",
+        "text3":"Si no te llego tu Password temporal",
+        "urlText3":"solicitala de nuevo aquí",
+        "tPassword":"Password temporal",
+        "nPassword":"Nuevo password",
+        "save":"Guardar",
+        "cancel":"Cancel",
+        "request_password":"Solicitar Password",
+        "forgot_password":"¿Olvidaste tu contraseña?"
     },
     "FAQ":{
         "title":"Preguntas Frecuentes",
