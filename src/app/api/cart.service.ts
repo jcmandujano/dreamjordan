@@ -4,6 +4,7 @@ import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../api/user.service';
 import { map } from 'rxjs/operators';
+import { Platform } from '@ionic/angular';
 import { CommonService } from '../api/common.service';
 import {StorageService, Item} from '../api/storage.service';
 import { TourService } from './tour.service';
@@ -34,7 +35,9 @@ export class CartService {
     public US : UserService,
     public http: HttpClient,
     public co: CommonService,
-    private storage : StorageService) { }
+    private storage : StorageService,
+    public platform: Platform
+  ) { }
 
   getProducts(){
     return this.data;
@@ -128,7 +131,13 @@ export class CartService {
       );
   }
 
-  insertSinglePurchase(type:string, title:string, trans_id:string, status:boolean, element:any){
+  insertInAppPurchase(type:string, title:string, trans:{
+      transactionId: string;
+      receipt: string;
+      signature: string;
+      productType: string;
+    }, status:boolean, element:any){
+
     let today = this.getCurrentDate();
     console.log("Que nos llega",element[0]);
     let itemsCarrito = [];
@@ -139,20 +148,37 @@ export class CartService {
       "field_cantidad_articulo":[{"value":element[0].amount}],
       "field_costo_articulo":[{"value":element[0].field_costo}],
       "field_costo_total":[{"value":(element[0].field_costo*element[0].amount)}],
+      "field_moneda":[{"value":(element[0].field_moneda)?element[0].field_moneda:"USD"}],
       "field_nombre_articulo":[{"value":element[0].name}],
       "field_tour":[{"target_id":element[0].nid}],
       "field_audio":[{"target_id":element[0].mid}]
     };
     itemsCarrito.push(item);
+
+    //get platform
+    let _plat = "";
+    if(this.platform.is("ios"))
+      _plat = "ios";
+    if(this.platform.is("android"))
+      _plat = "android";
+
     let datos =  {
       "type":type,
       "title":title,
-      "field_transactionid":[{"value":trans_id}],
+      "field_transactionid":[{"value":trans.transactionId}],
+      "field_receipt":[{"value":trans.receipt}],
+      "field_signature":[{"value":trans.signature}],
+      "field_producttype":[{"value":trans.productType}],
+      "field_platform":[{"value":_plat}],
       "field_status":[{"value":status}],
       "field_fecha_comprado":[{"value":today}],
       "field_elementos":itemsCarrito
     };
     console.log("checkout",datos);
+    //console.log("RES:",trans.receipt);
+    //console.log("SING:",trans.signature);
+    //console.log("TYPE:",trans.productType);
+    //console.log("PLAT:",_plat);
     return this.http.post(
       this.co.API+'user/checkout?_format=json',
       JSON.stringify(datos)).pipe(

@@ -100,7 +100,7 @@ export class MyCartPage {
             // console.log("Que resulto de la compra",data);
                 console.log("item actual el ulimo",currentItem);
                 this.co.showLoader();
-                this.cartserv.insertSinglePurchase("checkout", this.currentUser.user+"-", data.transactionId, false, currentItem).subscribe(
+                this.cartserv.insertInAppPurchase("checkout", this.currentUser.user+"-", data, false, currentItem).subscribe(
                   (res:any) => { 
                     console.log("resp comopra",res);
                     this.co.presentToast("La compra se relizo correctamente");
@@ -110,7 +110,7 @@ export class MyCartPage {
                     }
                   },
                   (err: HttpErrorResponse) => { 
-                    //console.log(err);
+                    console.log(err);
                     var message = err.error.message;
                     if(err.status == 400){
                       message = 'Correo electrónico o contraseña no reconocidos.';
