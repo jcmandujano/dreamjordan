@@ -50,7 +50,9 @@
     "CART":{
         "keep":"Continue shopping",
         "pay":"Pay",
-        "empty":"Empty Cart"
+        "empty":"Empty Cart",
+        "add_cart": "Add to cart",
+        "go_cart": "Go to cart"
     },
     "ABOUT":{
         "title":"What is Drean Jordan?",

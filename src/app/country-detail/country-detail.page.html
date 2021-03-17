@@ -10,9 +10,11 @@
     <ion-col size="7" >
       <div class="header-text">
         <h4>{{paisSelecc?.nombrePais}}</h4>
-        <span class="price" *ngIf="tours?.length>0">{{paisSelecc?.field_costo_pais| currency:'USD'}} USD</span>
+        <!--<span class="price" *ngIf="tours?.length>0">{{paisSelecc?.field_costo_pais| currency:'USD'}} USD</span>-->
         <br>
-        <ion-button (click)="addToCart()">{{ 'GRAL.buy_all' | translate }}</ion-button>
+        <!--<ion-button (click)="addToCart()">{{ 'GRAL.buy_all' | translate }}</ion-button>-->
+        <ion-button (click)="addToCart()" *ngIf="!isOnCart">{{ 'CART.add_cart' | translate }}</ion-button>
+        <ion-button color="secondary" (click)="openCart()" *ngIf="isOnCart">{{ 'CART.go_cart' | translate }}</ion-button>
       </div>
     </ion-col>
   </ion-row>
@@ -23,11 +25,11 @@
 
   <ion-grid>
     <ion-row>
-      <ion-col size="6" *ngFor="let tour of tours">
+      <ion-col size="6" *ngFor="let tour of tours" (click)="tourDetail(tour.nid)">
         <div class="warp-solid"></div>
         <img class="portait-img" [src]="co.API+tour.field_imagen_tour_app" />
         <div class="bottom-slider-text">
-          <span class="title-slider" (click)="tourDetail(tour.nid)">{{tour.title}}</span>
+          <span class="title-slider">{{tour.title}}</span>
           <br>
           <span class="sub-slider">{{tour.field_paises}}</span>
         </div>

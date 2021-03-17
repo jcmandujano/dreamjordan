@@ -12,6 +12,7 @@ export interface Product{
   mid:number;
   name:string;
   field_costo:number;
+  field_moneda:string;
   field_media_audio_file:string;
   amount:number;
   image:string;

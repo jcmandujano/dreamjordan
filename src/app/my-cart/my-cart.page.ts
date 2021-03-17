@@ -8,6 +8,7 @@ import {Router} from '@angular/router';
 import { InAppPurchase } from '@ionic-native/in-app-purchase/ngx';
 import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';//paypal ios only
 
+import { Platform } from '@ionic/angular';
  
 
 @Component({
@@ -26,13 +27,19 @@ export class MyCartPage {
   braintree_token = 'sandbox_fwz2cyc9_prmgr28yvpr28pqw';
   //paymentOptions: PaymentUIOptions ;
 
+  defaultCurrency = 'USD';
+  public is_ios=false;
 
   constructor( private cartserv : CartService,
     private iap: InAppPurchase,
     public co: CommonService,
     private payPal: PayPal,//Paypal ios only
     public user : UserService,
-    private router:Router) { }
+    private router:Router,
+    public platform: Platform
+  ) {
+    
+  }
 
   ionViewDidEnter(){
     this.user.customLoginStatus().then(data => {
@@ -49,7 +56,13 @@ export class MyCartPage {
     });
     this.cartItemCount = this.cartserv.getCartItemCount();
     this.cart = this.cartserv.getCart();
+    if( this.cart.length>=1 && this.cart[0].field_moneda ){
+      this.defaultCurrency = this.cart[0].field_moneda;
+    }
     this.applePIDs = this.getTourAppleIds();
+    for(let _p of this.cart){
+      console.log(_p);
+    }
   }
 
   getTourAppleIds(){
@@ -65,7 +78,7 @@ export class MyCartPage {
     })
   }
 
-  /* buyitems(){
+  buyitems(){
     if(this.sessionState){
       console.log("Que jay en el carro",this.cart);
       let items = this.getTourAppleIds();
@@ -122,7 +135,7 @@ export class MyCartPage {
       this.router.navigate(['/tabs/login']);
     }
     
-  } */
+  }
 
   //Delete selected item from the cart list JCMV
   removeCartItem(product){

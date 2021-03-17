@@ -50,7 +50,9 @@
     "CART":{
         "keep":"Seguir Comprando",
         "pay":"Pagar",
-        "empty":"Vaciar Carrito"
+        "empty":"Vaciar Carrito",
+        "add_cart": "Agregar al Carrito",
+        "go_cart": "Ir al Carrito"
     },
     "ABOUT":{
         "title":"¿Qué es Dream Jordan?",

@@ -6,13 +6,15 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../api/user.service';
 import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
-import { NavController } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
+import { InAppPurchase } from '@ionic-native/in-app-purchase/ngx';
 
 export interface Track{
   nid:string;
   mid:string;
   name:string;
   field_costo:string;
+  field_moneda:string;
   field_media_audio_file:string;
   amount:number;
   isPlaying:boolean;
@@ -32,13 +34,19 @@ export class CountryDetailPage {
   tours:any;
   cart=[];
   cartItemCount: BehaviorSubject<number>;
+
+  isOnCart:boolean=false;
+
   constructor(public router:Router,
     public tourService:TourService,
     public user : UserService,
     public co: CommonService,
     private navCtrl: NavController,
     public active : ActivatedRoute,
-    private cartserv:CartService) { 
+    private cartserv:CartService,
+    public platform: Platform,
+    private iap: InAppPurchase,
+  ) { 
       this.idPais = this.active.snapshot.paramMap.get("id");
   }
 
@@ -46,10 +54,34 @@ export class CountryDetailPage {
     this.co.showLoader();
     this.tourService.getToursByCountry(this.idPais).subscribe(
       (res:any) => { 
-        this.co.hideLoader();
-        this.tours = res;
-        console.log("TOURS", this.tours);
-        this.getPurchasedItems();
+        if(this.platform.is('ios') && this.platform.is('cordova')){
+          console.log('IOS CORDOVA, comparando lista de tours con lista IAP...');
+          this.tours = [];
+          let apIDs = this.getToursAppleIds(res);
+          this.iap.getProducts(apIDs).then((_products:any[]) => {
+            for(let _tour of res){
+              let _p = _products.find( x => x.productId === _tour.field_id_prod_apple );
+              if(_p){
+                _tour.title = _p.title;
+                //_tour.body = _p.description;
+                _tour.field_costo = _p.priceAsDecimal;
+                _tour.field_moneda = _p.currency;
+
+                this.tours.push(_tour);
+              }
+            }
+            this.co.hideLoader();
+            console.log("TOURS", this.tours);
+            this.getPurchasedItems();
+          });
+        } else {
+          console.log('mostrando tours sin comparar con IAP...');
+          this.co.hideLoader();
+          this.tours = res;
+          console.log("TOURS", this.tours);
+          this.getPurchasedItems();
+        }
+        
       },
       (err: HttpErrorResponse) => { 
         console.log(err);
@@ -65,6 +97,8 @@ export class CountryDetailPage {
     this.user.getPaisById(this.idPais).subscribe(res => { 
       this.co.hideLoader();
       this.paisSelecc = res[0];
+      console.log('PAIS SELEC:');
+      console.log(this.paisSelecc);
     }, 
     (err: HttpErrorResponse) => { 
       this.co.hideLoader();
@@ -73,6 +107,10 @@ export class CountryDetailPage {
     });
     this.cart = this.cartserv.getCart();
     this.cartItemCount = this.cartserv.getCartItemCount();
+
+    // si se vacia el carrito poder agregarlo otravez
+    if(this.cart.length == 0)
+      this.isOnCart = false;
   }
 
   getPurchasedItems(){
@@ -89,6 +127,7 @@ export class CountryDetailPage {
 
 
   tourDetail(nid){
+    console.log('NAV TO','/tabs/tour-detail/'+this.idPais+'/'+nid);
     this.router.navigate(['/tabs/tour-detail/'+this.idPais+'/'+nid]);
   }
 
@@ -97,6 +136,7 @@ export class CountryDetailPage {
   }
 
   addToCart(){
+    this.isOnCart = true;
     let data = {}
     console.log("normale",this.tours);
     if(this.toursComprados.length > 0){
@@ -109,6 +149,7 @@ export class CountryDetailPage {
               mid:"0",
               name:element.title,
               field_costo:element.field_costo,
+              field_moneda:element.field_moneda? element.field_moneda:'USD',
               field_media_audio_file:"",
               amount:1,
               image:element.field_imagen_tour_app, 
@@ -126,6 +167,7 @@ export class CountryDetailPage {
           mid:"0",
           name:element.title,
           field_costo:element.field_costo,
+          field_moneda:element.field_moneda? element.field_moneda:'USD',
           field_media_audio_file:"",
           amount:1,
           image:element.field_imagen_tour_app,
@@ -136,7 +178,13 @@ export class CountryDetailPage {
     }
   }
 
+  getToursAppleIds(tours){
+    return tours.map((i)=>{
+      return i.field_id_prod_apple;
+    })
+  }
+
   goBack() {
     this.navCtrl.back();
-    }
+  }
 }

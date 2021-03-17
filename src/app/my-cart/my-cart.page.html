@@ -13,27 +13,34 @@
       <p class="file-tour-name">{{item.name}}  <!-- <span class="file-tour-desc">País completo</span> --></p>
     </ion-col >
     <ion-col size="2" class="centered">
-      <span class="price">{{item.field_costo | currency:'USD'}} USD</span>
+      <span class="price">{{item.field_costo | currency:'USD'}} {{item.field_moneda? item.field_moneda:'USD'}}</span>
     </ion-col>
     <ion-col size="1" class="centered">
         <ion-icon (click)="removeCartItem(item)" class="trashy" src="./assets/img/trash.svg" ></ion-icon>
       </ion-col>
   </ion-row>
     <div class="resume">
-      <p class="resume-total">Total  <span class="price">{{getTotal() | currency:'USD'}} USD</span></p>
+      <p class="resume-total">Total  <span class="price">{{getTotal() | currency:'USD'}} {{defaultCurrency}}</span></p>
     </div>
     <div class="row">
       <div class="column">
         <ion-button class="cancel-btn" (click)="goHome()">{{ 'CART.keep' | translate }}</ion-button>
       </div>
-      <!-- Boton ocupado para pagar en IOS -->
-      <!-- <div class="column">
-        <ion-button (click)="buyitems()" [disabled]="cart.length==0" class="primary">{{ 'CART.pay' | translate }}</ion-button>
-      </div> -->
-      <!-- Boton ocupado para pagar en Android -->
-      <div class="column">
-        <ion-button (click)="paypalPayment()" [disabled]="cart.length==0" class="primary">{{ 'CART.pay' | translate }} </ion-button>
-      </div>
+      
+      <ng-container *ngIf="platform.is('ios') && platform.is('cordova')">
+        <!-- Boton ocupado para pagar en IOS -->
+        <div class="column">
+          <ion-button (click)="buyitems()" [disabled]="cart.length==0" class="primary">{{ 'CART.pay' | translate }}</ion-button>
+        </div>
+      </ng-container>
+      
+      <ng-container *ngIf="platform.is('android')">
+        <!-- Boton ocupado para pagar en Android -->
+        <div class="column">
+          <ion-button (click)="paypalPayment()" [disabled]="cart.length==0" class="primary">{{ 'CART.pay' | translate }}</ion-button>
+        </div>
+      </ng-container>
+
        <!--  <div class="column">
         <ion-button (click)="braintreePayment()" class="primary">BRAINTREE</ion-button>
       </div> -->

@@ -6,12 +6,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CartService } from '../api/cart.service';
 import { BehaviorSubject } from 'rxjs';
 import {Howl, howler} from 'howler';
-import { IonRange } from '@ionic/angular';
+import { IonRange, Platform } from '@ionic/angular';
 import { UserService} from '../api/user.service';
 import { DownloadService } from '../api/download.service'; 
 import { NavController } from '@ionic/angular';
 import { StorageService } from '../storage.service';
 import { NetworkService, ConnectionStatus } from "../api/network.service";
+import { InAppPurchase } from '@ionic-native/in-app-purchase/ngx';
 
 
 export interface Track{
@@ -19,6 +20,7 @@ export interface Track{
   mid:string;
   name:string;
   field_costo:string;
+  field_moneda:string;
   field_media_audio_file:string;
   ammount:number;
   isPlaying:boolean;
@@ -54,6 +56,7 @@ export class TourDetailPage{
   /*variables para audio player*/
   
   blockByGlobalPurchase:boolean=false;
+  isOnCart:boolean=false;
 
   get player(){ return this.tourService.player; }
   set player( val ){ this.tourService.player = val; }
@@ -69,7 +72,10 @@ export class TourDetailPage{
     public storage: StorageService,
     public user : UserService,
     public download : DownloadService,
-    private cartserv:CartService) { 
+    private cartserv:CartService,
+    public platform: Platform,
+    private iap: InAppPurchase,
+  ) { 
       this.nid = this.active.snapshot.paramMap.get("nid");
       this.idPais = this.active.snapshot.paramMap.get("idpais");
   }
@@ -78,6 +84,12 @@ export class TourDetailPage{
   addToCart(product){
     //console.log("item",product);
     this.cartserv.addProduct(product);
+    this.isOnCart = true;
+  }
+
+  ionViewWillEnter(){
+    console.log('Tour page will enter...');
+    this.isOnCart = false;
   }
 
   ionViewDidEnter() {
@@ -114,6 +126,7 @@ export class TourDetailPage{
     this.cart = this.cartserv.getCart();
     //console.log("carrito",this.cart);
     this.checkIfIsPurchased();
+    this.checkIfOnCart();
     this.cartItemCount = this.cartserv.getCartItemCount();
   }
 
@@ -122,6 +135,18 @@ export class TourDetailPage{
       if(this.cart[i].nid==this.idPais){
         //console.log("bloqueado");
         this.blockByGlobalPurchase=true;
+      }
+    }
+    //blockByGlobalPurchase
+  }
+
+  checkIfOnCart(){
+    console.log("REVISANDO CARRITO...")
+    console.log(this.cart);
+    for(let i in this.cart ){
+      if(this.cart[i].nid==this.nid){
+        //console.log("bloqueado");
+        this.isOnCart = true;
       }
     }
     //blockByGlobalPurchase
@@ -154,8 +179,30 @@ export class TourDetailPage{
   getTourInfo(){
     this.tourService.getSingleTour(this.idPais,this.nid).subscribe(
       (res:any) => { 
-        this.currentTour = res[0];
-        console.log("currnt tour",this.currentTour);
+        console.log('entrando a la funcion modificada...');
+        if(this.platform.is('ios') && this.platform.is('cordova')){
+          console.log('Sobreescribir datos de el tour con las de IAP...');
+          this.iap.getProducts([res[0].field_id_prod_apple]).then((_products:any[]) => {
+            let _p = _products[0];
+            if(_p){
+              console.log('product found', _p);
+              res[0].title = _p.title;
+              //res[0].body = _p.description;
+              res[0].field_costo = _p.priceAsDecimal;
+              res[0].field_moneda = _p.currency;
+
+              this.currentTour = res[0];
+              console.log("currnt tour",this.currentTour);
+            } else {
+              this.co.presentAlert('Error','Hubo un problema al recuperar la información.','In app purchase info not found.');
+            }
+          });
+        } else {
+          console.log('Presentando iformacion de tour como es sin IAP...');
+          this.currentTour = res[0];
+          console.log("currnt tour",this.currentTour);
+        }
+        
       },
       (err: HttpErrorResponse) => { 
         //console.log(err);
@@ -194,6 +241,7 @@ export class TourDetailPage{
       mid:this.currentTour.nid,
       name:this.currentTour.title,
       field_costo:this.currentTour.field_costo,
+      field_moneda:this.currentTour.field_moneda? this.currentTour.field_moneda:'USD',
       field_media_audio_file:"",
       amount:1,
       image:this.currentTour.field_imagen_tour_app,
@@ -206,6 +254,7 @@ export class TourDetailPage{
     }
     this.cartserv.addProduct(data);
     this.cartserv.addAudios(this.audiosArray);
+    this.isOnCart = true;
   }
 
   /*METODOS PARA AUDIO PLAYER*/
@@ -326,7 +375,7 @@ export class TourDetailPage{
        local_file:"",
        no_plays:0,
      }); */
-   }
+  }
 
   updateProgress(track:Howl){
     let seek =  track.seek();
@@ -403,6 +452,6 @@ export class TourDetailPage{
   
   goBack() {
     this.navCtrl.back();
-    }
+  }
 
 }
