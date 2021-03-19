@@ -110,6 +110,7 @@ export class MyCartPage {
                     }
                   },
                   (err: HttpErrorResponse) => { 
+                    this.co.hideLoader();
                     console.log(err);
                     var message = err.error.message;
                     if(err.status == 400){
