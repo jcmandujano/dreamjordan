@@ -6,7 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '../api/user.service';
 import {Router} from '@angular/router';
 import { InAppPurchase } from '@ionic-native/in-app-purchase/ngx';
-import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';//paypal ios only
+//import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';//paypal ios only
 
 import { Platform } from '@ionic/angular';
  
@@ -33,7 +33,7 @@ export class MyCartPage {
   constructor( private cartserv : CartService,
     private iap: InAppPurchase,
     public co: CommonService,
-    private payPal: PayPal,//Paypal ios only
+    //private payPal: PayPal,//Paypal ios only
     public user : UserService,
     private router:Router,
     public platform: Platform
@@ -173,7 +173,8 @@ export class MyCartPage {
   }
 
   paypalPayment(){//braintree ios only
-    if(this.sessionState){
+    this.co.presentAlert("Error","","Plugin de cordova paypal removido por compatibilidad con IOS. Implementar ngx-paypal en su lugar");
+    /*if(this.sessionState){
       let totalAmount = this.getTotal();
       this.payPal.init({
         PayPalEnvironmentProduction: 'AVxNm7rigbHzmf02mzz1TLhDJZuJqYOXavlecCP2cMQMEL1nG4gxChDa-mr5_d8vCOLit8IruMhZGgoo',
@@ -205,7 +206,7 @@ export class MyCartPage {
     } else{
       this.co.presentAlert("Error","","Necesitas acceder para poder comprar contenido.");
       this.router.navigate(['/tabs/login']);
-    }
+    }*/
   }
 
   ionViewWillLeave(){
@@ -215,5 +216,5 @@ export class MyCartPage {
   goHome(){
     this.router.navigate(['/']);
   }
-
+  
 }
